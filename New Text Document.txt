@@ -1,0 +1,5 @@
+1. due poriman 
+2. expenditure date 
+3. pathology test  
+4. Commission
+5. Due Amount test wise

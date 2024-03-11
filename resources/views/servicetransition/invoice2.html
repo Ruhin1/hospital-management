@@ -1,0 +1,37 @@
+
+<html>
+
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+#toNewWindow p {
+color:red;
+}
+</style>
+</head>
+
+<body>
+<div id="toNewWindow">
+   <p>Your content here</p>
+   <p>Your content here</p>
+  <img src="s0_codeecf9cb71-2aac-45ec-9225-1a22ba235fff_editor_result (1).jpg" >
+
+    <p>Your content here</p>
+</div>
+
+<a href="javascript:;" id="print">Open</a>
+
+<script>
+function nWin() {
+  var w = window.open();
+  var html = $("img").html();
+
+    $(w.document.body).html(html);
+}
+
+$(function() {
+    $("#print").click(nWin);
+});
+</script>
+</body>
+</html>

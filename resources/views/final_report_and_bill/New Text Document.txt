@@ -1,0 +1,259 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<style>
+
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid black;
+  text-align: left;
+  padding: 2px;
+}
+
+
+
+#c{
+
+
+
+
+margin: 0 auto;
+position:relative;
+
+}
+
+
+
+
+
+#c img {
+width:100%;
+}
+
+#c::before {
+content:'';
+position:absolute;
+top:50px;
+left:0;
+background-image: url("img/watermark.jpg");
+background-position:center;
+background-repeat:no-repeat;
+width: 100%;
+height: 100%;;
+opacity: .1;
+}
+
+#m{
+  
+ background-color:red;;
+
+}
+
+
+
+
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+<div id="c" >
+<div id="head" >
+<img    src="img/logo.jpg" >
+<hr>
+</div>
+<br>
+<br>
+<B STYLE="FONT-SIZE:15PX; margin:40px;">Money Receipt</B>
+<br>
+<div  style="margin-left:20px;"  id="information">
+<br>
+<b> Patient Name: {{$data->name}}</b> <br>
+<b> Patient ID: {{$data->id}}</b> <br>
+<b >Age: {{$data->age}}</b> <br>
+<b >Sex: {{$data->sex}}</b> <br>
+<b >Due: {{$data->due}} TK</b> <br>
+
+<b >Date:  <?php // echo date("Y/m/d") ;  ?> </b> <br>
+
+<br>
+
+
+<?php if ( $surdata != null) { ?>
+<table>
+  <tr>
+    <th>Cost Name </th>
+    <th>Charge</th>
+	
+  </tr>
+  
+
+ 
+ 
+  <tr>
+    <td> Pre-Operative Charge</td>
+   <td> {{$surdata->pre_operative_charge}}</td>
+
+  </tr>
+
+  <tr>
+    <td> Surgeon harge</td>
+   <td> {{$surdata->Surgeon_charge}}</td>
+
+  </tr>
+  
+  <tr>
+    <td> Anesthesia Charge</td>
+   <td> {{$surdata->anesthesia_charge}}</td>
+
+  </tr>
+
+  <tr>
+    <td> Assistant Charge</td>
+   <td> {{$surdata->assistant_charge}}</td>
+
+  </tr>
+
+  <tr>
+    <td> OT Charge</td>
+   <td> {{$surdata->ot_charge}}</td>
+
+  </tr>
+
+  <tr>
+    <td> Oxygen/Nitrogen Charge</td>
+   <td> {{$surdata->o2_no2_charge}}</td>
+
+  </tr>
+
+  <tr>
+    <td> C-Arme Charge</td>
+   <td> {{$surdata->c_arme_charge}}</td>
+
+  </tr>
+
+  <tr>
+    <td> Post-Operative Charge</td>
+   <td> {{$surdata->post_operative_charge}}</td>
+
+  </tr>  
+  
+    <tr>
+    <td> Miscellaneous Expenses</td>
+   <td> {{$surdata->miscellaneous_expenses}}</td>
+
+  </tr> 
+
+</table>
+
+<?php } ?>
+<table>
+  <tr>
+    <th>Service/Product Name </th>
+    <th>Service/Product Cost(TK)</th>
+    <th>Vat (TK) </th>
+	 <th>Discount(TK) </th> 
+	 <th>Total service Charger After <br> Adjusting Vat and tax (TK) </th> 
+  </tr>
+  
+ 
+  <tr>
+    <td> Medicine</td>
+   
+    <td>{{$totalmedibeforeadjusting}}</td>
+	 <td>{{$mvat}}</td>
+	 <td>{{$mdiscount}}</td>
+	 <td>{{$mtotal}}</td>
+  </tr>
+  <tr>
+    <td>Cabine/Bed Fare</td>
+   
+    <td>{{$tcabinecharge}}</td>
+	 <td>{{$cabinevat}}</td>
+	 <td>{{$cabinediscount}}</td>
+	 <td>{{$cabinetotal}}</td>
+  </tr>
+    <tr>
+    <td>Doctor's Visits Fees</td>
+   
+    <td>{{$dtotal}}</td>
+	 <td>0 </td>
+	 <td>0 </td>
+	 <td>{{$dtotal}}</td>
+  </tr>
+    <tr>
+    <td> Pathological Tests</td>
+   
+    <td>{{$totalpathobeforeadjusting}}</td>
+	 <td>{{$rvat}}</td>
+	 <td>{{$rdiscount}}</td>
+	 <td>{{$rtotal}}</td>
+  </tr>
+  
+      <tr>
+    <td> Surgery </td>
+   
+    <td>{{$stoalbeforeadjust}}</td>
+	 <td>{{$svat}}</td>
+	 <td>{{$sdiscount}}</td>
+	 <td>{{$stotal}}</td>
+  </tr>
+
+
+
+
+
+</table>
+<br>
+<br>
+<b >Total VAT: {{$fvat}}</b> <br>
+<b >Total Discount: {{$fdiscount}}</b> <br>
+<b >Total Charge (including VAT and Discount): {{$fadjust}} TK</b> <br>
+
+
+
+<b style="position: absolute; bottom:-60px; left:1px;">Entry By:{{$finalreport->User->name}} </b> <br>
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+</body>
+</html>

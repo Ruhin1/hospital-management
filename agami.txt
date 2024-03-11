@@ -1,0 +1,3 @@
+1. agent commission paid
+2. Doctor Commission serial wise
+3.due payment

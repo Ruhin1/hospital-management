@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script>
+$(document).ready(function(){
+
+  $("#cars").change(function(){
+     
+	var  c = $("#cars option:selected").text();
+	
+var d=	$("#cars option:selected").attr("data-number")
+	  console.log(d);
+	  $("#fname").val(d);
+  });
+  
+
+  
+});
+</script>
+
+
+<body>
+
+<h1>The option element</h1>
+
+<label for="cars">Choose a car:</label>
+
+<select id="cars">
+ <option  data-number="1" value="volvo">--Select--</option>
+  <option data-number="2" value="volvo">Volvo</option>
+  <option data-number="3" value="saab">Saab</option>
+  <option data-number="4" value="opel">Opel</option>
+  <option data-number="5" value="audi">Audi</option>
+</select>
+   <input type="text" id="fname" name="fname"><br><br>
+   
+   
+   
+   
+
+</body>
+</html>

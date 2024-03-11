@@ -1,0 +1,42 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<input type="button" id="add" value="add" /><br/>
+<form id="inst_form">
+<div id="container">
+  <input type="text" class="inst_amount" value="4" /><br/>
+  <input type="text" class="inst_amount" value="" /><br/>
+  <input type="text" id="total_amount" value="0" />
+</form>
+</div>
+<span id="total_price"></span>
+
+<script>
+function sumIt() {
+  var total = 0, val;
+  $('.inst_amount').each(function() {
+    val = $(this).val();
+    val = isNaN(val) || $.trim(val) === "" ? 0 : parseFloat(val);
+    total += val;
+  });
+  $('#total_price').html(Math.round(total));
+  $('#total_amount').val(Math.round(total));
+}
+
+$(function() {
+
+  // $('.datepicker').datepicker(); // not needed for this test
+
+
+  $("#add").on("click", function() {
+    $("#container input").last()
+      .before($("<input />").prop("class","inst_amount").val(0))
+      .before("<br/>");
+    sumIt();  
+  });
+
+
+  $(document).on('input', '.inst_amount', sumIt);
+  sumIt() // run when loading
+});
+
+
+</script>

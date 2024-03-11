@@ -1,0 +1,87 @@
+
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+	
+
+
+<form class="form-horizontal" id="whereEntry" method='post' action=''>
+    <fieldset>
+        <div class="control-group">
+            <div class="controls controls-row">
+                <input type="text" class="span3 register_input" id="main_activity" name="main_activity" placeholder="Company's main activity">
+                <input type="text" class="span1 register_input income_count" id="income" name="income" placeholder="% of income">
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls controls-row">
+                <div id="InputsIncomeWrapper"></div>
+            </div>
+            <div class="row">
+                <input type="text" class="span1 register_input pull-right" id="income_sum" name="income_sum">
+            </div>
+            <div class="row"> <a href="#" id="AddMoreIncomeBox" class="btn btn-info pull-right"><i class="icon-plus"></i>Add More</a>
+
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+
+<script>
+//calculation script
+var $form = $('#whereEntry'),
+    $sumDisplay = $('#income_sum');
+
+$form.delegate('.income_count', 'change', function () {
+    var $summands = $form.find('.income_count');
+    var sum = 0;
+    $summands.each(function () {
+        var value = Number($(this).val());
+        if (!isNaN(value)) sum += value;
+    });
+
+    $sumDisplay.val(sum);
+});
+
+//add dynamic field script
+$(document).ready(function () {
+
+    var MaxInputs = 5; //maximum input boxes allowed
+    var InputsWrapper = $("#InputsIncomeWrapper"); //Input boxes wrapper ID
+    var AddButton = $("#AddMoreIncomeBox"); //Add button ID
+
+    var x = InputsWrapper.length; //initlal text box count
+    var FieldCount = 1; //to keep track of text box added
+
+    $(AddButton).click(function (e) //on add input button click
+    {
+        if (x <= MaxInputs) //max input box allowed
+        {
+            FieldCount++; //text box added increment
+            //add input box
+            $(InputsWrapper).append('\
+            <div>\
+            <input type="text" class="register_input span3"\
+            name="main_activity_' + FieldCount + '" id="main_activity_' + FieldCount + '"\
+            placeholder="Company´s other activity" style="margin:0px 15px 20px 0px"/>\
+            <input type="text" class="span1 register_input income_count" id="income_' + FieldCount + '"\
+            name="income_' + FieldCount + '" placeholder="% of income"\ style="margin:0px 15px 20px 15px"/>\
+            <a href="#" class="removeclass pull-left"><i class="icon-remove icon-remove-addincome"></i></a></div>');
+            x++; //text box increment
+        }
+        return false;
+    });
+
+    $("body").on("click", ".removeclass", function (e) { //user click on remove text
+        if (x > 1) {
+            $(this).parent('div').remove(); //remove text box
+            x--; //decrement textbox
+        }
+
+        $('.income_count').trigger('change');
+        return false;
+    })
+
+});
+
+
+</script>

@@ -1,0 +1,100 @@
+
+<html>
+<head>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<style>
+.js-select2 {
+  width: 300px;
+}
+</style>
+</head>
+<body>
+
+<div id="form-repeater">
+  <div class="row">
+    <select class="js-select2">
+    </select>
+    <button type="button" class="btn btn-primary" id="add-more">Add More</button>
+  </div>
+</div>
+
+
+
+
+<div id="template" style='display: none;'>
+  <div class="parent-div">
+    <div class="row">
+      <select class="js-select2">
+      </select>
+
+      <button type="button" class="btn btn-primary remove">Remove</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+$("select.js-select2").first().select2({
+  ajax: {
+    url: "https://run.mocky.io/v3/651b234e-e668-4143-8c41-2e6a5bafcd27",
+    delay: 250,
+    processResults: processData
+  },
+  data: processData([{
+    "Id": "4",
+    "Code": "JKL",
+    "Description": "Juliet Kilo Laugh"
+  }]).results,
+  minimumInputLength: 1,
+  escapeMarkup: function(m) {
+    return m;
+  },
+  templateSelection: myCustomTemplate
+});
+
+function processData(data) {
+  var mapdata = $.map(data, function(obj) {
+    obj.id = obj.Id;
+    obj.text = '[' + obj.Code + '] ' + obj.Description;
+    return obj;
+  });
+  return {
+    results: mapdata
+  };
+}
+
+function myCustomTemplate(item) {
+  return '<strong>' + item.Code + '</strong> - ' + item.Description;
+}
+
+$("#add-more").click(function() {
+  var content = $('#template').html();
+  $('#form-repeater').append(content);
+  //console.log($("#form-repeater select.js-select2").length)
+  $("#form-repeater select.js-select2").last().select2({
+    ajax: {
+      url: "https://run.mocky.io/v3/651b234e-e668-4143-8c41-2e6a5bafcd27",
+      delay: 250,
+      processResults: processData
+    },
+    data: processData([{
+      "Id": "4",
+      "Code": "JKL",
+      "Description": "Juliet Kilo Laugh"
+    }]).results,
+    minimumInputLength: 1,
+    escapeMarkup: function(m) {
+      return m;
+    },
+    templateSelection: myCustomTemplate
+  });
+})
+$("body").on("click", "button.remove", function() {
+  $(this).closest('div.parent-div').remove();
+})
+</script>
+</bodY>
+
+</html>

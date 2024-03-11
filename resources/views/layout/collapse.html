@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+
+</head>
+<body>
+
+<ul><button id="bone"> One </button>
+ <div id="one"> 
+           <div class="bg-white py-2 collapse-inner rounded">
+        <a target="_blank"   class="collapse-item" href="{{url('pathologyreportmaking/showreport')}}">প্যাথলজির রিপোর্ট প্রিন্ট  করুন </a><br>    
+	    <a target="_blank" class="collapse-item" href="{{ url('reportlist') }}">প্যাথোলজি টেস্টের নাম, মূল্য <br> ডাটাবেজে যুক্ত করেন </a><br>
+             </div>
+
+			 </div>
+          </ul>
+			
+			
+			         <ul><button id="btwo"> two </button>
+						 <div id="two">
+              <div class="bg-white py-2 collapse-inner rounded">
+        <a target="_blank"   class="collapse-item" href="{{url('pathologyreportmaking/showreport')}}">প্যাথলজির রিপোর্ট প্রিন্ট  করুন </a><br>    
+	    <a target="_blank" class="collapse-item" href="{{ url('reportlist') }}">প্যাথোলজি টেস্টের নাম, মূল্য <br> ডাটাবেজে যুক্ত করেন </a><br>
+             </div>
+			  </div>
+          </ul>
+    
+</body>
+
+<script>
+$(document).ready(function(){
+ $("#one").hide();
+  $("#two").hide();
+
+  $("#bone").click(function(){
+    $("#one").show();
+	$("#two").hide();
+  });
+  $("#btwo").click(function(){
+   $("#one").hide();
+	$("#two").show();
+  });
+});
+</script>
+</html>

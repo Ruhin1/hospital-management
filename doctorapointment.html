@@ -1,0 +1,74 @@
+<html>
+<head>
+<style>
+
+
+
+#c{
+
+
+width:300px;
+height:350px;
+
+margin: 0 auto;
+position:relative;
+  border-style: solid;
+  border-width: 5px;
+}
+
+
+
+
+
+#c img {
+width:100%;
+}
+
+#c::before {
+content:'';
+position:absolute;
+top:50px;
+left:0;
+background-image: url("watermark.jpg");
+background-position:center;
+background-repeat:no-repeat;
+width: 100%;
+height: 100%;;
+opacity: .3;
+}
+
+#m{
+  
+ background-color:red;;
+
+}
+</style>
+</head>
+<body>
+<div id="c" >
+<div id="head" >
+<img    src="logo.jpg" >
+<hr>
+</div>
+<div  style="margin-left:20px;"  id="information">
+<b>Name: Kamal Hossain</b> <br>
+<b >Age: 45</b> <br>
+<b >Sex: Male</b> </br>
+<b >Serial No: 12</b> </br>
+<b >Date: </b> </br>
+
+<b>Ref Doctor: Ahsan Habib</b></br>
+
+<b >Due:0 TK </b> </br>
+<b >Paid: 500 TK</b> </br>
+<b style="position: absolute; bottom:3px; right:100px;">Entry By: Shela</b> </br>
+</div>
+
+
+
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+
+
+<body>
+<table border="1" id="table">
+<tr><td>
+    <select class="cat">
+       <option value="c">A</option>
+       <option value="p">B</option>
+       <option value="n">C</option>
+       <option value="k">D</option>
+    </select>
+   </td>
+   <td><select class="item"></select></td>
+</tr>
+</table>
+<INPUT type='button' value='Add Row' />
+
+<script>
+   c=new Array('a1','a2','a3');
+  p=new Array('p1','p2','p3');
+  n=new Array('n1','n2','n3');
+  k=new Array('k1','k2','k3');
+
+  $(function() {
+      $('#table').on('change', '.cat', function(){
+          var cat = $(this).val();
+          var $item = $(this).parent().next().find('.item');
+          $('option', $item).remove();
+          $.each(eval(cat), function(i,v){
+          $('<option value="'+v+'">'+v+'</option>').appendTo($item);
+          });
+      });
+      $('.cat').change();
+      
+      $(':button').on('click', function(){ $('#table').find('tr:first').clone().find('.cat').val(function(){
+              return $(this).val();
+          }).end().appendTo('#table');
+      });
+  });
+</script>
