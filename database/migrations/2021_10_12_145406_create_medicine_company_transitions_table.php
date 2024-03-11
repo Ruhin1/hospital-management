@@ -18,12 +18,9 @@ class CreateMedicineCompanyTransitionsTable extends Migration
 			$table->foreignId('medicine_id');
 			$table->foreignId('medicinecompanyorder_id');
 			$table->double('Quantity', 14, 4);
-		
 			$table->double('unit_price', 14, 4);
-
-			
-			
-            $table->timestamps();
+			$table->tinyInteger('transitiontype'); // 1-> nogode porishod  2-bakir sathe adjust
+            $table->timestamps(); 
         });
     }
 

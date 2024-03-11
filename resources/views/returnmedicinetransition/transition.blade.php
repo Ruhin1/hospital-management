@@ -83,7 +83,7 @@ tr:nth-child(even) {background-color: #f2f2f2;}
 			 <div class="row">
 			 
 			     <div class= " col-4">
-      Date:<input  type="date" id="dataentry"  name="dataentry" required >
+      Date:<input  type="datetime-local" id="dataentry"  name="dataentry" value="{{date('Y-m-d H:i:s')}}" required >
   
     </div>
 			 

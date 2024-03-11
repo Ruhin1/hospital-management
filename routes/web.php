@@ -81,8 +81,7 @@ use App\Http\Controllers\duecollectionfromphermachyController;
 use App\Http\Controllers\BasicSettingController;
 use App\Http\Controllers\indoorpatientduecollectionforphermachy;
 use App\Http\Controllers\ReagentTransactionController;
-
-
+use App\Http\Controllers\virtualTableController;
 
 /* medicinecontroller dueshow pathologyreportmaking releasedindoor   employeesalarymonth
 |--------------------------------------------------------------------------   order
@@ -1759,6 +1758,11 @@ Route::get('balancesheetforcompany/destroy/{id}', [ compnanybalncecontroller::cl
 
 
 });
+
+
+
+Route::get('virtual-table', [virtualTableController::class, 'show']);
+
 
 
 
