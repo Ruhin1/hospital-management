@@ -183,8 +183,9 @@ public function printpdf($id)
 		'paid',
 		'due',
 		'totalamount',
-'statusvalue',
-'medicine_name','date'
+        'statusvalue',
+        'transitiontype',
+        'medicine_name','date'
 
 		
 		
@@ -340,7 +341,8 @@ if($request->transitiontype == 2  )
 	 
 		$medicinetransition->Quantity = $request->quantity[$product_id];   
 		   
-		$medicinetransition->unit_price = $request->unit_price[$product_id];   
+		$medicinetransition->unit_price = $request->unit_price[$product_id]; 
+        $medicinetransition->transitiontype   = $request->transitiontype; 
         $medicinetransition->created_at  = $request->date;
 		$medicinetransition->save(); 
 

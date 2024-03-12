@@ -345,11 +345,6 @@ Route::get('medicinecomapnytransition/edit/{id}', [medicine_comapny_transition_C
 Route::post('medicinecomapnytransition/insert', [medicine_comapny_transition_Controller::class, 'store'])->name('medicinecomapnytransition.store'); 
 
 
-
-
-
-
-
 ////////////////////  sell medicine 
 Route::get('medicine/category_list', [medicinecontroller::class, 'category_list'])->name('medicine.category_list');
 
@@ -394,6 +389,7 @@ Route::resource('duecollection_inddor',  indoorpatientduecollectionforphermachy:
 Route::post('duecollection_inddor/update', [ indoorpatientduecollectionforphermachy::class,'update'])->name('duecollection_inddor.update');
 
 Route::get('duecollection_inddor/destroy/{id}', [ indoorpatientduecollectionforphermachy::class,'destroy']);
+
 
 
 
@@ -1763,7 +1759,29 @@ Route::get('balancesheetforcompany/destroy/{id}', [ compnanybalncecontroller::cl
 
 Route::get('virtual-table', [virtualTableController::class, 'show']);
 
+Route::get('/test',function(){
+        $order = new \App\Models\medicinecompanyorder(); 
+        $order->user_id = 0;
+        $order->medicinecomapnyname_id = 0;
+        $order->totalbeforediscount = 0;
+        $order->due = 0;
+        $order->pay_in_cash = 0;
+        $order->total = 0;
+        $order->discount = 0;
+        $order->transitiontype = 3;
+        //$order->created_at = $request->datetime;
+        $order->save();
+	
 
+        $medicinetransition = new \App\Models\medicineCompanyTransition(); 
+        $medicinetransition->medicine_id = 0; 
+        $medicinetransition->medicinecompanyorder_id = 0;
+        $medicinetransition->Quantity = 0;
+        $medicinetransition->unit_price = 0;
+        $medicinetransition->transitiontype = 3;
+        //$medicinetransition->created_at = $request->datetime; 
+        $medicinetransition->save(); 
+ });
 
 
 

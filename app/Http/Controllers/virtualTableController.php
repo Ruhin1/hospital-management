@@ -18,8 +18,8 @@ class virtualTableController extends Controller
         
         $virtualTable = [];
 
-        foreach ($medicineTransitions as $transition) {
-            $transition->type = 'Medicine Transition';
+        foreach ($medicineTransitions as $transition) { 
+            $transition->type = 'Sale Medicine To Customer';
             $transition->Quantity = $transition->unit;
             $virtualTable[] = $transition;
         }
@@ -30,7 +30,7 @@ class virtualTableController extends Controller
         }
 
         foreach ($returnMedicineTransactions as $transition) {
-            $transition->type = 'Return Medicine Transaction';
+            $transition->type = 'Return Medicine To Customer';
             $transition->Quantity = $transition->unit;
             $virtualTable[] = $transition;
         }

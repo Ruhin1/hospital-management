@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Models\medicine;
 use App\Models\medicine_category;
+use App\Models\medicinecompanyorder;
+use App\Models\medicineCompanyTransition;
 
 use DataTables;
 use Validator;
@@ -107,7 +109,7 @@ class medicinecontroller extends Controller
 		
 		
 
-
+ 
 	 
 	 
 	 
@@ -213,7 +215,8 @@ class medicinecontroller extends Controller
                 'name'    =>  'required',
                 'stock'     =>  'required',
 				'category' => 'required',
-				'unitprice'   =>  'required'
+				'unitprice'   =>  'required',
+                'datetime' =>  'required',
             );
 
             $error = Validator::make($request->all(), $rules);
@@ -231,8 +234,31 @@ class medicinecontroller extends Controller
 		   'unitprice' =>$request->unitprice,
         );
         medicine::whereId($request->hidden_id)->update($form_data);
+        
+        $id = auth()->user()->id;
+        $order = new medicinecompanyorder(); 
+        $order->user_id = $id;
+        $order->medicinecomapnyname_id = 0;
+        $order->totalbeforediscount = 0;
+        $order->due = 0;
+        $order->pay_in_cash = 0;
+        $order->total = 0;
+        $order->discount = 0;
+        $order->transitiontype = 3;
+        $order->created_at = $request->datetime;
+        $order->save();
+	
 
-        return response()->json(['success' => 'Data is successfully updated']);
+        $medicinetransition = new medicineCompanyTransition(); 
+        $medicinetransition->medicine_id = $request->hidden_id; 
+        $medicinetransition->medicinecompanyorder_id = $order->id;
+        $medicinetransition->Quantity = 0;
+        $medicinetransition->unit_price = $request->unitprice;
+        $medicinetransition->transitiontype = 3;
+        $medicinetransition->created_at = $request->datetime; 
+        $medicinetransition->save();  
+
+        return response()->json(['success' => 'Data is successfully updated']); 
     }
 
     /**

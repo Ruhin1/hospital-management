@@ -18,6 +18,7 @@ class medicine extends Model
 		'softdelete',
 		'medicinecomapnyname_id',
 		'Genericname',
+		'datetime',
 		'Strength',
 		
 

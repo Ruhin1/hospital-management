@@ -55,18 +55,6 @@
                 <th>User ID</th>
                 <th>Patient ID</th>
                 <th>Order ID</th>
-                <th>Unit</th>
-                <th>VAT</th>
-                <th>Pay by Cash</th>
-                <th>Amount</th>
-                <th>Adjust</th>
-                <th>Pay by Adv</th>
-                <th>Unit Price</th>
-                <th>Discount</th>
-                <th>Total VAT</th>
-                <th>Total Discount</th>
-                <th>Due</th>
-                <th>Total Cost</th>
                 <th>Return order id</th>
                 <th>Medicine company order id</th>
                 <th>Unit price</th>
@@ -90,18 +78,6 @@
                         <th>User ID</th>
                         <th>Patient ID</th>
                         <th>Order ID</th>
-                        <th>Unit</th>
-                        <th>VAT</th>
-                        <th>Pay by Cash</th>
-                        <th>Amount</th>
-                        <th>Adjust</th>
-                        <th>Pay by Adv</th>
-                        <th>Unit Price</th>
-                        <th>Discount</th>
-                        <th>Total VAT</th>
-                        <th>Total Discount</th>
-                        <th>Due</th>
-                        <th>Total Cost</th>
                         <th>Return order id</th>
                         <th>Medicine company order id</th>
                         <th>Unit price</th>
@@ -111,6 +87,7 @@
                         <th>Type</th>
                     </tr>
                 </tr>
+                <?php $b=0; ?> 
                 @foreach($rows as $row)
                 <tr>
                    
@@ -119,55 +96,56 @@
                     <td>{{ $row->user_id }}</td>
                     <td>{{ $row->patient_id }}</td>
                     <td>{{ $row->order_id }}</td>
-                    <td>{{ $row->unit }}</td>
-                    <td>{{ $row->vat }}</td>
-                    <td>{{ $row->pay_by_cash }}</td>
-                    <td>{{ $row->amount }}</td>
-                    <td>{{ $row->adjust }}</td>
-                    <td>{{ $row->pay_by_adv }}</td>
-                    <td>{{ $row->unitprice }}</td>
-                    <td>{{ $row->discount }}</td>
-                    <td>{{ $row->totalvat }}</td>
-                    <td>{{ $row->totaldiscount }}</td>
-                    <td>{{ $row->due }}</td>
-                    <td>{{ $row->Total_cost }}</td>
                     <td>{{ $row->return_order_id }}</td>
                     <td>{{ $row->medicinecompanyorder_id }}</td>
                     <td>{{ $row->unit_price }}</td>
                     <td>
                         @if ($row->transitiontype == 1)
-                           In 
+                        Buy Medicine From Company
                         @elseif ($row->transitiontype == 2)
-                            Out
+                        Return Medicine To Company
                         @endif
                     </td>
-                    <td>{{ $row->Quantity }}</td>
+                    
+					<td>{{ $row->Quantity }}</td>
                     <td>
                        
-                       @if($row->order_id != null)
-    
-                            {{$b = $b-$row->Quantity}}
-    
-                       @elseif ($row->return_order_id != null)
-    
-                            {{$b = $b + $row->Quantity}}
-    
-                       @elseif ($row->transitiontype == 1)
-    
-                            {{$b = $b + $row->Quantity}}
-    
-                       @elseif ($row->transitiontype == 2)
-    
-                            {{$b = $b - $row->Quantity}}
-    
-                       @endif
+					   <?php 
+					   
+					   if($row->order_id != null) 
+					   {
+						  $b = $b -  $row->Quantity;
+					   }
+					   if($row->return_order_id  != null)
+					   {
+						  $b = $b + $row->Quantity; 
+					   }
+					   if($row->medicinecompanyorder_id != null )
+					   {
+						 if ($row->transitiontype == 1)
+						 {
+                          $b = $b + $row->Quantity;
+
+						 }	
+                         if($row->transitiontype == 2){
+	
+	                          $b = $b - $row->Quantity;
+                            }
+                         if($row->transitiontype == 3){
+	
+	                          $b = $b + $row->Quantity;
+                            }							
+					   }
+					   
+					   
+					   ?>
+					   
+					   
+					   {{$b}} 
                     </td>
                     <td>{{ $row->type }}</td>
                     
                 </tr>
-                @php
-                    $b = 0;
-                @endphp
                 @endforeach
             @endforeach
         </tbody>
