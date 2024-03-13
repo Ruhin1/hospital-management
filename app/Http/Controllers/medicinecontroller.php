@@ -101,34 +101,7 @@ class medicinecontroller extends Controller
 		   
     }
 
-
-
-
-		
-		
-		
-		
-
  
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
     public function create()
     {
         //
@@ -165,7 +138,30 @@ class medicinecontroller extends Controller
 		   'unitprice' =>$request->unitprice,
         );
 
-        medicine::create($form_data);
+        $medicineId = medicine::create($form_data);
+
+            $id = auth()->user()->id;
+            $order = new medicinecompanyorder(); 
+            $order->user_id = $id;
+            $order->medicinecomapnyname_id = 0;
+            $order->totalbeforediscount = 0;
+            $order->due = 0;
+            $order->pay_in_cash = 0;
+            $order->total = 0;
+            $order->discount = 0;
+            $order->transitiontype = 3;
+            //$order->created_at = $request->datetime;
+            $order->save();
+         
+
+            $medicinetransition = new medicineCompanyTransition(); 
+            $medicinetransition->medicine_id = $medicineId->id; 
+            $medicinetransition->medicinecompanyorder_id = $order->id;
+            $medicinetransition->Quantity = 0;
+            $medicinetransition->unit_price = $request->unitprice;
+            $medicinetransition->transitiontype = 3;
+            //$medicinetransition->created_at = $request->datetime; 
+            $medicinetransition->save();  
 
         return response()->json(['success' => 'Data Added successfully.']);
     }
@@ -234,29 +230,57 @@ class medicinecontroller extends Controller
 		   'unitprice' =>$request->unitprice,
         );
         medicine::whereId($request->hidden_id)->update($form_data);
-        
-        $id = auth()->user()->id;
-        $order = new medicinecompanyorder(); 
-        $order->user_id = $id;
-        $order->medicinecomapnyname_id = 0;
-        $order->totalbeforediscount = 0;
-        $order->due = 0;
-        $order->pay_in_cash = 0;
-        $order->total = 0;
-        $order->discount = 0;
-        $order->transitiontype = 3;
-        $order->created_at = $request->datetime;
-        $order->save();
-	
+        $checkdata = medicineCompanyTransition::where('medicine_id','=', $request->hidden_id)->where('transitiontype','=',3)->first();
+        if($checkdata){
 
-        $medicinetransition = new medicineCompanyTransition(); 
-        $medicinetransition->medicine_id = $request->hidden_id; 
-        $medicinetransition->medicinecompanyorder_id = $order->id;
-        $medicinetransition->Quantity = 0;
-        $medicinetransition->unit_price = $request->unitprice;
-        $medicinetransition->transitiontype = 3;
-        $medicinetransition->created_at = $request->datetime; 
-        $medicinetransition->save();  
+            $id = auth()->user()->id;
+            $order = new medicinecompanyorder(); 
+            $order->user_id = $id;
+            $order->medicinecomapnyname_id = 0;
+            $order->totalbeforediscount = 0;
+            $order->due = 0;
+            $order->pay_in_cash = 0;
+            $order->total = 0;
+            $order->discount = 0;
+            $order->transitiontype = 3;
+            $order->created_at = $request->datetime;
+            $order->save();
+        
+
+            $medicinetransition = medicineCompanyTransition::find($checkdata->id); 
+            $medicinetransition->medicine_id = $request->hidden_id; 
+            $medicinetransition->medicinecompanyorder_id = $order->id;
+            $medicinetransition->Quantity = 0;
+            $medicinetransition->unit_price = $request->unitprice;
+            $medicinetransition->transitiontype = 3;
+            $medicinetransition->created_at = $request->datetime; 
+            $medicinetransition->update(); 
+
+        }else{
+            $id = auth()->user()->id;
+            $order = new medicinecompanyorder(); 
+            $order->user_id = $id;
+            $order->medicinecomapnyname_id = 0;
+            $order->totalbeforediscount = 0;
+            $order->due = 0;
+            $order->pay_in_cash = 0;
+            $order->total = 0;
+            $order->discount = 0;
+            $order->transitiontype = 3;
+            $order->created_at = $request->datetime;
+            $order->save();
+        
+
+            $medicinetransition = new medicineCompanyTransition(); 
+            $medicinetransition->medicine_id = $request->hidden_id; 
+            $medicinetransition->medicinecompanyorder_id = $order->id;
+            $medicinetransition->Quantity = 0;
+            $medicinetransition->unit_price = $request->unitprice;
+            $medicinetransition->transitiontype = 3;
+            $medicinetransition->created_at = $request->datetime; 
+            $medicinetransition->save();  
+        }
+        
 
         return response()->json(['success' => 'Data is successfully updated']); 
     }

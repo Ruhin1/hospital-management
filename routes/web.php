@@ -83,6 +83,7 @@ use App\Http\Controllers\indoorpatientduecollectionforphermachy;
 use App\Http\Controllers\ReagentTransactionController;
 use App\Http\Controllers\virtualTableController;
 
+
 /* medicinecontroller dueshow pathologyreportmaking releasedindoor   employeesalarymonth
 |--------------------------------------------------------------------------   order
 | Web Routes dueshowtranstionController selectfetch cabinetransfer takauttolon
@@ -1760,27 +1761,9 @@ Route::get('balancesheetforcompany/destroy/{id}', [ compnanybalncecontroller::cl
 Route::get('virtual-table', [virtualTableController::class, 'show']);
 
 Route::get('/test',function(){
-        $order = new \App\Models\medicinecompanyorder(); 
-        $order->user_id = 0;
-        $order->medicinecomapnyname_id = 0;
-        $order->totalbeforediscount = 0;
-        $order->due = 0;
-        $order->pay_in_cash = 0;
-        $order->total = 0;
-        $order->discount = 0;
-        $order->transitiontype = 3;
-        //$order->created_at = $request->datetime;
-        $order->save();
-	
 
-        $medicinetransition = new \App\Models\medicineCompanyTransition(); 
-        $medicinetransition->medicine_id = 0; 
-        $medicinetransition->medicinecompanyorder_id = 0;
-        $medicinetransition->Quantity = 0;
-        $medicinetransition->unit_price = 0;
-        $medicinetransition->transitiontype = 3;
-        //$medicinetransition->created_at = $request->datetime; 
-        $medicinetransition->save(); 
+$checkdata = \App\Models\medicineCompanyTransition::where('medicine_id','=', 645)->where('transitiontype','=',3)->first();
+   return $checkdata->id;
  });
 
 

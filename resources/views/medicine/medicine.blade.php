@@ -67,7 +67,7 @@
                             <input type="number" class="form-control register_form" name="unitprice" id="unitprice" placeholder="Unit Price" autocomplete="off">
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" id="dateElemint"> 
                             <label for="email">Date:</label>
                             <input type="datetime-local" class="form-control register_form" id="datetime" name="datetime" value="{{date('Y-m-d\TH:i')}}" autocomplete="off">
                         </div>
@@ -224,6 +224,9 @@
             $('#action_button').val("Add");
             $('#action').val("Add");
             $('#formModal').modal('show');
+            $('#dateElemint').hide();
+           
+           
 
             fetch();
 
@@ -266,12 +269,12 @@
 
         /////////////////////////////////ADD Data //////////////////////////// 
 
-
+        
 
         $('#sample_form').on('submit', function(event) {
             event.preventDefault();
             if ($('#action').val() == 'Add') {
-
+           
 
 
 
@@ -361,7 +364,8 @@
                     $('#name').val(html.data.name);
                     $('#stock').val(html.data.stock);
                     $('#unitprice').val(html.data.unitprice);                    
-                    $('#datetime').val('1212');                    
+                    //$('#datetime').val();
+                                     
 
                     var len = html.categorylist.length;
                     var medicine_present_category = html.data.medicine_category_id;
@@ -406,6 +410,7 @@
                     $('.modal-title').text("Edit New Record");
                     $('#action_button').val("Edit");
                     $('#action').val("Edit");
+                    $('#dateElemint').show(); 
                     $('#formModal').modal('show');
                 }
             })
