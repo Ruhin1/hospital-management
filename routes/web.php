@@ -1758,13 +1758,11 @@ Route::get('balancesheetforcompany/destroy/{id}', [ compnanybalncecontroller::cl
 
 
 
-Route::get('virtual-table', [virtualTableController::class, 'show']);
+Route::get('virtual-table/{print?}', [virtualTableController::class, 'show']);
 
-Route::get('/test',function(){
 
-$checkdata = \App\Models\medicineCompanyTransition::where('medicine_id','=', 645)->where('transitiontype','=',3)->first();
-   return $checkdata->id;
- });
+
+
 
 
 
