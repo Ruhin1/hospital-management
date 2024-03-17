@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>Virtual Table</title>
 <style>
-
+*{margin: 0;padding: 0;box-sizing: border-box}
 .virtual-table{
 background: #D1E7DD;
 color: black;
@@ -39,7 +39,29 @@ th, td {
     /* background: #D1E7DD; */
 }
 
+.header{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 50px;
 
+}
+
+.header .logo{
+width: 20%;
+}
+
+.header .logo img{
+    width: 100%;
+}
+
+.header .description{
+width: 80%;
+padding-left: 100px; 
+}
+
+.header .description span{
+    
+}
 
 .pdf-div{
     display: flex;
@@ -47,8 +69,8 @@ th, td {
     margin:20px 0; 
 }
 
-.pdf-div a{
-    text-decoration: none;
+.pdf-div .print-pdfruhin{
+   
     padding: 5px 10px;
     font-weight: bold;
     text-transform: uppercase;
@@ -56,25 +78,31 @@ th, td {
     background: #0069D9;
     border-radius: 3px; 
     color: #fff;
-}
-
- 
+} 
 
 </style>
 </head>
-<body>
-    @php
-$b = 0;
-$groupedRows = [];
-
-foreach ($virtualTable as $row) {
-    $groupedRows[$row->medicine_id][] = $row;
-}
-@endphp
-    <h2 class="virtual-table">Virtual Table</h2>
-    <div class="pdf-div">
-        <a class="print-pdfruhin" href="{{url('virtual-table/yes')}}">Print PDF</a>
+<body style="font-family: Times New Roman;">
+   
+    <div class="header">
+        <div class="logo">
+            <img src="img/logo.jpg" alt="logo">
+        </div>
+        <div class="description">
+            <h1>Khulna City Medical College Hospital</h1> <br/>
+            <span>33, KDA Avenue, Hotel Royal Mor, Khulna Sadar, Khulna.</span><br/>
+            <span>Reg No:234555 Diagnostic center Reg:689990</span><br/>
+            <span>Mobile:0000000001</span> 
+        </div>
     </div>
+    <h2>Sales-Expenses Statement between date: {{ \Carbon\Carbon::parse($data['startDate'])->format('Y-m-d H:i:s') }} to {{ \Carbon\Carbon::parse($data['endDate'])->format('Y-m-d H:i:s') }}</h2>     
+    <br/>
+    <br/>
+    <div class="pdf-div">
+        <button class="print-pdfruhin" onclick="printPage()" >Print PDF</button>
+    </div> 
+        
+    
     <table> 
         <thead>  
             <tr>
@@ -92,49 +120,17 @@ foreach ($virtualTable as $row) {
                 <th>Type</th>
                 <th>Date</th>
             </tr>
-        </thead>
-        <tbody>
-            @foreach($groupedRows as $medicineId => $rows)
-
-            <tr class="medicine-name">
-                <th colspan="13">
-                    Matched Medicine Name: 
-                    {{-- Check if medicine exists --}}
-                    @php
-                        $medicine = \App\Models\medicine::find($medicineId);
-                    @endphp
-                    @if($medicine)
-                        {{-- Print medicine name --}}
-                        {{ $medicine->name }}
-                    @else
-                        {{-- Handle case when medicine is not found --}}
-                        Medicine not found
-                    @endif
-                </th>
-            </tr> 
-            
-
             <tr>
-                    <th>ID</th>
-                    <th>Medicine ID</th>
-                    <th>User ID</th>
-                    <th>Patient ID</th>
-                    <th>Order ID</th>
-                    <th>Return order id</th>
-                    <th>Medicine company order id</th>
-                    <th>Unit price</th>
-                    <th>Transition Type</th>
-                    <th>Quantity</th>
-                    <th>Balance</th>
-                    <th>Type</th>
-                    <th>Date</th>
+                <th colspan="4">Matched Medicine Name:{{$data['medicneName']}}</th>
+                <th colspan="4">Preveus Stock:</th> 
+                <th colspan="5">Date:{{$data['startDate']}} to {{$data['endDate']}}</th> 
             </tr>
-           
-            
-                <?php $b=0; ?> 
-                @foreach($rows as $row)
+        </thead>
+       <tbody>
+            @if (!empty($virtualTable))
+                @foreach ($virtualTable as $row)
                 <tr>
-                   
+                       
                     <td>{{ $row->id }}</td>
                     <td>{{ $row->medicine_id }}</td>
                     <td>{{ $row->user_id }}</td>
@@ -151,11 +147,11 @@ foreach ($virtualTable as $row) {
                         @endif
                     </td>
                     
-					<td>{{ $row->Quantity }}</td>
+                    <td>{{ $row->Quantity }}</td>
                     <td>
                        
                         <?php 
-					   
+                       
                         if($row->order_id != null) 
                         {
                             if ($b != 0) {
@@ -171,7 +167,7 @@ foreach ($virtualTable as $row) {
                           if ($row->transitiontype == 1)
                           {
                            $b = $b + $row->Quantity;
- 
+    
                           }	
                           if($row->transitiontype == 2){
                              if ($b != 0) {
@@ -185,16 +181,28 @@ foreach ($virtualTable as $row) {
                              }							
                         }
                         ?>
-					   
-					   
-					   {{$b}} 
+                       
+                       
+                       {{$b}} 
                     </td>
                     <td>{{ $row->type }}</td>
                     <td>{{ \Carbon\Carbon::parse($row->created_at)->format('d-m-Y h:i A') }}</td>
                 </tr>
                 @endforeach
-            @endforeach
-        </tbody>
+            @else  
+            <tr>
+                <td colspan="12" style="color: green">
+                No have a transition not available 
+                </td>
+            </tr>
+           
+            @endif
+       </tbody>
     </table>  
+    <script>
+        function printPage(){
+            window.print();
+        }
+    </script>
 </body>
 </html>

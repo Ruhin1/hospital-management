@@ -71,7 +71,8 @@ tr:nth-child(even) {background-color: #f2f2f2;}
 
 
 <div class="col-3"> 	 
-Date:  <input type="datetime-local"  required id="datePicker" name="date" class="" value="{{date('Y-m-d H:i:s')}}"/>
+Date:  <input type="datetime-local"  required id="datePicker" name="date" class="" />
+{{-- value="{{date('Y-m-d H:i:s')}}" --}}
 </div>		
 
 

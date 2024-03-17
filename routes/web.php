@@ -1758,13 +1758,15 @@ Route::get('balancesheetforcompany/destroy/{id}', [ compnanybalncecontroller::cl
 
 
 
-Route::get('virtual-table/{print?}', [virtualTableController::class, 'show']);
+Route::get('virtual-table/{print?}', [virtualTableController::class, 'show']); 
+Route::get('showmedicne', [virtualTableController::class, 'index']);
+Route::post('showmedicnepdf/{print?}', [virtualTableController::class, 'showmedicnepdf']);
 
 
 
 
 
-
+ 
 
 
 

@@ -1,3 +1,6 @@
+{{-- @extends('layout.main')
+
+@section('content') --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>Virtual Table</title>
 <style>
-
+*{margin: 0;padding: 0;box-sizing:border-box; }
 .virtual-table{
 background: #D1E7DD;
 color: black;
@@ -41,14 +44,39 @@ th, td {
 
 
 
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 50px;
+
+}
+
+.header .logo{
+width: 20%;
+}
+
+.header .logo img{
+    width: 100%;
+}
+
+.header .description{
+width: 80%;
+padding-left: 100px; 
+}
+
+.header .description span{
+    
+}
+
 .pdf-div{
     display: flex;
     justify-content:end;
     margin:20px 0; 
 }
 
-.pdf-div a{
-    text-decoration: none;
+.pdf-div .print-pdfruhin{
+    
     padding: 5px 10px;
     font-weight: bold;
     text-transform: uppercase;
@@ -56,9 +84,10 @@ th, td {
     background: #0069D9;
     border-radius: 3px; 
     color: #fff;
-}
-
+} 
  
+/* ------ */
+
 
 </style>
 </head>
@@ -71,10 +100,31 @@ foreach ($virtualTable as $row) {
     $groupedRows[$row->medicine_id][] = $row;
 }
 @endphp
-    <h2 class="virtual-table">Virtual Table</h2>
-    <div class="pdf-div">
-        <a class="print-pdfruhin" href="{{url('virtual-table/yes')}}">Print PDF</a>
+<body style="font-family: Times New Roman;">
+   
+    <div class="header">
+        <div class="logo">
+            <img src="img/logo.jpg" alt="logo">
+        </div>
+        <div class="description">
+            <h1>Khulna City Medical College Hospital</h1> <br/>
+            <span>33, KDA Avenue, Hotel Royal Mor, Khulna Sadar, Khulna.</span><br/>
+            <span>Reg No:234555 Diagnostic center Reg:689990</span><br/>
+            <span>Mobile:0000000001</span> 
+        </div>
     </div>
+    <div>
+        <div class="pdf-div">
+            <button class="print-pdfruhin" onclick="printPage()" >Print PDF</button>
+        </div> 
+        <br/>
+       
+        <h2>Sales-Expenses Statement between date: {{ \Carbon\Carbon::parse($data['startDate'])->format('Y-m-d H:i:s') }} to {{ \Carbon\Carbon::parse($data['endDate'])->format('Y-m-d H:i:s') }}</h2>     
+        <br/>
+       <br/>
+       
+    </div>
+   
     <table> 
         <thead>  
             <tr>
@@ -111,8 +161,7 @@ foreach ($virtualTable as $row) {
                         Medicine not found
                     @endif
                 </th>
-            </tr> 
-            
+            </tr>   
 
             <tr>
                     <th>ID</th>
@@ -154,47 +203,52 @@ foreach ($virtualTable as $row) {
 					<td>{{ $row->Quantity }}</td>
                     <td>
                        
-                        <?php 
+					   <?php 
 					   
-                        if($row->order_id != null) 
-                        {
+					   if($row->order_id != null) 
+					   {
+						   if ($b != 0) {
+                            $b= $b - $row->Quantity;
+                           }
+					   }
+					   if($row->return_order_id  != null)
+					   {
+						  $b = $b + $row->Quantity; 
+					   }
+					   if($row->medicinecompanyorder_id != null )
+					   {
+						 if ($row->transitiontype == 1)
+						 {
+                          $b = $b + $row->Quantity;
+
+						 }	
+                         if($row->transitiontype == 2){
                             if ($b != 0) {
-                             $b =$b -  $row->Quantity;
+                                 $b =$b- $row->Quantity;
                             }
-                        }
-                        if($row->return_order_id  != null)
-                        {
-                           $b = $b + $row->Quantity; 
-                        }
-                        if($row->medicinecompanyorder_id != null )
-                        {
-                          if ($row->transitiontype == 1)
-                          {
-                           $b = $b + $row->Quantity;
- 
-                          }	
-                          if($row->transitiontype == 2){
-                             if ($b != 0) {
-                                  $b =$b- $row->Quantity;
-                             }
-                               
-                             }
-                          if($row->transitiontype == 3){
-     
-                               $b = $b + $row->Quantity;
-                             }							
-                        }
-                        ?>
-					   
-					   
-					   {{$b}} 
+	                          
+                            }
+                         if($row->transitiontype == 3){
+	
+	                          $b = $b + $row->Quantity;
+                            }							
+					   }
+					   ?>
+                       {{$b}}
                     </td>
                     <td>{{ $row->type }}</td>
                     <td>{{ \Carbon\Carbon::parse($row->created_at)->format('d-m-Y h:i A') }}</td>
+
+                    
                 </tr>
                 @endforeach
             @endforeach
         </tbody>
     </table>  
+    <script>
+        function printPage(){
+            window.print();
+        }
+    </script>
 </body>
 </html>

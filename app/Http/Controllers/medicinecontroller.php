@@ -150,7 +150,7 @@ class medicinecontroller extends Controller
             $order->total = 0;
             $order->discount = 0;
             $order->transitiontype = 3;
-            //$order->created_at = $request->datetime;
+            $order->created_at = $request->datetime;
             $order->save();
          
 
@@ -160,7 +160,7 @@ class medicinecontroller extends Controller
             $medicinetransition->Quantity = 0;
             $medicinetransition->unit_price = $request->unitprice;
             $medicinetransition->transitiontype = 3;
-            //$medicinetransition->created_at = $request->datetime; 
+            $medicinetransition->created_at = $request->datetime; 
             $medicinetransition->save();  
 
         return response()->json(['success' => 'Data Added successfully.']);
@@ -233,24 +233,11 @@ class medicinecontroller extends Controller
         $checkdata = medicineCompanyTransition::where('medicine_id','=', $request->hidden_id)->where('transitiontype','=',3)->first();
         if($checkdata){
 
-            $id = auth()->user()->id;
-            $order = new medicinecompanyorder(); 
-            $order->user_id = $id;
-            $order->medicinecomapnyname_id = 0;
-            $order->totalbeforediscount = 0;
-            $order->due = 0;
-            $order->pay_in_cash = 0;
-            $order->total = 0;
-            $order->discount = 0;
-            $order->transitiontype = 3;
-            $order->created_at = $request->datetime;
-            $order->save();
-        
-
+            
             $medicinetransition = medicineCompanyTransition::find($checkdata->id); 
             $medicinetransition->medicine_id = $request->hidden_id; 
-            $medicinetransition->medicinecompanyorder_id = $order->id;
-            $medicinetransition->Quantity = 0;
+            //$medicinetransition->medicinecompanyorder_id = $order->id;
+            $medicinetransition->Quantity = $request->stock;
             $medicinetransition->unit_price = $request->unitprice;
             $medicinetransition->transitiontype = 3;
             $medicinetransition->created_at = $request->datetime; 

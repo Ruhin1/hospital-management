@@ -63,12 +63,12 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Unit Price:</label>
+                            <label for="price">Unit Price:</label>
                             <input type="number" class="form-control register_form" name="unitprice" id="unitprice" placeholder="Unit Price" autocomplete="off">
                         </div>
 
                         <div class="form-group" id="dateElemint"> 
-                            <label for="email">Date:</label>
+                            <label for="date">Date:</label>
                             <input type="datetime-local" class="form-control register_form" id="datetime" name="datetime" value="{{date('Y-m-d\TH:i')}}" autocomplete="off">
                         </div>
                         <br />
@@ -116,7 +116,7 @@
             $("#name").html("");
             $("#stock").html("");
             $("#unitprice").html("");
-            $("#datetime").html(""); 
+            //$("#datetime").html(""); 
         });
         ///////////////////////////////
 
@@ -224,7 +224,7 @@
             $('#action_button').val("Add");
             $('#action').val("Add");
             $('#formModal').modal('show');
-            $('#dateElemint').hide();
+            //$('#dateElemint').hide();
            
            
 
@@ -307,7 +307,7 @@
                         $("#name").val("");
                         $("#stock").val("");
                         $("#unitprice").val("");
-                        //$("#datetime").val("");
+                        $("#datetime").val("");
 
                     }
                 })
@@ -410,7 +410,7 @@
                     $('.modal-title').text("Edit New Record");
                     $('#action_button').val("Edit");
                     $('#action').val("Edit");
-                    $('#dateElemint').show(); 
+                    //$('#dateElemint').show(); 
                     $('#formModal').modal('show');
                 }
             })
