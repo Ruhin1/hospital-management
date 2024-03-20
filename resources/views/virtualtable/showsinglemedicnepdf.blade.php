@@ -94,17 +94,21 @@ padding-left: 100px;
             <span>Reg No:234555 Diagnostic center Reg:689990</span><br/>
             <span>Mobile:0000000001</span> 
         </div>
-    </div>
-    <h2>Sales-Expenses Statement between date: {{ \Carbon\Carbon::parse($data['startDate'])->format('Y-m-d H:i:s') }} to {{ \Carbon\Carbon::parse($data['endDate'])->format('Y-m-d H:i:s') }}</h2>     
-    <br/>
+    </div> 
     <br/>
     <div class="pdf-div">
         <button class="print-pdfruhin" onclick="printPage()" >Print PDF</button>
     </div> 
         
+    <?php 
+    $medicine = \App\Models\medicine::find($data['medicneName']);
+    $sdate = strtotime(\Carbon\Carbon::parse($data['startDate'])->format('d-m-Y') .' 12:00');
+    $edate = strtotime(\Carbon\Carbon::parse($data['endDate'])->format('d-m-Y') .' 12:00');
     
-    <table> 
-        <thead>  
+    ?>
+    
+    <table>
+        <thead>
             <tr>
                 <th>ID</th>
                 <th>Medicine ID</th>
@@ -121,84 +125,169 @@ padding-left: 100px;
                 <th>Date</th>
             </tr>
             <tr>
-                <th colspan="4">Matched Medicine Name:{{$data['medicneName']}}</th>
-                <th colspan="4">Preveus Stock:</th> 
-                <th colspan="5">Date:{{$data['startDate']}} to {{$data['endDate']}}</th> 
+                <th colspan="4">Matched Medicine Name:
+                    @if ($medicine)
+                        {{ $medicine->name }}
+                    @endif
+                </th>
+                <th colspan="4">Preveus Stock:
+                    <?php
+                    $b = $medicine->stock;
+                    $sb = $medicine->stock;
+                    foreach ($virtualTable as $row){
+                    $rdate = strtotime(\Carbon\Carbon::parse($row->created_at)->format('d-m-Y') . ' 12:00');
+                    if($rdate  < $sdate){
+
+if ($row->order_id != null) {
+    if ($sb != 0) {
+        $sb = $sb - $row->Quantity;
+    }
+}
+
+if ($row->return_order_id != null) {
+        $sb = $sb + $row->Quantity;
+}
+
+if ($row->medicinecompanyorder_id != null) {
+    
+    if ($row->transitiontype == 1) {
+        $sb = $sb + $row->Quantity;
+    }
+
+    if ($row->transitiontype == 2) {
+        if ($sb != 0) {
+            $sb = $sb - $row->Quantity;
+        }
+    }
+
+    if ($row->transitiontype == 3) {
+        $sb = $sb + $row->Quantity;
+    }
+}
+
+
+}else {
+break;
+}  
+                        
+                    } 
+                       
+                    ?>
+                    @if ($medicine)
+                    Balance as on {{ \Carbon\Carbon::parse($data['startDate'])->subDay()->format('d-m-Y') }} was : {{ $sb }}
+                    @endif
+                </th>
+                <th colspan="5">Date: <span
+                        style="color:green">{{ \Carbon\Carbon::parse($data['startDate'])->format('d-m-Y h:i A') }}</span> to
+                    <span style="color: green">{{ \Carbon\Carbon::parse($data['endDate'])->format('d-m-Y h:i A') }}</span>
+                </th>
             </tr>
         </thead>
-       <tbody>
+        <tbody>
             @if (!empty($virtualTable))
                 @foreach ($virtualTable as $row)
-                <tr>
-                       
-                    <td>{{ $row->id }}</td>
-                    <td>{{ $row->medicine_id }}</td>
-                    <td>{{ $row->user_id }}</td>
-                    <td>{{ $row->patient_id }}</td>
-                    <td>{{ $row->order_id }}</td>
-                    <td>{{ $row->return_order_id }}</td>
-                    <td>{{ $row->medicinecompanyorder_id }}</td>
-                    <td>{{ $row->unit_price }}</td>
-                    <td>
-                        @if ($row->transitiontype == 1)
-                        Buy Medicine From Company
-                        @elseif ($row->transitiontype == 2)
-                        Return Medicine To Company
-                        @endif
-                    </td>
+                    @php
+                        $rdate = strtotime(\Carbon\Carbon::parse($row->created_at)->format('d-m-Y') . ' 12:00');
+                    @endphp
+   
+                @if (!($sdate > $rdate))
+                    @if ($edate >= $rdate)
+                            <tr>
+   
+                                <td>{{ $row->id }}</td>
+                                <td>{{ $row->medicine_id }}</td>
+                                <td>{{ $row->user_id }}</td>
+                                <td>{{ $row->patient_id }}</td>
+                                <td>{{ $row->order_id }}</td>
+                                <td>{{ $row->return_order_id }}</td>
+                                <td>{{ $row->medicinecompanyorder_id }}</td>
+                                <td>{{ $row->unit_price }}</td>
+                                <td>
+                                    @if ($row->transitiontype == 1)
+                                        Buy Medicine From Company
+                                    @elseif ($row->transitiontype == 2)
+                                        Return Medicine To Company
+                                    @endif
+                                </td>
+
+                                @if (@$loop->first)
+                                    <td>{{ $medicine->stock }}</td>
+                                @else
+                                    <td>{{ $row->Quantity  }}</td>
+                                @endif
+                                
+                                <td>
+   
+                                    <?php
+                                    
+                                    if ($row->order_id != null) {
+                                        if ($b != 0) {
+                                            $b = $b - $row->Quantity;
+                                        }
+                                    }
+                                    if ($row->return_order_id != null) {
+                                        $b = $b + $row->Quantity;
+                                    }
+                                    if ($row->medicinecompanyorder_id != null) {
+                                        if ($row->transitiontype == 1) {
+                                            $b = $b + $row->Quantity;
+                                        }
+                                        if ($row->transitiontype == 2) {
+                                            if ($b != 0) {
+                                                $b = $b - $row->Quantity;
+                                            }
+                                        }
+                                        if ($row->transitiontype == 3) {
+                                            $b = $b + $row->Quantity;
+                                        }
+                                    }
+                                    ?>
+                                    {{ $b }}
+                                </td>
+                                <td>{{ $row->type }}</td>
+                                <td>{{ \Carbon\Carbon::parse($row->created_at)->format('d-m-Y h:i A') }}</td>
+                            </tr>
+                    @else
+                        @break
+                @endif
+                @else
+                    <?php
                     
-                    <td>{{ $row->Quantity }}</td>
-                    <td>
-                       
-                        <?php 
-                       
-                        if($row->order_id != null) 
-                        {
+                    if ($row->order_id != null) {
+                        if ($b != 0) {
+                            $b = $b - $row->Quantity;
+                        }
+                    }
+                    if ($row->return_order_id != null) {
+                        $b = $b + $row->Quantity;
+                    }
+                    if ($row->medicinecompanyorder_id != null) {
+                        if ($row->transitiontype == 1) {
+                            $b = $b + $row->Quantity;
+                        }
+                        if ($row->transitiontype == 2) {
                             if ($b != 0) {
-                             $b =$b -  $row->Quantity;
+                                $b = $b - $row->Quantity;
                             }
                         }
-                        if($row->return_order_id  != null)
-                        {
-                           $b = $b + $row->Quantity; 
+                        if ($row->transitiontype == 3) {
+                            $b = $b + $row->Quantity;
                         }
-                        if($row->medicinecompanyorder_id != null )
-                        {
-                          if ($row->transitiontype == 1)
-                          {
-                           $b = $b + $row->Quantity;
-    
-                          }	
-                          if($row->transitiontype == 2){
-                             if ($b != 0) {
-                                  $b =$b- $row->Quantity;
-                             }
-                               
-                             }
-                          if($row->transitiontype == 3){
-     
-                               $b = $b + $row->Quantity;
-                             }							
-                        }
-                        ?>
-                       
-                       
-                       {{$b}} 
-                    </td>
-                    <td>{{ $row->type }}</td>
-                    <td>{{ \Carbon\Carbon::parse($row->created_at)->format('d-m-Y h:i A') }}</td>
-                </tr>
-                @endforeach
-            @else  
+                    }
+                    ?>
+                @endif
+            @endforeach
+            
+        @else
             <tr>
                 <td colspan="12" style="color: green">
-                No have a transition not available 
+                    No have a transition not available
                 </td>
             </tr>
-           
-            @endif
-       </tbody>
-    </table>  
+        @endif
+    </tbody>
+   </table>
+   
     <script>
         function printPage(){
             window.print();

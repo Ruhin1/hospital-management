@@ -93,7 +93,7 @@ padding-left: 100px;
 </head>
 <body>
     @php
-$b = 0;
+
 $groupedRows = [];
 
 foreach ($virtualTable as $row) {
@@ -119,7 +119,8 @@ foreach ($virtualTable as $row) {
         </div> 
         <br/>
        
-        <h2>Sales-Expenses Statement between date: {{ \Carbon\Carbon::parse($data['startDate'])->format('Y-m-d H:i:s') }} to {{ \Carbon\Carbon::parse($data['endDate'])->format('Y-m-d H:i:s') }}</h2>     
+       
+        <h2>Sales-Expenses Statement between date: <span style="color: green; background:yallow">{{ \Carbon\Carbon::parse($data['startDate'])->format('d-m-Y h:i A') }}</span> to <span style="color: green; background:yallow">{{ \Carbon\Carbon::parse($data['endDate'])->format('d-m-Y h:i A') }}</span></h2>     
         <br/>
        <br/>
        
@@ -144,23 +145,83 @@ foreach ($virtualTable as $row) {
             </tr>
         </thead>
         <tbody>
+            @php
+            $sdate = strtotime(\Carbon\Carbon::parse($data['startDate'])->format('d-m-Y') .' 12:00');
+            $edate = strtotime(\Carbon\Carbon::parse($data['endDate'])->format('d-m-Y') .' 12:00');
+            
+        @endphp
             @foreach($groupedRows as $medicineId => $rows)
 
             <tr class="medicine-name">
-                <th colspan="13">
-                    Matched Medicine Name: 
-                    {{-- Check if medicine exists --}}
-                    @php
-                        $medicine = \App\Models\medicine::find($medicineId);
-                    @endphp
-                    @if($medicine)
-                        {{-- Print medicine name --}}
-                        {{ $medicine->name }}
-                    @else
-                        {{-- Handle case when medicine is not found --}}
-                        Medicine not found
-                    @endif
-                </th>
+               
+                    <th colspan="10">
+                        Matched Medicine Name: 
+                        {{-- Check if medicine exists --}}
+                        @php
+                           $medicine = \App\Models\medicine::find($medicineId);
+                        @endphp
+                        @if($medicine)
+                            <?php 
+                            
+                             echo $medicine->name;
+                             
+                             
+                            ?>
+                        @else
+                            {{-- Handle case when medicine is not found --}}
+                            Medicine not found
+                        @endif
+                    </th>
+               
+                    <th colspan="4">Preveus Stock:
+                        <?php
+                        $b = $medicine->stock;
+                        $sb = $medicine->stock;
+                        foreach ($rows as $row){
+                        $rdate = strtotime(\Carbon\Carbon::parse($row->created_at)->format('d-m-Y') . ' 12:00');
+
+                            if($rdate  < $sdate){
+
+                                            if ($row->order_id != null) {
+                                                if ($sb != 0) {
+                                                    $sb = $sb - $row->Quantity;
+                                                }
+                                            }
+
+                                            if ($row->return_order_id != null) {
+                                                    $sb = $sb + $row->Quantity;
+                                            }
+
+                                            if ($row->medicinecompanyorder_id != null) {
+                                                
+                                                if ($row->transitiontype == 1) {
+                                                    $sb = $sb + $row->Quantity;
+                                                }
+
+                                                if ($row->transitiontype == 2) {
+                                                    if ($sb != 0) {
+                                                        $sb = $sb - $row->Quantity;
+                                                    }
+                                                }
+
+                                                if ($row->transitiontype == 3) {
+                                                    $sb = $sb + $row->Quantity;
+                                                }
+                                            }
+                                            
+                                           
+                            }else {
+                                break;
+                            }
+                            
+                            
+                        } 
+                       
+                        ?>
+                        @if ($medicine)
+                        Balance as on {{ \Carbon\Carbon::parse($data['startDate'])->subDay()->format('d-m-Y') }} was : {{ $sb }}
+                        @endif
+                    </th>
             </tr>   
 
             <tr>
@@ -180,8 +241,13 @@ foreach ($virtualTable as $row) {
             </tr>
            
             
-                <?php $b=0; ?> 
+                <?php  $b = $medicine->stock;?>
                 @foreach($rows as $row)
+                @php
+                $rdate = strtotime(\Carbon\Carbon::parse($row->created_at)->format('d-m-Y') .' 12:00');
+                @endphp
+                @if (!($sdate > $rdate))
+                @if ($edate >= $rdate) 
                 <tr>
                    
                     <td>{{ $row->id }}</td>
@@ -199,8 +265,12 @@ foreach ($virtualTable as $row) {
                         Return Medicine To Company
                         @endif
                     </td>
-                    
-					<td>{{ $row->Quantity }}</td>
+                    @if (@$loop->first)
+                    <td>{{ $medicine->stock }}</td>
+                @else
+                    <td>{{ $row->Quantity  }}</td>
+                @endif
+					
                     <td>
                        
 					   <?php 
@@ -238,9 +308,44 @@ foreach ($virtualTable as $row) {
                     </td>
                     <td>{{ $row->type }}</td>
                     <td>{{ \Carbon\Carbon::parse($row->created_at)->format('d-m-Y h:i A') }}</td>
+                </tr> 
+                @else  
+                  @break
+                @endif
+                @else 
+                <?php 
+					   
+					   if($row->order_id != null) 
+					   {
+						   if ($b != 0) {
+                            $b= $b - $row->Quantity;
+                           }
+					   }
+					   if($row->return_order_id  != null)
+					   {
+						  $b = $b + $row->Quantity; 
+					   }
+					   if($row->medicinecompanyorder_id != null )
+					   {
+						 if ($row->transitiontype == 1)
+						 {
+                          $b = $b + $row->Quantity;
 
-                    
-                </tr>
+						 }	
+                         if($row->transitiontype == 2){
+                            if ($b != 0) {
+                                 $b =$b- $row->Quantity;
+                            }
+	                          
+                            }
+                         if($row->transitiontype == 3){
+	
+	                          $b = $b + $row->Quantity;
+                            }							
+					   }
+					   ?>
+                @endif
+                
                 @endforeach
             @endforeach
         </tbody>

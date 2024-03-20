@@ -4,7 +4,7 @@
  </style>
      </head>
     
-    <form class="form" action="{{url('showmedicnepdf')}}" method="POST"> 
+    <form class="form" action="{{url('showmedicnepdf')}}" method="POST">  
         @csrf
         <div class="from-group mb-3">
             <label for="শুরুর তারিখ :">শুরুর তারিখ :</label>

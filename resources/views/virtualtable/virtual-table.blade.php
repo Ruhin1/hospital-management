@@ -64,7 +64,7 @@ th, td {
 </head>
 <body>
     @php
-$b = 0;
+
 $groupedRows = [];
 
 foreach ($virtualTable as $row) {
@@ -101,11 +101,14 @@ foreach ($virtualTable as $row) {
                     Matched Medicine Name: 
                     {{-- Check if medicine exists --}}
                     @php
-                        $medicine = \App\Models\medicine::find($medicineId);
+                       $medicine = \App\Models\medicine::find($medicineId);
                     @endphp
                     @if($medicine)
-                        {{-- Print medicine name --}}
-                        {{ $medicine->name }}
+                        <?php 
+                        
+                         echo $medicine->name;
+                         
+                        ?>
                     @else
                         {{-- Handle case when medicine is not found --}}
                         Medicine not found
@@ -131,7 +134,7 @@ foreach ($virtualTable as $row) {
             </tr>
            
             
-                <?php $b=0; ?> 
+                <?php  $b = $medicine->stock;?>
                 @foreach($rows as $row)
                 <tr>
                    
@@ -151,7 +154,11 @@ foreach ($virtualTable as $row) {
                         @endif
                     </td>
                     
-					<td>{{ $row->Quantity }}</td>
+					@if (@$loop->first)
+                    <td>{{ $medicine->stock }}</td>
+                    @else
+                    <td>{{ $row->Quantity  }}</td>
+                    @endif
                     <td>
                        
                         <?php 
