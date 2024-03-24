@@ -19,6 +19,7 @@ class CreatePrescriptionsTable extends Migration
 			$table->foreignId('patient_id');
 			$table->string('meettingtimefornext')->nullable();
 			$table->text('history')->nullable();
+			$table->text('investigation')->nullable();
 			
             $table->timestamps();
         });

@@ -1,183 +1,160 @@
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<style>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+      <style>
+         #three{
+         min-height: 800px;
+         }
+         #c img {
+         width:100%;
+         }
+         #four img {
+         width:100%;
+         position: fixed;
+  bottom: 0;
+  left: 0;
+         }
+         .m-content{
+          display: flex;
+         }
+         .m-content .m-data{
+          width: 30%;
+         }
+        .m-content .m-list{
+          width: 70%;
+        }
+        .m-content .m-list table tbody tr td{
+          padding: 5px 5px;
 
-#three{
-	
-min-height: 800px;
-}
-
-
-#c img {
-width:100%;
-}
-
-
-#four img {
-width:100%;
-	
-}
-
- </style>
- 
-</head>
-
-<body>
-
-
-
-<div  class="container">
-  <div id="one" class="row">
-
-   <!-- <div  >
-         <b style="color:green; font-size:30px;">{{ $doctor->name }}</b> <br>
-<span style="font-size:15px; color:darkblue;"> {!! nl2br(e($doctor->prescriptionheading)) !!}	           <br>
-
-    </div> -->
-	
-	
-	<div id="c" >
-	<img src="{{ public_path('img/'.$doctor->headerimage) }}">
-
-<hr>
-</div>
-	
-<hr>
-  </div>
-  
-    <div style="height:10px; font-size:13px;" id="two" >
-    <div style="width:50%; float:left;" >
-      <b> Patient Name:</b> {{$data->name}}
-    </div>
-    <div style="width:10%;float:left;" >
- <b>Age:</b> {{$data->age}}
-    </div>
-	    <div style="width:13%;float:left;" >
- <b>Sex:</b>{{$data->sex}}
-    </div>
-	    <div style="width:17%;float:left;" >
-<b>Date:</b><?php  echo date('d/m/y', strtotime($prescription->created_at)); ?> 
-    </div>
-
-  </div>
-  <hr>
- 
-  
-  
-      <div  style="height:690px;"  id="three" >
-    
-	
-	<div style="width:25%; float:left;" >
-{!! nl2br(e($prescription->history)) !!}	
-    </div>
-
-	
-
-	
-	<div style="width:75%; float:left;">
-	<div   >
-	<div style="width:20%; float:left;" >
- <b style="font-size:30px;">Rx:</b> <br>
- </div      >
- <?php $i = 1 ; ?>
- @foreach($prescription->prescriptionmedicinelist as $presmed)
- <div style="width:80%; height:7px; float:right;">
- <div >
- <b> {{$i}} . {{$presmed->medicine_category->name}}. {{$presmed->medicine->name}}</b><br><br>
- 
- <div >
- <div style="width:15%; float:left; font-family:nikosh" >
-
-<?php 
-if($presmed->prescriptionusages != null )
-{
-	?>
-{{$presmed->prescriptionusages->usage}}
-<?php } ?>
+        }
 
 
- </div>
-  <div style="width:30%; float:left; font-family:nikosh;"  >
-  <?php 
-if($presmed->prescriptionkhabaragepore != null )
-{
-	?>
+      </style>
+   </head>
+   <body style="font-family:nikosh">
+      <div  class="container">
+      <div id="one" class="row">
+         <div id="c" >
+          @if ($doctor->footerimage)
+          <img src="{{
+            asset('/img/'.$doctor->footerimage);
+         }}" alt="logo">
+         @else
+         <img src="{{
+          asset('/img/20230601001256.png');
+       }}" alt="logo">
+        @endif
+           
+            <hr>
+         </div>
+         <hr>
+      </div>
+      <div style="height:10px; font-size:13px;" id="two" >
+         <div style="width:50%; float:left;" >
+            <b> Patient Name:</b> {{$data->name}}
+         </div>
+         <div style="width:10%;float:left;" >
+            <b>Age:</b> {{$data->age}}
+         </div>
+         <div style="width:13%;float:left;" >
+            <b>Sex:</b>{{$data->sex}}
+         </div>
+         <div style="width:17%;float:left;" >
+            <b>Date:</b><?php  echo date('d/m/y', strtotime($prescription->created_at)); ?> 
+         </div>
+      </div>
+      <hr>
 
-      খাবার  {{$presmed->prescriptionkhabaragepore->khabaragebapore}}
-	  
-	  <?php } ?>
- </div>
- 
-   <div style="width:15%; float:left; font-family:nikosh;"  >
-     <?php 
-if($presmed->day != null )
-{
-	?>
-   
- {{$presmed->day}} দিন
-   <?php } ?>
- </div>
-     <div style="width:35%; float:left; font-family:nikosh;" >
- {{$presmed->comment}}
- </div>
- </div>
- </div>
- 
-<br>
- 
- </div>
- <?php $i++ ?>
- @endforeach
-<span style=" background-color:#00FA9A; font-family:nikosh; font-size:15px;"> পরবর্তী সাক্ষাতঃ {{ $prescription->meettingtimefornext }} দিন পর   </span><br>	
+      <div class="m-content">
+        <div class="m-data">
+          <div>
+        <h3>History:</h3>
+        <p> {!! nl2br(e($prescription->history)) !!}</p>
+          </div>
+          <div>
+            <h3>Investigation:</h3>
+            <p>{!! nl2br(e($prescription->investigation)) !!}"</p>
+          </div>
+          <div>
+           <h3>RX:</h3>
+           <p style=" background-color:#00FA9A; font-family:nikosh; font-size:15px;"> পরবর্তী সাক্ষাতঃ {{ $prescription->meettingtimefornext }} দিন পর   </p><br>	
 
- </div>
-  
+          </div>
+        </div>
+        <div class="m-list">
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+             
+              @foreach($prescription->prescriptionmedicinelist as $key=>$presmed)
+              <tr>
+                <td style="font-weight: bold">{{$key+1}} {{$presmed->medicine_category->name}}. {{$presmed->medicine->name}} </td>          
+                <td>
+                  @if ( $presmed->prescriptionusages != null)
+                  {{$presmed->prescriptionusages->usage}} 
+                  @endif
+                </td>
+                <td>
+                  @if ($presmed->prescriptionkhabaragepore != null)
+                  {{$presmed->prescriptionkhabaragepore->khabaragebapore}}
+                  @endif
+                </td>
+                <td>
+                  @if($presmed->day != null )
+                  {{$presmed->day}} দিন
+                  @endif
+                </td>
+                <td> {{$presmed->comment}}</td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+     
+      <br>
+      <div id="four">
+        @if ($doctor->footerimage)
+        <img src="{{asset('/img/' . $doctor->footerimage)}}" alt="fotter-logo">
+        @else
+        <img src="{{ asset('/img/20230601001256footerimage.png') }}" alt="fotter-logo">
+        @endif
+      </div>
+      <script>
+        window.onload = function() {
+            // Automatically print the page
+            window.print();
+        };
+    // Flag to track whether the print dialog is still open
+        var printDialogOpen = true;
 
+        // Start a timer to check if the print dialog is closed
+        var printTimer = setTimeout(function() { 
+            // Check if the print dialog is still open
+            if (printDialogOpen) {
+                // If the print dialog is still open after the timeout, assume print operation was canceled
+                window.location.href = "{{ route('prescription.index') }}";
 
-  </div>
+            } else {
+                // If the print dialog is closed, assume print operation was successful
+                window.location.href = "{{ route('prescription.index') }}";
+            }
+        }, 5000); // Adjust the duration (in milliseconds) as needed
 
+        // Event listener to detect when the print dialog window is closed
+        window.addEventListener('focus', function() {
+            // Update the flag when the focus returns to the main window
+            printDialogOpen = false;
+        });
 
-  </div>
-  <br>
-
-	
-
-  <div id="four">
-  
-  <img src="{{ public_path('img/'.$doctor->footerimage) }}">
-
-<!--
-  <img    src="img/{{ $doctor->footerimage }}" >
-  
- 
-  <div style="width:33%;float:left;">
-<b style="color:red; font-family:nikosh; font-size:25px;">  সিরিয়ালের জন্য </b><br>
-<span style="color:darkblue;">    {{ $doctor->contact_address_for_serial}}  </span>
-  </div>
-  
-  <div  style="width:33%;float:left;font-family:nikosh;">
- <b style="color:red;font-size:25px;">  চেম্বার </b> <br>
-{!! nl2br(e($doctor->chamber_address)) !!}	 
- 
- <br>
-  
-  </div>
-  <div style="width:33%;float:left;font-family:nikosh;">
-<b style="color:red;font-size:25px;">  সাক্ষাতের সময়</b> <br>
-  
-  {{$doctor->visiting_hours}} 
- <br>
- বন্ধঃ  {{$doctor->offday}} 
-
- </div>
-  </div>
-  -->
-
-</div>
-
-
-
-    
-</body>
+    </script>
+   </body>
 </html>

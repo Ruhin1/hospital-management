@@ -5,16 +5,6 @@
 @section('content')
 
 
-
-
- 
- 
-
-
-
-
-
-
 </head>
 
 
@@ -24,36 +14,27 @@
 
 <body>
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-12 col-sm-6" >
-    <h1>Prescription Usages </h1>
-    <a style="float:right; margin-bottom:20px;" class="btn btn-success" href="javascript:void(0)" id="create_record"> Add New </a>
-	
-	
-	<div class="table-responsive">
-    <table id="patient_table"  class="table  table-success table-striped data-tablem">
-        <thead>
-            <tr>
-	
-			<th>ID</th>
-			<th>No</th>
-                <th>Usage</th>
-				
-				
-				
-			     
-             
-                <th width="300px">Action</th>
-            </tr>
-        </thead>
-        <tbody   >
-
-        </tbody>
-    </table>
-	</div>
-</div>
-</div>
+    <div class="container">
+        <div class="row">
+           <div class="col-md-12 col-sm-6" >
+              <h1>Prescription Usages </h1>
+              <a style="float:right; margin-bottom:20px;" class="btn btn-success" href="javascript:void(0)" id="create_record"> Add New </a>
+              <div class="table-responsive">
+                 <table id="patient_table"  class="table  table-success table-striped data-tablem">
+                    <thead>
+                       <tr>
+                          <th>ID</th>
+                          <th>No</th>
+                          <th>Usage</th>
+                          <th width="300px">Action</th>
+                       </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                 </table>
+              </div>
+           </div>
+        </div>
 </div>
 
 
@@ -111,7 +92,7 @@
 
 
 
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
@@ -154,34 +135,6 @@ $(document).ready(function(){
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
  $('#create_record').click(function(){
   $('.modal-title').text("Add New Record");

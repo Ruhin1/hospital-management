@@ -25,36 +25,27 @@ use App\Http\Controllers\reporttransactionController;
 use App\Http\Controllers\agentdetailcontroller;   
 use App\Http\Controllers\AgenttransactionControllerController;     
 use App\Http\Controllers\externalcostcontroller; 
-use App\Http\Controllers\AccountController;        
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\phermacyController;  
- use App\Http\Controllers\employeerolecangecontroller;      
+use App\Http\Controllers\employeerolecangecontroller;      
 use App\Http\Controllers\deletedusercontroller;  
 use App\Http\Controllers\cashtransitionContoller; 
-
 use App\Http\Controllers\pathologytestfromother; 
-
 use App\Http\Controllers\relesepatient;  
 use App\Http\Controllers\medicinecompanyorder; 
-
 use App\Http\Controllers\doctorcontroller;        
 use App\Http\Controllers\doctorappointmenttransactionController;   
 use Dompdf\Dompdf; 
 use App\Http\Controllers\makepathologyreport;        
-
 use App\Http\Controllers\surgeryaddlistcontroller;    
-
-
 use App\Http\Controllers\indexController;        
 use App\Http\Controllers\surgerytransitionController;  
 use App\Http\Controllers\finalreporttransitionController;   
 use App\Http\Controllers\Create_khorocer_khad_Controller;                
 use App\Http\Controllers\CreaterSupplierController;      
 use App\Http\Controllers\KhorochTransitionConTrollerController; 
-
 use App\Http\Controllers\incomestatemnetController;  
-
 use App\Http\Controllers\outdoordoctortranstion;  
-
 use App\Http\Controllers\dhar_shod_advance_get_Controller;
 use App\Http\Controllers\DoctorCommissionController; 
 use App\Http\Controllers\medicineCompanyController;                                
@@ -79,9 +70,12 @@ use App\Http\Controllers\dentalservicecontroller;
 use App\Http\Controllers\duetranController;
 use App\Http\Controllers\duecollectionfromphermachyController;
 use App\Http\Controllers\BasicSettingController;
+use App\Http\Controllers\coshmaController;
 use App\Http\Controllers\indoorpatientduecollectionforphermachy;
 use App\Http\Controllers\ReagentTransactionController;
 use App\Http\Controllers\virtualTableController;
+use App\Http\Controllers\addcoshmaInstructions;
+
 
 
 /* medicinecontroller dueshow pathologyreportmaking releasedindoor   employeesalarymonth
@@ -1761,11 +1755,16 @@ Route::get('balancesheetforcompany/destroy/{id}', [ compnanybalncecontroller::cl
 Route::get('virtual-table/{print?}', [virtualTableController::class, 'show']); 
 Route::get('showmedicne', [virtualTableController::class, 'index']);
 Route::post('showmedicnepdf/{print?}', [virtualTableController::class, 'showmedicnepdf']);
+Route::get('coshmaprescription',[coshmaController::class,'index'])->name('coshma.index');
+Route::Post('printcoshmaprescription',[coshmaController::class,'store'])->name('coshma.store');
+Route::get('addcoshmainstructions',[addcoshmaInstructions::class,'index'])->name('coshmainstructions.index');
+Route::post('storecoshmainstructions',[addcoshmaInstructions::class,'store'])->name('coshmainstructions.store');
+Route::get('/coshma/{id}/edit', [ addcoshmaInstructions::class,'edit']);
+Route::post('coshma/update', [ addcoshmaInstructions::class,'update'])->name('coshma.update');
 
+Route::get('coshma/destroy/{id}', [ addcoshmaInstructions::class,'destroy']);
 
-
-
-
+ 
  
 
 

@@ -14,6 +14,7 @@ class prescription extends Model
 	 'patient_id',
 	 'meettingtimefornext',
 	 'history',
+     'investigation',
 
     ];
 	
