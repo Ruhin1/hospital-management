@@ -1,0 +1,118 @@
+<div id="coshma-from">
+                <h3 style="text-align: center; margin:20px;">Write coshma Prescription</h3>
+                <div class="row">
+                    <div class="col-lg-3">
+                       <label for="name">Name:</label>
+                       <input type="text" class="form-control" name="name" id="name"  placeholder="write name....">
+                    </div>
+                    <div class="col-lg-3">
+                       <label for="age">Age:</label>
+                       <input type="number" class="form-control" name="age" id="age"  placeholder="write age....">
+                    </div>
+                    <div class="col-lg-3">
+                        <label for="Date">Date:</label>
+                        <input type="date" class="form-control" name="brith" id="brith">
+                     </div>
+                    <div class="col-lg-3">
+                        <label for="Date">Ipd:</label>
+                        <input type="number" class="form-control" name="ipd" id="ipd"  placeholder="write ipd....">
+                     </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-lg-6 border">
+                       <div class="row">
+                        <div class="col-lg-12">
+                            <h3>Right Eye (OD)</h3> 
+                            
+                        </div>
+                        <div class="col-lg-6">
+                           <label for="resph">Sph</label>
+                           <input type="text" class="form-control" id="resph" name="resph"  placeholder="write sps....">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="recyl">Cyl</label>
+                           <input type="number" class="form-control" id="recyl" name="recyl" placeholder="write cyl....">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="reaxis">Axis</label>
+                           <input type="number" class="form-control" id="reaxis" name="reaxis"  placeholder="write axis....">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="rebyes">Byes</label>
+                           <input type="number" class="form-control" id="rebyes" name="rebyes"  placeholder="write byes.... 6/6">
+                        </div>
+                       </div>           
+                    </div>
+                    <div class="col-lg-6 border">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h3>Left Eye (OS)</h3> 
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="lesph">Sph</label>
+                                <input type="text" class="form-control" id="lesph" name="lesph"  placeholder="write sps....">
+                             </div>
+                             <div class="col-lg-6">
+                                 <label for="lecyl">Cyl</label>
+                                <input type="number" class="form-control" id="lecyl" name="lecyl"  placeholder="write cyl....">
+                             </div>
+                             <div class="col-lg-6">
+                                 <label for="leaxis">Axis</label>
+                                <input type="number" class="form-control" id="leaxis" name="leaxis"  placeholder="write axis....">
+                             </div>
+                             <div class="col-lg-6">
+                                 <label for="lebyes">Byes</label>
+                                <input type="number" class="form-control" id="lebyes" name="lebyes"  placeholder="write byes.... 6/6">
+                             </div>
+                           </div>   
+                    </div>
+                    <div class="col-lg-6">
+                            <label for="add">Add:</label>
+                            <input type="text" class="form-control" name="add" id="add" placeholder="write add....">
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="diopter">Diopter:</label>
+                        <input type="text" class="form-control" name="diopter" id="diopter" placeholder="write diopter....">
+                    </div>
+                    <div class="row">
+                       <div class="col-lg-6">
+                        <label for="instructions">Instructions</label><br/>
+                        <select name="instructions[]" multiple>
+                            {{-- @foreach ($inst as $row)
+                            <option style="padding: 2px;border:1px solid black;" value="{{$row->id}}">{{$row->value}}</option>
+                                @endforeach   --}}
+                                <option selected style="padding: 2px;border:1px solid black;" value="1">value1</option>
+                        </select>
+                       </div>
+                            <div class="col-lg-6">
+                                <div class="col-lg-12">
+                                    <label for="type">Type:</label><br/>
+                                    <select name="type[]" multiple> 
+                                        <option selected value="1">Unifosal</option>
+                                        <option value="2">mit
+                                            Bifocal</option>
+                                        <option value="3">Progressive focal (Varilus)</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-12">
+                                    <label for="color">Color:</label><br/>
+                                    <select name="color[]" multiple>
+                                        <option selected value="1">White</option>
+                                        <option value="2">Photochromatic</option>
+                                        <option value="3">MC Fiber (UV Protect) (Blue Cut)</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-12">
+                                    <label for="Remarks">Remarks :</label><br/>
+                                    <select name="remarks[]" multiple>
+                                        <option selected value="1">Distant</option>
+                                        <option value="2">Reading</option>
+                                        <option value="3">Constant</option>
+                                        <option value="4">Fiber</option>
+                                        <option value="5">Glass</option>
+                                    </select>
+                                </div>
+                            </div>
+                    </div>
+                </div> 
+            </div>

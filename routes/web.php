@@ -1755,17 +1755,27 @@ Route::get('balancesheetforcompany/destroy/{id}', [ compnanybalncecontroller::cl
 Route::get('virtual-table/{print?}', [virtualTableController::class, 'show']); 
 Route::get('showmedicne', [virtualTableController::class, 'index']);
 Route::post('showmedicnepdf/{print?}', [virtualTableController::class, 'showmedicnepdf']);
-Route::get('coshmaprescription',[coshmaController::class,'index'])->name('coshma.index');
-Route::Post('printcoshmaprescription',[coshmaController::class,'store'])->name('coshma.store');
+///--------
 Route::get('addcoshmainstructions',[addcoshmaInstructions::class,'index'])->name('coshmainstructions.index');
 Route::post('storecoshmainstructions',[addcoshmaInstructions::class,'store'])->name('coshmainstructions.store');
 Route::get('/coshma/{id}/edit', [ addcoshmaInstructions::class,'edit']);
 Route::post('coshma/update', [ addcoshmaInstructions::class,'update'])->name('coshma.update');
-
 Route::get('coshma/destroy/{id}', [ addcoshmaInstructions::class,'destroy']);
+///-----
 
- 
- 
+
+Route::get('coshmaprescription',[coshmaController::class,'index'])->name('coshma.index');
+Route::get('coshma/prescription/delate/{id}',[coshmaController::class,'destroy'])->name('coshma.delate');
+Route::get('/coshma/{id}/edit',[coshmaController::class,'edit']);
+Route::get('printcoshmaPreection/{id}',[coshmaController::class,'printcoshmaPreection'])->name('print.coshma.Preection');
+Route::post('coshma/update', [coshmaController::class,'update'])->name('coshma.update');
+
+   
+Route::get('test',function(){
+    $data = new \App\Models\coshmaPrescription();
+    $data->name = 'sdds';
+    $data->save();
+});  
 
 
 

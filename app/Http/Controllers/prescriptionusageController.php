@@ -23,13 +23,13 @@ class prescriptionusageController extends Controller
 	  
 	
 	  
-	        if ($request->ajax()) {
+	    if ($request->ajax()) {
             $prescriptionusages =  prescriptionusages::where('softdelete',0)->latest()->get();
             return Datatables::of($prescriptionusages)
                    ->addIndexColumn()
                     ->addColumn('action', function( prescriptionusages $data){ 
    
-                          $button = '<button type="button" name="edit" id="'.$data->id.'" class="edit btn btn-primary btn-sm">Edit</button>';
+                        $button = '<button type="button" name="edit" id="'.$data->id.'" class="edit btn btn-primary btn-sm">Edit</button>';
                         $button .= '&nbsp;&nbsp;';
                         $button .= '<button type="button" name="delete" id="'.$data->id.'" class="delete btn btn-danger btn-sm">Delete</button>';
                         return $button;

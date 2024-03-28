@@ -124,16 +124,16 @@
                         </div>
                         <div class="col-lg-12">
                             <label for="color">Color:</label><br/>
-                            <select name="color">
-                                <option value="1">White</option>
+                            <select name="color[]" multiple>
+                                <option selected value="1">White</option>
                                 <option value="2">Photochromatic</option>
                                 <option value="3">MC Fiber (UV Protect) (Blue Cut)</option>
                             </select>
                         </div>
                         <div class="col-lg-12">
                             <label for="Remarks">Remarks :</label><br/>
-                            <select name="remarks">
-                                <option value="1">Distant</option>
+                            <select name="remarks[]" multiple>
+                                <option selected value="1">Distant</option>
                                 <option value="2">Reading</option>
                                 <option value="3">Constant</option>
                                 <option value="4">Fiber</option>

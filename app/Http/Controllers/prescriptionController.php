@@ -7,10 +7,9 @@ use Illuminate\Http\Request;
 use DataTables;
 use Validator;
 use App\Events\DataStored;
-
-
+use App\Models\coshmaPrescription;
 use App\Models\patient;
-use App\Models\medicine;
+use App\Models\medicine; 
 use App\Models\doctor;
 use App\Models\medicine_category;
 
@@ -220,40 +219,79 @@ class prescriptionController extends Controller
 
 
 
-    
+     
     public function store(Request $request)
     {
-		 
-			
-	    DB::transaction(function () use ($request) {
+		//$data =  dd($request->medicine_name[]);
+        if(!empty($request->medicine_name) && !empty($request->category) && !empty($request->usages) && !empty($request->khabaragepore)){
+
+            DB::transaction(function () use ($request) {
 		
-            $prescription = new prescription; 
-            $prescription->user_id  = auth()->user()->id ; //$request->sellerid;
-            $prescription->patient_id  = $request->customer_id;
-            $prescription->meettingtimefornext =	$request->nextdate;
-            $prescription->history =	$request->history;
-            $prescription->investigation =	$request->investigation;
-            $prescription->save();
+                $prescription = new prescription; 
+                $prescription->user_id  = auth()->user()->id ; //$request->sellerid;
+                $prescription->patient_id  = $request->customer_id;
+                $prescription->meettingtimefornext =	$request->nextdate;
+                $prescription->history =	$request->history;
+                $prescription->investigation =	$request->investigation;
+                $prescription->save();
+    
+                $prescription_id = $prescription->id;
+    
+                for ($i = 0; $i < count($request->medicine_name); $i++ ){
+    
+                
+                    $prescriptionmedicinelist = new prescriptionmedicinelist; 
+                    $prescriptionmedicinelist->prescription_id = $prescription_id;
+                    $prescriptionmedicinelist->medicine_category_id = $request->category[$i];
+                    $prescriptionmedicinelist->medicine_id = $request->medicine_name[$i]; 
+                    $prescriptionmedicinelist->prescriptionusages_id = $request->usages[$i];
+                    $prescriptionmedicinelist->prescriptionkhabaragepore_id = $request->khabaragepore[$i];
+                    $prescriptionmedicinelist->day = $request->days[$i];	
+                    $prescriptionmedicinelist->comment = $request->comment[$i];		
+                    $prescriptionmedicinelist->save(); 
+    
+                }		
+            });
+        
 
-            $prescription_id = $prescription->id;
+        }
+        
+        if(!empty( $request->brith) && !empty($request->ipd) && !empty($request->resph) && !empty($request->lesph)){
 
-            for ($i = 0; $i < count($request->medicine_name); $i++ ){
+            $patient = patient::find($request->customer_id);    
+            $coshmaprescription = new coshmaPrescription();
+            $coshmaprescription->name = $patient->name;
+            $coshmaprescription->age = $patient->age;
+            $coshmaprescription->preint_id = $request->customer_id;
+            $coshmaprescription->brith = $request->brith;
+            $coshmaprescription->ipd = $request->ipd;
+            $coshmaprescription->resph = $request->resph;
+            $coshmaprescription->recyl = $request->recyl;
+            $coshmaprescription->reaxis = $request->reaxis;
+            $coshmaprescription->rebyes = $request->rebyes;
+            $coshmaprescription->resph = $request->lesph;
+            $coshmaprescription->recyl = $request->lecyl;
+            $coshmaprescription->reaxis = $request->leaxis;
+            $coshmaprescription->rebyes = $request->lebyes;
+            $coshmaprescription->add = $request->add;
+            $coshmaprescription->diopter = $request->diopter;
+            $coshmaprescription->instructions = $request->instructions;
+            $coshmaprescription->type = $request->type;
+            $coshmaprescription->color = $request->color;
+            $coshmaprescription->remarks = $request->remarks;
+            $coshmaprescription->save();
+          
+           
+        } 
+        	 
 
+           
+             
             
-                $prescriptionmedicinelist = new prescriptionmedicinelist; 
-                $prescriptionmedicinelist->prescription_id = $prescription_id;
-                $prescriptionmedicinelist->medicine_category_id = $request->category[$i];
-                $prescriptionmedicinelist->medicine_id = $request->medicine_name[$i]; // asole medicine_name[] er vetore id neya hoyeche. form bananor somoy name lekha hoyechecilo pore ar change kora hoy nai 
-                $prescriptionmedicinelist->prescriptionusages_id = $request->usages[$i];
-                $prescriptionmedicinelist->prescriptionkhabaragepore_id = $request->khabaragepore[$i];
-                $prescriptionmedicinelist->day = $request->days[$i];	
-                $prescriptionmedicinelist->comment = $request->comment[$i];		
-                $prescriptionmedicinelist->save(); 
-
-            }		
-        });	
-        event(new DataStored());
-        return response()->json(['success' => 'Data Added successfully.']);
+            
+        event(new DataStored()); 
+        return response()->json(['success' =>  'Data Added successfully.']);  
+        
     } 
 
   

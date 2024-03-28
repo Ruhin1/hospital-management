@@ -29,7 +29,10 @@
         @endif
 
         <div class="container" style="background-color:#EEE8AA; ">
-            <h2>Write Prescription</h2>
+            <div style="display: flex; justify-content:space-between">
+                <h2>Write Prescription</h2>
+            <button class="btn btn-primary coshma-prection">Add Coshma prection</button>
+            </div>
             <span id="form_result"></span>
 
             <form method="post" action="{{ route('prescription.store') }}" id="sample_form" class="form-horizontal"
@@ -70,7 +73,7 @@
 
 
                             <td>
-                                <select id="category" class="form-control category" name="category[]" required
+                                <select id="category" class="form-control category" name="category[]" 
                                     style='width: 100px;'>
 
                                 </select>
@@ -80,7 +83,7 @@
 
                             <td>
                                 <select id="medicine_name" class="form-control medicine_name" name="medicine_name[]"
-                                    required style='width: 200px;'>
+                                   style='width: 200px;'>
 
                                 </select>
                             </td>
@@ -160,7 +163,118 @@
                 </div>
 
 
-
+                <div id="coshma-from">
+                    <h3 style="text-align: center; margin:20px;">Write coshma Prescription</h3>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label for="Date">Date:</label>
+                            <input type="date" class="form-control" name="brith" id="brith">
+                         </div>
+                        <div class="col-lg-3">
+                            <label for="Date">Ipd:</label>
+                            <input type="number" class="form-control" name="ipd" id="ipd"  placeholder="write ipd....">
+                         </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-lg-6 border">
+                           <div class="row">
+                            <div class="col-lg-12">
+                                <h3>Right Eye (OD)</h3> 
+                                
+                            </div>
+                            <div class="col-lg-6">
+                               <label for="resph">Sph</label>
+                               <input type="text" class="form-control" id="resph" name="resph"  placeholder="write sps....">
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="recyl">Cyl</label>
+                               <input type="number" class="form-control" id="recyl" name="recyl" placeholder="write cyl....">
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="reaxis">Axis</label>
+                               <input type="number" class="form-control" id="reaxis" name="reaxis"  placeholder="write axis....">
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="rebyes">Byes</label>
+                               <input type="number" class="form-control" id="rebyes" name="rebyes"  placeholder="write byes.... 6/6">
+                            </div>
+                           </div>           
+                        </div>
+                        <div class="col-lg-6 border">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h3>Left Eye (OS)</h3> 
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="lesph">Sph</label>
+                                    <input type="text" class="form-control" id="lesph" name="lesph"  placeholder="write sps....">
+                                 </div>
+                                 <div class="col-lg-6">
+                                     <label for="lecyl">Cyl</label>
+                                    <input type="number" class="form-control" id="lecyl" name="lecyl"  placeholder="write cyl....">
+                                 </div>
+                                 <div class="col-lg-6">
+                                     <label for="leaxis">Axis</label>
+                                    <input type="number" class="form-control" id="leaxis" name="leaxis"  placeholder="write axis....">
+                                 </div>
+                                 <div class="col-lg-6">
+                                     <label for="lebyes">Byes</label>
+                                    <input type="number" class="form-control" id="lebyes" name="lebyes"  placeholder="write byes.... 6/6">
+                                 </div>
+                               </div>   
+                        </div>
+                        <div class="col-lg-6">
+                                <label for="add">Add:</label>
+                                <input type="text" class="form-control" name="add" id="add" placeholder="write add....">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="diopter">Diopter:</label>
+                            <input type="text" class="form-control" name="diopter" id="diopter" placeholder="write diopter....">
+                        </div>
+                        <div class="row">
+                           <div class="col-lg-6">
+                            <label for="instructions">Instructions</label><br/>
+                            <select name="instructions[]" multiple>
+                             @php
+                                 $inst = \App\Models\coshma::all();
+                             @endphp
+                             @foreach ($inst as $row)
+                             <option value="{{$row->id}}" style="margin: 10px; padding:10px;"> {{$row->value}}</option>
+                             @endforeach
+                            </select>
+                           </div>
+                                <div class="col-lg-6">
+                                    <div class="col-lg-12">
+                                        <label for="type">Type:</label><br/>
+                                        <select name="type[]" multiple> 
+                                            <option selected value="1">Unifosal</option>
+                                            <option value="2">mit
+                                                Bifocal</option>
+                                            <option value="3">Progressive focal (Varilus)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label for="color">Color:</label><br/>
+                                        <select name="color[]" multiple>
+                                            <option selected value="1">White</option>
+                                            <option value="2">Photochromatic</option>
+                                            <option value="3">MC Fiber (UV Protect) (Blue Cut)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <label for="Remarks">Remarks :</label><br/>
+                                        <select name="remarks[]" multiple>
+                                            <option selected value="1">Distant</option>
+                                            <option value="2">Reading</option>
+                                            <option value="3">Constant</option>
+                                            <option value="4">Fiber</option>
+                                            <option value="5">Glass</option>
+                                        </select>
+                                    </div>
+                                </div>
+                        </div>
+                    </div> 
+                </div>
 
 
                 <br />
@@ -170,11 +284,14 @@
                     <input type="submit" name="action_button" id="action_button" class="btn btn-warning" value="Add" />
                 </div>
             </form>
+           
 
             <span id="form_result_footer"></span>
 
         </div>
-
+       
+            
+            
 
 
 
@@ -255,9 +372,12 @@
 
 
         <script type="text/javascript">
-            $(document).ready(function() {
-
-
+           
+           $(document).ready(function() {
+                $("#coshma-from").hide();
+                $(".coshma-prection").click(function(){
+                    $("#coshma-from").toggle();
+                });
 
                 //////////////////////////// Show record 
 
@@ -668,97 +788,99 @@
 
                 $('#sample_form').on('submit', function(event) {
                     event.preventDefault();
-                    if ($('#action').val() == 'Add') {
-                        $.ajax({
-                            url: "{{ route('prescription.store') }}",
-                            method: "POST",
-                            data: new FormData(this),
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            dataType: "json",
-                            success: function(data) {
-                                var html = '';
-                                if (data.errors) {
-                                    html = '<div class="alert alert-danger">';
-                                    for (var count = 0; count < data.errors.length; count++) {
-                                        html += '<p>' + data.errors[count] + '</p>';
-                                    }
-                                    html += '</div>';
-                                }
-                                if (data.success) {
-                                    html = '<div class="alert alert-success">' + data.success +
-                                        '</div>';
-                                    $('#sample_form')[0].reset();
-                                    $('#patient_table').DataTable().ajax.reload();
-                                }
+                        if ($('#action').val() == 'Add') {
+                            try {
+                                $.ajax({
+                                        url: "{{ route('prescription.store') }}",
+                                        method: "POST",
+                                        data: new FormData(this),
+                                        contentType: false,
+                                        cache: false,
+                                        processData: false,
+                                        dataType: "json",
+                                        success: function(data) {
+                                            console.log(data);
+                                            var html = '';
+                                            if (data.errors) {
+                                                html = '<div class="alert alert-danger">';
+                                                for (var count = 0; count < data.errors.length; count++) {
+                                                    html += '<p>' + data.errors[count] + '</p>';
+                                                }
+                                                html += '</div>';
+                                            }
+                                            if (data.success) {
+                                                html = '<div class="alert alert-success">' + data.success +
+                                                    '</div>';
+                                                $('#sample_form')[0].reset();
+                                                $('#patient_table').DataTable().ajax.reload();
+                                                console.log(data.success);
+                                            }
 
-                                if (data.error) {
-                                    html = '<div class="alert alert-danger">' + data.error +
-                                        '</div>';
-                                    $('#sample_form')[0].reset();
-                                    $('#patient_table').DataTable().ajax.reload();
-                                }
+                                            if (data.error) {
+                                                html = '<div class="alert alert-danger">' + data.error +
+                                                    '</div>';
+                                                $('#sample_form')[0].reset();
+                                                $('#patient_table').DataTable().ajax.reload();
+                                            }
 
-                                $('#form_result').html(html);
+                                            $('#form_result').html(html);
 
-                                $('#form_result').fadeIn();
-                                $('#form_result').delay(1500).fadeOut();
+                                            $('#form_result').fadeIn();
+                                            $('#form_result').delay(1500).fadeOut();
 
-                                $('#form_result_footer').html(html);
+                                            $('#form_result_footer').html(html);
 
-                                $('#form_result_footer').fadeIn();
-                                $('#form_result_footer').delay(1500).fadeOut();
-
-
-
-                                $("#agentoption").hide();
-                                $("#doctoroption").hide();
-                                fetch();
-
-
-                                $("#products_table tr:gt(1)").remove();
-
-                                //remover por select2 dite hobe 
-                                $('.medicine_name').select2();
+                                            $('#form_result_footer').fadeIn();
+                                            $('#form_result_footer').delay(1500).fadeOut();
 
 
 
+                                            $("#agentoption").hide();
+                                            $("#doctoroption").hide();
+                                            fetch();
 
 
+                                            $("#products_table tr:gt(1)").remove();
+
+                                            //remover por select2 dite hobe 
+                                            $('.medicine_name').select2();
+
+                                            }
+                                 })
+                            } catch (error) {
+                                console.log(error);
                             }
-                        })
-                    }
+                        }
 
-                    if ($('#action').val() == "Edit") {
-                        $.ajax({
-                            url: "{{ route('patientlist.update') }}",
-                            method: "POST",
-                            data: new FormData(this),
-                            contentType: false,
-                            cache: false,
-                            processData: false,
-                            dataType: "json",
-                            success: function(data) {
-                                var html = '';
-                                if (data.errors) {
-                                    html = '<div class="alert alert-danger">';
-                                    for (var count = 0; count < data.errors.length; count++) {
-                                        html += '<p>' + data.errors[count] + '</p>';
+                        if ($('#action').val() == "Edit") {
+                            $.ajax({
+                                url: "{{ route('patientlist.update') }}",
+                                method: "POST",
+                                data: new FormData(this),
+                                contentType: false,
+                                cache: false,
+                                processData: false,
+                                dataType: "json",
+                                success: function(data) {
+                                    var html = '';
+                                    if (data.errors) {
+                                        html = '<div class="alert alert-danger">';
+                                        for (var count = 0; count < data.errors.length; count++) {
+                                            html += '<p>' + data.errors[count] + '</p>';
+                                        }
+                                        html += '</div>';
                                     }
-                                    html += '</div>';
+                                    if (data.success) {
+                                        html = '<div class="alert alert-success">' + data.success +
+                                            '</div>';
+                                        $('#sample_form')[0].reset();
+                                        $('#store_image').html('');
+                                        $('#patient_table').DataTable().ajax.reload();
+                                    }
+                                    $('#form_result').html(html);
                                 }
-                                if (data.success) {
-                                    html = '<div class="alert alert-success">' + data.success +
-                                        '</div>';
-                                    $('#sample_form')[0].reset();
-                                    $('#store_image').html('');
-                                    $('#patient_table').DataTable().ajax.reload();
-                                }
-                                $('#form_result').html(html);
-                            }
-                        });
-                    }
+                            });
+                        }
                 });
 
 
@@ -849,8 +971,8 @@
                 });
 
 
-
-
+               
+                
 
             });
         </script>

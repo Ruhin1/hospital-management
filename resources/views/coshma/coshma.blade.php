@@ -323,14 +323,12 @@
                 <div>
                     <h3>নিচের নির্দেশনা গুলো মেনে চলুন</h3>
                     <ol>
-                       
-                        @foreach ($inst as $row)
-                        <li>{{$row->value}}</li>
-                        @endforeach 
-                        
-                       
-                        
-                    </ol>
+                            @foreach ($inst as $row)
+                                <li>{{$row->value}}</li>
+                            @endforeach 
+                  
+                     
+                    </ol> 
                 </div>
 
                 <div class="img">

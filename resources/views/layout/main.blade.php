@@ -489,7 +489,12 @@ $("#thirteen").hide();
 <a target="_blank" class="collapse-item" href="{{ url('printprescription') }}"> প্রেসক্রিপশন প্রিন্ট করেন   </a><p> <p>
 <p><br> 
 
+<a target="_blank" class="collapse-item" href="{{ url('coshmaprescription') }}"> চশমার প্রেস্কিপসন দেখুন   </a><p> <p>
+<p><br> 
+
+<a target="_blank" class="collapse-item" href="{{ url('addcoshmainstructions') }}"> চশমার নির্দেশনা যুক্ত করোন    </a><p>
 <a target="_blank" class="collapse-item" href="{{ url('prescriptionusages') }}"> ব্যাবহার বিধি যুক্ত করেন-১    </a><p>
+
 
 <p><br>
 <a target="_blank" class="collapse-item" href="{{ url('prescriptionusagestwo') }}"> ব্যাবহার বিধি যুক্ত করেন-2 ( খাবার আগে /পরে )     </a><p>
@@ -923,9 +928,12 @@ $("#thirteen").hide();
 <p>
  
 
+  <a target="_blank" class="collapse-item" href="{{ url('virtual-table/') }}">  সকল ট্রানজেকশন এর ভার্চুয়াল টেবিল দেখুন।   </a><p>
+    <p><br>
+  <a target="_blank" class="collapse-item" href="{{ url('showmedicne') }}"> তারিখ অনুযায়ী মেডিসিন এর ট্রানজেকশন দেখুন   </a><p>
+        <p><br>
  
- 
-   <a target="_blank" class="collapse-item" href="{{ url('doctortransition/doctorincome') }}">  কোন  তারিখে কোন ডাক্তারের কাছে আসা রোগীদের তালিকা  ও ইনকাম   </a><p>
+<a target="_blank" class="collapse-item" href="{{ url('doctortransition/doctorincome') }}">  কোন  তারিখে কোন ডাক্তারের কাছে আসা রোগীদের তালিকা  ও ইনকাম   </a><p>
  <p><br>
 <a target="_blank" class="collapse-item" href="{{ url('month_year_pick') }}"> কোন  মাসে দেয়া এম্পলয়িদের বেতনের সিট   </a><p>
  

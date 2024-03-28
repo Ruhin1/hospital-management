@@ -387,7 +387,7 @@ tr:nth-child(even) {background-color: #f2f2f2;}
 
 
             processing: true,
-            serverSide: true,
+            serverSide: true, 
             responsive: true,
 
             ajax: "{{ route('medicinetransition.index') }}",
