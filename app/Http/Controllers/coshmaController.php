@@ -55,14 +55,7 @@ class coshmaController extends Controller
              }
          }
 
-        // public function edit($id)
-        // {
-        //     if(request()->ajax())
-        //     {
-        //         $data = prescriptionusages::findOrFail($id);
-        //         return response()->json(['data' => $data]);
-        //     }
-        // }
+        
 
          public function destroy($id)
          {
@@ -119,8 +112,8 @@ class coshmaController extends Controller
     public function update(Request $request)
     {
         $data =  coshmaPrescription::find($request->hidden_id);
-        $data->name = $request->name;
-        $data->age = $request->age;
+        //$data->name = $request->name;
+        //$data->age = $request->age;
         $data->brith = $request->brith;
         $data->ipd = $request->ipd;
         $data->resph = $request->resph;
@@ -130,16 +123,20 @@ class coshmaController extends Controller
         $data->lesph = $request->lesph;
         $data->lecyl = $request->lecyl;
         $data->leaxis = $request->leaxis; 
-        $data->lebyes = $request->lebyes; //
+        $data->lebyes = $request->lebyes; 
         $data->add = $request->add; 
         $data->diopter = $request->diopter;
+        $data->instructions = $request->instructions;
+        $data->type = $request->type;
+        $data->color = $request->color;
+        $data->remarks = $request->remarks;
         $data->save(); 
            
        
-        //         // 'instructions',
-        //         // 'type',
-        //         // 'color',
-        //         // 'remarks',
+        //         // '',
+        //         // '',
+        //         // '',
+        //         // '',
                  
     
 

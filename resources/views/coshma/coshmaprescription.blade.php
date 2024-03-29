@@ -53,22 +53,6 @@
 
           <div class="row">
             <div class="col-lg-3">
-
-                <label for="Patinet Id">Patinet Id : </label>
-                <select id="customer_id" class="form-control " name="customer_id"  style='width: 270px;'>
-                    @php 
-                    $dt = \App\Models\patient::all();
-                    @endphp
-                    @foreach ($dt as $row)
-                    @if ($row->id == 20 )
-                    <option selected value="{{$row->id}}">{{$row->id}}</option> 
-                    @else  
-                    <option  value="{{$row->id}}">{{$row->id}}</option> 
-                    @endif
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-lg-3">
                <label for="name">Name:</label>
                <input disabled type="text" class="form-control" name="name" id="name" required placeholder="write name....">
             </div>
@@ -259,13 +243,7 @@ $(document).ready(function(){
 
 
 
-        // '',
-        // '',
-        // 'instructions',
-        // 'type',
-        // 'color',
-        // 'remarks',
- 
+        
  $(document).on('click', '.edit', function(){
     $('#action_button').attr("disabled", false); 	 
         var id = $(this).attr('id');
@@ -289,7 +267,6 @@ $(document).ready(function(){
             $('#lebyes').val(html.data.lebyes);
             $('#add').val(html.data.add);
             $('#diopter').val(html.data.diopter);
-            $('#customer_id').val();
             $('#hidden_id').val(html.data.id);
             $('.modal-title').text("Edit New Record");
             $('#action_button').val("Edit");
