@@ -31,6 +31,7 @@ class medicine_comapny_transition_Controller extends Controller
 
 	       public function index(Request $request)
     {
+        
       $order=  medicinecompanyorder::with('medicineCompanyTransition','medicinecomapnyname','user')->orderBy('id','DESC')->get();
 	  
 	

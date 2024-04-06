@@ -28,7 +28,10 @@ class User extends Authenticatable
 		'doctor_id'
     ];
 
-
+    // public function medicinecompanyorder()
+    // {
+    //     return $this->hasMany(medicinecompanyorder::class);
+    // }
 	  public function doctor()
     {
         return $this->belongsTo(doctor::class);
