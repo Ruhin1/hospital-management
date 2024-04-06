@@ -12,6 +12,8 @@ use App\Models\setting;
 use App\Models\medicinecompanyorder;
 use Illuminate\Support\Facades\DB;
 use DataTables;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Validator;
 use PDF;
 $jsonmessage=0;
@@ -417,6 +419,22 @@ if($status !=0 )
 
 if($jsonmessage ==0 )
 {
+        if($request->transitiontype == 1){
+            Log::channel('medicneTrinction')->info('Medicines are purchased from medicine companies.',
+                [
+                    'massage'=> 'Medicines are purchased from medicine companies.',
+                    'employee_details'=> Auth::user(),
+                    'Info'=> $request->all(),
+                ]);
+        }else{
+            Log::channel('medicneTrinction')->info('Purchased from a medicine company returned to the medicine company.',
+                [
+                    'massage'=> 'Purchased from a medicine company returned to the medicine company.',
+                    'employee_details'=> Auth::user(),
+                    'Info'=> $request->all(),
+                ]);
+        }
+
         return response()->json(['success' => 'Data Added successfully.']);
 }
 else{
@@ -594,6 +612,21 @@ if ($cashtransition)
 {
 $cashtransition->delete();
 }	
+if($data->transitiontype == 1){
+    Log::channel('medicneTrinction')->info('Medicines are purchased from medicine companies Delated.',
+        [
+            'massage'=> 'Medicines are purchased from medicine companies Delated.',
+            'employee_details'=> Auth::user(),
+            'Info'=> $data,
+        ]);
+}else{
+    Log::channel('medicneTrinction')->info('Purchased from a medicine company returned to the medicine company Delated.',
+        [
+            'massage'=> 'Purchased from a medicine company returned to the medicine company Delated.',
+            'employee_details'=> Auth::user(),
+            'Info'=> $data,
+        ]);
+}
         $data->delete();
     }
 

@@ -19,10 +19,8 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\returnmedicinetransaction;
 use App\Models\cashtransition;
 use App\Models\return_order;
-
-
-
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use PDF;
 $jsonmessage=0;
 $status=0;
@@ -447,39 +445,36 @@ public function printpdfformedicineslip($id)
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-      public function store(Request $request)
+	public function store(Request $request)
     {
 		
 			
-	DB::transaction(function () use ($request) {
-		
-		
-  
-	$validated = $request->validate([
+		DB::transaction(function () use ($request) {
+			
+			
 	
-	 	'customer_id',
-		'unit_price',
-		'quantity',
-		'stock',
-		'vat',
-		'vattk',
-		'discount',
-		'totaldiscount',
-		'amount',
-		'adjust',
-		'percentofdicountontaotal',
-		'grossamount',
-		'discountatend',
-		'paid',
-		'due',
-		'totalamount',
-'statusvalue',
-'medicine_name',
-'dataentry',
-
+		$validated = $request->validate([
 		
-		
-    ]);
+			'customer_id',
+			'unit_price',
+			'quantity',
+			'stock',
+			'vat',
+			'vattk',
+			'discount',
+			'totaldiscount',
+			'amount',
+			'adjust',
+			'percentofdicountontaotal',
+			'grossamount',
+			'discountatend',
+			'paid',
+			'due',
+			'totalamount',
+			'statusvalue',
+			'medicine_name',
+			'dataentry',	
+		]);
 		
 
 
@@ -505,12 +500,9 @@ public function printpdfformedicineslip($id)
 		
 		if ( $stcok_amount_of_medicine < $desired_qun )
 		{ 
-global	$jsonmessage;
-$jsonmessage=1;
-	goto flag;
-			
-			 // return Redirect::back()
-                     //   ->with('success','স্টকে যথেষ্ট পণ্য নেই ');
+			global	$jsonmessage;
+			$jsonmessage=1;
+				goto flag;
 		}
 		
 		
@@ -526,32 +518,32 @@ $jsonmessage=1;
 
 
 
-		if ( ($request->customer_id == '')   and ($request->regcustomer == '')  and ($request->excus == '' )  )
-		{
-		$patient = new patient() ; 
-		$patient->name = $request->name;
-		$patient->mobile = $request->mobile;
-		$patient->age = $request->age;
-		$patient->sex = $request->sex;
-		$patient->address = $request->address;
-		$patient->booking_status = 5;
-		$patient->save();
-		
-		$patientid = $patient->id;
-		}
-		else if ($request->excus == 1 ) 
-		{
-		$patientid = 1;
+			if ( ($request->customer_id == '')   and ($request->regcustomer == '')  and ($request->excus == '' )  )
+			{
+			$patient = new patient() ; 
+			$patient->name = $request->name;
+			$patient->mobile = $request->mobile;
+			$patient->age = $request->age;
+			$patient->sex = $request->sex;
+			$patient->address = $request->address;
+			$patient->booking_status = 5;
+			$patient->save();
 			
-		}
-		else if  ($request->customer_id != '')    
-		{
-		$patientid = $request->customer_id;	
-		}
-		else if ($request->regcustomer != '')    
-		{
-		$patientid = $request->regcustomer;	
-		}
+			$patientid = $patient->id;
+			}
+			else if ($request->excus == 1 ) 
+			{
+			$patientid = 1;
+				
+			}
+			else if  ($request->customer_id != '')    
+			{
+			$patientid = $request->customer_id;	
+			}
+			else if ($request->regcustomer != '')    
+			{
+			$patientid = $request->regcustomer;	
+			}
 
 
 
@@ -566,103 +558,84 @@ $jsonmessage=1;
 
 		
 		
-		global $status;
-		if ($request->statusvalue == 0 )
-		{
-			$status = 0;
-		}
-	/*
-	jodi commission na dite deya hoy
-
-
-	if ( ($request->statusvalue !=0 ) && ($request->discountatend > 0))
-		{
-		$status = 1;	
-		goto flag;	
-		}  */
-		
-		
-		
-		//////////////////////////////////////////////////// insert shuru ///////////////////////
-		
-		$patient = patient::findOrFail($patientid);	
-		
-if($request->adjustwithadvancedeposit == 1 )
-{	
-
+			global $status;
+			if ($request->statusvalue == 0 )
+			{
+				$status = 0;
+			}
 	
+			$patient = patient::findOrFail($patientid);	
+		
+			if($request->adjustwithadvancedeposit == 1 )
+			{	
+					$remainging = $patient->dena - $request->due;
+					
+					if ( ($remainging > 0) or ($remainging == 0))
+					{
+						
+						$adjust_advance = $request->due;
+					$request->due =0;
+					
+					patient::where('id', $patientid )
+				->update([
+					'dena' => $remainging
+					
+					]);	
+						
+					}
+					if ($remainging < 0)
+					{
+					
+						$adjust_advance = $patient->dena;
+						$request->due =  -1 * $remainging ;
+							patient::where('id', $patientid )
+				->update([
+					'dena' => 0
+					
+					]);		
+						
+						
+						
+			} } else{
+				$adjust_advance =0;
+					
+				
+			}		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+			$order = new order; 
+			$order->user_id  = auth()->user()->id ; //$request->sellerid;
+		$order->patient_id  = $patientid; 
+			$order->pay_by_adv =	$adjust_advance;	
+		$order->due =	$request->due;
+		$due = $request->due;
+		$id= $patientid ;
+		
+	$patient_due = patient::where('id', $patientid )->pluck('due')->first();
 
-		$remainging = $patient->dena - $request->due;
-		
-		
-		
-		
-		if ( ($remainging > 0) or ($remainging == 0))
-		{
-			
-			$adjust_advance = $request->due;
-		$request->due =0;
-		
-		patient::where('id', $patientid )
-       ->update([
-           'dena' => $remainging
-		   
-        ]);	
-			
-		}
-		if ($remainging < 0)
-		{
-		
-			$adjust_advance = $patient->dena;
-			$request->due =  -1 * $remainging ;
-				patient::where('id', $patientid )
-       ->update([
-           'dena' => 0
-		   
-        ]);		
-			
-			
-			
-} } else{
-	$adjust_advance =0;
-		
-	
-}		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		$order = new order; 
-		$order->user_id  = auth()->user()->id ; //$request->sellerid;
-	$order->patient_id  = $patientid; 
-		$order->pay_by_adv =	$adjust_advance;	
-	$order->due =	$request->due;
-	$due = $request->due;
-	$id= $patientid ;
-	
-$patient_due = patient::where('id', $patientid )->pluck('due')->first();
+	$patient_due = $patient_due + $due; 
 
-$patient_due = $patient_due + $due; 
-
-//// update patient due 
-patient::where('id', $patientid )
-       ->update([
-           'due' => $patient_due
-        ]);
+		//// update patient due 
+			patient::where('id', $patientid )
+				->update([
+					'due' => $patient_due
+					]);
 
 /////////// update company balance 
   
@@ -763,26 +736,9 @@ patient::where('id', $patientid )
 		 $medicinetransition->created_at  = $request->dataentry;
 		  $medicinetransition->save(); 
 		 
-	
-
-
-
-
-
-
-
-
-
-
-
-
 
 	}		
 		
-
-
-
-
 
 $patient_name = patient::findOrFail($patientid)->name;
 
@@ -809,47 +765,51 @@ $cashtransition->advance_deposit_minus = $adjust_advance;
 $cashtransition->customer_joma =0;
 $cashtransition->save();
 
+						
+				flag:
+				});	
+					//  return Redirect::back();
+				global $jsonmessage;
+				global $status; 
 
+				if($status !=0 )
+				{
+					Log::channel('medicneTrinction')->info('Medicine Sales',
+						[
+							'massage'=> 'Medicine Sales',
+							'employee_details'=> Auth::user(),
+							'Info'=> $request->all(),
+						]);
+						return response()->json(['success' => 'You can not give commission to an Admitted patient']);
+						
+				}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+				if($jsonmessage ==0 )
+				{
+					Log::channel('medicneTrinction')->info('Medicine Sales',
+						[
+							'massage'=> 'Medicine Sales',
+							'employee_details'=> Auth::user(),
+							'Info'=> $request->all(),
+						]);
+						return response()->json(['success' => 'Data Added successfully.']);
+						
+				}
+				else{
+					Log::channel('medicneTrinction')->info('Medicine Sales',
+				[
+					'massage'=> 'Medicine Sales',
+					'employee_details'=> Auth::user(),
+					'Info'=> $request->all(),
+				]);
+				return response()->json(['error' => 'Products are not avilable in Stock']);	
 				
-		
-flag:
-});	
-     //  return Redirect::back();
-global $jsonmessage;
-global $status; 
 
-if($status !=0 )
-{
-        return response()->json(['success' => 'You can not give commission to an Admitted patient']);
-}
-
-if($jsonmessage ==0 )
-{
-        return response()->json(['success' => 'Data Added successfully.']);
-}
-else{
-return response()->json(['error' => 'Products are not avilable in Stock']);	
-
-}
+				}
 
 
-    }
-	
+					}
+					
 	
 	
 	
@@ -1263,7 +1223,12 @@ cashtransition::where('order_id','=', $request->orderid )
   
   });	
   
-	  
+  Log::channel('medicneTrinction')->info('Medicine Sales Updated',
+  [
+	  'massage'=> 'Medicine Sales Updated',
+	  'employee_details'=> Auth::user(),
+	  'Info'=> $request->all(),
+  ]);
 	 	return redirect()->route('medicinetransition.index'); 
 
 	  
@@ -1329,7 +1294,14 @@ patient::where('id',  $data->patient_id )
 if ($cashtransition)
 {
 $cashtransition->delete();
-}	
+}		
+		Log::channel('medicneTrinction')->info('Pathology Bill  Delated',
+		[
+			'massage'=> 'Pathology Bill Delated',
+			'employee_details'=> Auth::user(),
+			'Info'=> $data,
+		]);
         $data->delete();
+
     }
 }

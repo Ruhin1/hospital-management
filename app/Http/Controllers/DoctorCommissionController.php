@@ -17,11 +17,7 @@ use Validator;
 use Carbon\Carbon;
 use App\Models\balance_of_business; 
 use DB;
-
-
-
-
-
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use PDF;
 
@@ -465,9 +461,12 @@ $d->created_at = $request->Date_of_Transition;
    
 
     DB::commit();
-
-        return response()->json(['success' => 'Data Added successfully.']);
-    }
+	
+	Log::channel('doctorpoint')->info('ডাক্তারদের দেয়া কমিশনের ট্রাঞ্জিশন।', [
+			$request->all(), 
+    ]);
+        return response()->json(['success' => 'Data Added successfully.000']);
+ }
     
 
 
@@ -516,6 +515,11 @@ cashtransition::where('doctorCommissionTransition_id', $id)->delete();
   
   
 		 DB::commit();
+
+		 Log::channel('doctorpoint')->info('ডাক্তারদের দেয়া কমিশনের ট্রাঞ্জিশন ডিলেট করা হহেছে।', [
+			$data, 
+    	]);
+
     }
 
 

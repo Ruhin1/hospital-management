@@ -21,7 +21,9 @@ use App\Models\duetransition;
 use App\Models\balance_of_business;  
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
-use App\Models\order;  
+use App\Models\order;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ReturnmedicinetransactionController extends Controller
 {
@@ -498,7 +500,12 @@ $cashtransition->save();
 });	
       // return Redirect::back()->with('message', 'Medicine takes return');;
 
-
+	  Log::channel('medicneTrinction')->info('Medicines sold have been withdrawn.',
+	  [
+		  'massage'=> 'Medicines sold have been withdrawn.',
+		  'employee_details'=> Auth::user(),
+		  'Info'=> $request->all(),
+	  ]);
         return response()->json(['success' => 'Data Added successfully.']);
     }
 	 
@@ -551,9 +558,18 @@ foreach( $request->returnmedicinetransaction as $r )
 medicine::where('id',$r->medicine_id )->decrement('stock',$r->unit );
 $r->delete();
 }
+$del_id = medicine::find($id);
+Log::channel('medicneTrinction')->info('Medicines sold Information',
+[
+    'massage'=> 'Medicines sold Information',
+    'employee_details'=> Auth::user(),
+	'Info'=> $del_id,
+]);	
 
-$request->delete();		
+$request->delete();	
+
 });
+
 
 return response()->json(['data'=>'Data has been deleted']);
  }

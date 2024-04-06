@@ -53,7 +53,7 @@ From Bed   :  	<select id="booked_cabine_list"  class="form-control "  name="fro
 
 
   <div class="col-6">
- Ending Date :<input type="date" id="From_end_date" name="From_end_date" required>
+ Ending Date :<input type="datetime-local" id="From_end_date" name="From_end_date" required>
    </select>
   </div> 
   
@@ -80,7 +80,7 @@ From Bed   :  	<select id="booked_cabine_list"  class="form-control "  name="fro
   
  
   <div class="col-6">
-  Starting Date:<input type="date" id="to_start_date" name="to_start_date" required>
+  Starting Date:<input type="datetime-local" id="to_start_date" name="to_start_date" required>
    </select>
   </div> 
   

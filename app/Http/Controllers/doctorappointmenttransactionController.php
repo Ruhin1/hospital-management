@@ -27,6 +27,7 @@ use Validator;
 
 Use \Carbon\Carbon;
 use DateTime;
+use Illuminate\Support\Facades\Log;
 use PDF; 
 
 class doctorappointmenttransactionController extends Controller
@@ -657,35 +658,12 @@ else
 			
         );
 
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-
-
         $error = Validator::make($request->all(), $rules);
 
         if($error->fails())
         {
             return response()->json(['errors' => $error->errors()->all()]);
         }
-
- 
-
-
-
 
 // Add data for new patient 
 
@@ -718,12 +696,7 @@ $patientid= $request->patientlist ;
 	
 }
 
-
-
-
-
-
-		
+	
 		$patient = patient::findOrFail($patientid);
 		
 
@@ -768,17 +741,6 @@ if($request->adjustwithadvancedeposit == 1 )
 		}
 		
 
-
-
-
-
-
-
-
-
-
-
-
 // Add data for new appointment 
 
 
@@ -788,13 +750,6 @@ if($request->adjustwithadvancedeposit == 1 )
 // Find out serial number for the appointment 
       	   	   $date = new DateTime($request->dateappointment); 
  
- 
-
-	 
- 
-	 
- 
-
  
  $serialno = doctorappointmenttransaction::where('doctor_id',$request->doctor_id)->where('date',$date )->orderBy('id', 'desc')->first();
 
@@ -1195,7 +1150,7 @@ else{
 		
 		
 		
-		$dentalserviceodermoney_deposit = new dentalserviceodermoney_deposit();
+$dentalserviceodermoney_deposit = new dentalserviceodermoney_deposit();
 
 $dentalserviceodermoney_deposit->patient_id =$patientid;
 $dentalserviceodermoney_deposit->user_id = auth()->user()->id;
@@ -1211,16 +1166,7 @@ $dentalserviceodermoney_deposit->doctor_id =$request->doctor_id;
 
 $dentalserviceodermoney_deposit->save();	
 		
-		
-		
-
-		
-		
-		
-		
-		
-		
-		
+	
 		
   longterminstallerorder::where('id', $request->installment_order )
        ->update([
@@ -1253,9 +1199,6 @@ $cashtransition->doctorappointmenttransaction_id	 = $doctorappointmenttransactio
 $cashtransition->user_id =  auth()->user()->id ;
 
 
-
-
-
 $cashtransition->gorssamount = $request->due_payment + $request->discount_intallment ;
 $cashtransition->discount = $request->discount_intallment;	
 $cashtransition->amount_after_discount = $request->due_payment  ;
@@ -1269,60 +1212,12 @@ $cashtransition->customer_type = 1;
 $cashtransition->transitionproducttype =11; 
 $cashtransition->save();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	
 	}
 	
 	
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if($request->due > 0)
@@ -1383,9 +1278,13 @@ if($request->due > 0)
 		}
 
 
+	
 
-
-
+		Log::channel('doctorpoint')->info('Appointment For Doctors', [
+			'patient name'=> $request->patientname,
+			'doctor id'=> $request->doctor_id,
+			'mobile'=> $request->mobile,
+		]);
 
         return response()->json(['success' => 'Data Added successfully.']);
     }
@@ -1667,7 +1566,11 @@ if($request->due > 0)
 		
 		
 		
-		
+  Log::channel('doctorpoint')->info('Updated Appointment For Doctors', [
+	'patient name'=> $request->patientname,
+	'doctor id'=> $request->doctor_id,
+	'mobile'=> $request->mobile,
+]);
 
         return response()->json(['success' => 'Data is successfully updated']);
     }
@@ -1836,7 +1739,10 @@ $cashtransition->each->delete();
   
   
   
-  
+		Log::channel('doctorpoint')->info('Delated Appointment For Doctors', [
+			$data
+		]);
+		
 		
 		$data->delete();
 		

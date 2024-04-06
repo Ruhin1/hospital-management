@@ -70,7 +70,8 @@ class Kernel extends HttpKernel
 		'isPhermachy' => \App\Http\Middleware\phermachysection::class, 
 		'isdeleteduser' => \App\Http\Middleware\deleteduser::class,
 		'ispathology' => \App\Http\Middleware\IsPathologymiddleware::class,
-         'PreventBackHistory' => \App\Http\Middleware\PreventBackHistory::class,  
+        'PreventBackHistory' => \App\Http\Middleware\PreventBackHistory::class,
+        'admin_permission' => \App\Http\Middleware\AdminPermission::class,
 		 
     ];
 }

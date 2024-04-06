@@ -93,7 +93,7 @@ Quantity : 	<input type="text"  autocomplete="off"  name="unit" id="unit" class=
 
 
 <div class="col-3">
-Date:  <input type="date"  required id="datePicker" name="Date_of_Transition" class="form-control" />
+Date:  <input type="datetime-local"  required id="datePicker" name="Date_of_Transition" class="form-control" />
 </div>	
  </div>
 <p> 

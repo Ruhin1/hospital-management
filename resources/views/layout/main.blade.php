@@ -64,7 +64,7 @@
       
    
 
-  /* input[type="date"] {
+  /* input[type="datetime-local"] {
     width: 100%;
     padding: 10px;
     font-size: 16px;

@@ -53,7 +53,7 @@ Patient Name  :  	<select id="customer_id"  class="form-control "  name="from_ca
 
 
   <div class= " col-6">
-    Data Entry Date:<input  type="date" id="dataentry" name="dataentry" required>
+    Data Entry Date:<input  type="datetime-local" id="dataentry" name="dataentry" required>
  
    </div>
 

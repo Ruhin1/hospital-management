@@ -21,7 +21,7 @@
      Cabine NO:  <input type="text" readonly name="cabine" id="cabine" value="{{$cabine->serial_no}}" autocomplete="off" class="form-control" />
     </div>
     <div class="col-4">
-   Unpaid Since the Date(M/D/Y) :   <input type="date" readonly name="unpaiddate" id="unpaiddate" value="{{$startimeshow}}" autocomplete="off" class="form-control" />
+   Unpaid Since the Date(M/D/Y) :   <input type="datetime-local" readonly name="unpaiddate" id="unpaiddate" value="{{$startimeshow}}" autocomplete="off" class="form-control" />
     </div>
   </div>
   
@@ -41,7 +41,7 @@
     <div class="row">
 
     <div class="col-4">
-     Pay Till Date(M/D/Y) : <input type="date" name="paytilldate" id="paytilldate"  autocomplete="off" class="form-control" />
+     Pay Till Date(M/D/Y) : <input type="datetime-local" name="paytilldate" id="paytilldate"  autocomplete="off" class="form-control" />
     </div>
     <div class="col-4">
     Pay for Total days :   <input type="text" name="payfordays" id="payfordays" value="" readonly autocomplete="off" class="form-control" />
@@ -72,10 +72,10 @@
 
 
 
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+ <script src="{{asset('jquery/jquery.min.js')}}"></script>  
+ <script src="{{asset('jquery_val/dist/jquery.validate.min.js')}}"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>  
 
 

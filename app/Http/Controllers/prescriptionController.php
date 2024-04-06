@@ -21,6 +21,7 @@ use App\Models\prescriptionkhabaragepore;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use PDF;
 $jsonmessage=0;
 
@@ -175,6 +176,10 @@ class prescriptionController extends Controller
             $user->role = 5;
             $user->save(); });	
 
+            Log::channel('doctorpoint')->info('Permission to write a doctors prescription is granted.', [
+                $request->all(),
+            ]);
+
             return response()->json(['success' => 'Data Added successfully.']);
 
     }
@@ -222,7 +227,7 @@ class prescriptionController extends Controller
      
     public function store(Request $request)
     {
-		//$data =  dd($request->medicine_name[]);
+		
         if(!empty($request->medicine_name) && !empty($request->category) && !empty($request->usages) && !empty($request->khabaragepore)){
 
             DB::transaction(function () use ($request) {
@@ -290,6 +295,9 @@ class prescriptionController extends Controller
             
             
         event(new DataStored()); 
+        Log::channel('doctorpoint')->info('The doctor wrote a prescription.', [
+			$request->all(),
+    	]);
         return response()->json(['success' =>  'Data Added successfully.']);  
         
     } 

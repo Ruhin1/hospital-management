@@ -65,7 +65,7 @@
 <div class="row">
 
 <div class="col-3">
-তারিখ :  <input type="date"  required id="datePicker" name="Date_of_Transition" class="form-control" />
+তারিখ :  <input type="datetime-local"  required id="datePicker" name="Date_of_Transition" class="form-control" />
 </div>	
  </div>
 <p> 

@@ -206,7 +206,7 @@
 		             <div class="form-group">
             <label class="control-label col-md-4" > Date: </label>
             <div class="col-md-8">
-                <input type="date" id="datePicker" name="Date_of_Transition" class="form-control"    required />
+                <input type="datetime-local" id="datePicker" name="Date_of_Transition" class="form-control"    required value="{{date('Y-m-d H:i:s')}}"  />
             </div>
            </div>	
 
@@ -297,7 +297,7 @@
 			 		             <div class="form-group">
             <label class="control-label col-md-4" > Date: </label>
             <div class="col-md-8">
-            <input type="date" id="datePicker" required name="Date_of_Transition" class="form-control" />
+            <input type="datetime-local" id="datePicker" required name="Date_of_Transition" class="form-control" value="{{date('Y-m-d H:i:s')}}" />
             </div>
            </div>	
 

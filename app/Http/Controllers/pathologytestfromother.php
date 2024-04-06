@@ -28,6 +28,8 @@ use Illuminate\Support\Facades\Redirect;
 
 use PDF;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 $status=0;
 
@@ -473,7 +475,12 @@ if($status !=0 )
 
    //return Redirect::back();
 
-
+   Log::channel('pathologi')->info('Other Diagonistic Center Pathology Test information Delated',
+   [
+       'massage'=> 'Other Diagonistic Center Pathology Test information Delated',
+       'employee_details'=> Auth::user(),
+       'Info'=> $request->all(),
+   ]);
 return response()->json(['success' => 'Data Added successfully.']);
    
 
@@ -567,7 +574,14 @@ $pathologytransitionfromotherinstitue = pathologytransitionfromotherinstitue::wh
 		cashtransition::where('pathologyorderfromotherinsitute_id', $data->id )->delete();
 		
 		
-		
+		Log::channel('pathologi')->info('Other Diagonistic Center Pathology Test information Delated',
+        [
+            'massage'=> 'Other Diagonistic Center Pathology Test information Delated',
+            'employee_details'=> Auth::user(),
+            'Info'=> $data,
+        ]);
+
 		$data->delete();
+        
     }
 }

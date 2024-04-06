@@ -63,7 +63,7 @@ tr:nth-child(even) {background-color: #f2f2f2;}
 
 	
     <div class= " col-4">
-      Date:<input  type="date" id="dataentry"  name="dataentry"  >
+      Date:<input  type="datetime-local" id="dataentry"  name="dataentry"  >
   
     </div>
 	
@@ -511,9 +511,9 @@ $amount = $m->medicine->unitprice * $m->unit;
  
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+ <script src="{{asset('jquery_val/dist/jquery.validate.min.js')}}"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>  
 
 

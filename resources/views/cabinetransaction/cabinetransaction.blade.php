@@ -97,7 +97,7 @@
   
   
       <div class="col-4">
-   ভর্তির তারিখ :  <input type="date" id="Startdate" name="Startdate" class="form-control" required />
+   ভর্তির তারিখ :  <input type="datetime-local" id="Startdate" name="Startdate" class="form-control" required />
     </div>
   
 	</div> 

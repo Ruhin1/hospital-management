@@ -151,7 +151,7 @@ Sex:<input type="text" autocomplete="off" name="sex" id="sex" class="form-contro
 
 <div class="col-4">
 
-Date: <input type="date" id="datePicker" required name="dateappointment" class="form-control" />
+Date: <input type="datetime-local" id="datePicker" required name="dateappointment" class="form-control" value="{{date('Y-m-d H:i:s')}}" />
 </div>
 
 <P>

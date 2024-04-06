@@ -14,6 +14,8 @@ use DataTables;
 use Validator;
 use App\Models\balance_of_business;
 use DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class medicineComapnyrDenaPawnaShodController extends Controller
 {
@@ -297,6 +299,13 @@ $cashtransition->save();
 		
 		
       // DB::commit();
+      Log::channel('medicneTrinction')->info('মেডিসিন কোম্পানির দেনা ও পাওনা তথ্য.',
+      [
+          'massage'=> 'মেডিসিন কোম্পানির দেনা ও পাওনা তথ্য',
+          'employee_details'=> Auth::user(),
+          'Info'=> $request->all(),
+      ]);
+
         return response()->json(['success' => 'Data is successfully updated']);	
 		
 	}
@@ -382,8 +391,17 @@ $m->delete();
 		
 			
 		}		
+
+        Log::channel('medicneTrinction')->info('মেডিসিন কোম্পানির দেনা ও পাওনা তথ্য ডিলেট করা হয়েছে।.',
+         [
+             'massage'=> 'মেডিসিন কোম্পানির দেনা ও পাওনা তথ্য ডিলেট করা হয়েছে।',
+             'employee_details'=> Auth::user(),
+             'Info'=> $medicinecomapnytrans,
+         ]);
 		
-	     $medicinecomapnytrans->delete();	
+	     $medicinecomapnytrans->delete();
+         
+         
 		
    return response()->json(['success' => 'Data is Deleted']);			
 		

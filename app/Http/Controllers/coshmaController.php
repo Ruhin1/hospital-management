@@ -8,6 +8,7 @@ use App\Models\coshmaPrescription;
 
 use Illuminate\Http\Request;
 use DataTables;
+use Illuminate\Support\Facades\Log;
 use Validator;
 
 class coshmaController extends Controller
@@ -62,30 +63,15 @@ class coshmaController extends Controller
      
           
             coshmaPrescription::find($id)->delete(); 
-          
+            Log::channel('doctorpoint')->info('Eyeglass prescription Delated.', [
+                'id'=>$id,
+            ]);
           
          }
       
     
 
-   public function store(Request $request)
-   {
-    // $request->validate([
-    //     'name'=>'required',
-    //     'age'=>'required',
-    //     'brith'=>'required',
-    // ]);
-   
-    // $data =  $request->all();
-    // if($request->has('instructions')){
-    //   $inst = coshma::wherein('id',$request->instructions)->get(); 
-    //   return view('coshma.coshma',['data'=>$data,'inst'=>$inst,]);
-    // }else{
-    //   $inst = coshma::all();
-    //   return view('coshma.coshma',['data'=>$data,'inst'=>$inst,]);
-      
-    // }  
-   }
+  
 
     public function printcoshmaPreection($id)
     {
@@ -132,15 +118,9 @@ class coshmaController extends Controller
         $data->remarks = $request->remarks;
         $data->save(); 
            
-       
-        //         // '',
-        //         // '',
-        //         // '',
-        //         // '',
-                 
-    
-
-        //return response()->json(['success' => $request->all()]); 
+        Log::channel('doctorpoint')->info('Eyeglass prescription edited.', [
+			$request->all(),
+    	]);
        return response()->json(['success' => 'Data is successfully updated']); 
         
     }

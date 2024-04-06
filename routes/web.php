@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;  
-use App\Http\Controllers;
+
 
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +18,7 @@ use App\Http\Controllers\cabinetransactioncontroller;
 use App\Http\Controllers\employeedetailscontroller;
 use App\Http\Controllers\cabinelistController;  
 use App\Http\Controllers\productcompanytransitionController;
- use App\Http\Controllers\compnanybalncecontroller;
+use App\Http\Controllers\compnanybalncecontroller;
 use App\Http\Controllers\employeetransactioncontroller; 
 use App\Http\Controllers\reportcontroller;              
 use App\Http\Controllers\reporttransactionController;       
@@ -75,7 +75,10 @@ use App\Http\Controllers\indoorpatientduecollectionforphermachy;
 use App\Http\Controllers\ReagentTransactionController;
 use App\Http\Controllers\virtualTableController;
 use App\Http\Controllers\addcoshmaInstructions;
-
+use App\Http\Controllers\AdminRootMenuController;
+use App\Http\Controllers\MenuLinkController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserControllerRole;
 
 
 /* medicinecontroller dueshow pathologyreportmaking releasedindoor   employeesalarymonth
@@ -89,30 +92,21 @@ use App\Http\Controllers\addcoshmaInstructions;
 |    account      finalreport  advancedeposit  dailyreport doctorcommission
 */ 
 
-
-
-Route::get('/', [indexController::class, 'index'])->name('welcome');
-
-
-
-
-
 Route::middleware(['middleware'=>'PreventBackHistory'])->group(function () {
  
 
     Auth::routes(['register' => false]);
 });
 
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [indexController::class, 'index'])->name('welcome');
 
-Route::group([ 'middleware'=>['auth','isdeleteduser','PreventBackHistory']], function(){
-        Route::get('deleteduserdashboard',[deletedusercontroller::class,'index'])->name('deleteduser.dashboard');
-});
+// Route::group(['middleware' => ['admin_permission']],function(){
 
 
 
-Route::group([ 'middleware'=>['auth','ispathology','PreventBackHistory']], function(){
-       
+Route::get('deleteduserdashboard',[deletedusercontroller::class,'index'])->name('deleteduser.dashboard');
+
+     
 // reagent list 
 Route::get('reagent/destroy/{id}', [ ReagentController::class,'delete'])->name('reagent.delete');
 Route::post('reagent/update', [ ReagentController::class,'update'])->name('reagent.update');
@@ -123,15 +117,7 @@ Route::get('reagent', [ ReagentController::class,'index'])->name('reagent.index'
 /////////////////// Make Pathological Report cabinefees
 
 Route::get('patient_cash_get', [ finalreporttransitionController::class,'patient_cash_get'])->name('finalreport.patient_cash_get');
-
-
 Route::post('patient_cash_fetch', [ finalreporttransitionController::class,'patient_cash_fetch'])->name('finalreport.patient_cash_fetch');
-
-
-
-
-
-
 
 
 Route::get('pathologyreportmaking/dropdownfortest/{id}', [makepathologyreport::class, 'dropdownfortest'])->name('pathologyreportmaking.dropdownfortest');
@@ -143,10 +129,10 @@ Route::get('pathologyreportmaking/dropdown_list', [makepathologyreport::class, '
 Route::get('pathologyreportmaking/pdf/{id}', [makepathologyreport::class, 'printpdffordoctorappointment'])->name('pathologyreportmaking.pdf');
 
 
-Route::get('pathologyreportmaking/showreportforhandover', [ makepathologyreport::class,'findreportforhandoverreport']);
+Route::get('pathologyreportmaking/showreportforhandover', [ makepathologyreport::class,'findreportforhandoverreport'])->name('findreportforhandoverreport');
 
 
-Route::get('pathologyreportmaking/showreport', [ makepathologyreport::class,'findreport']);
+Route::get('pathologyreportmaking/showreport', [ makepathologyreport::class,'findreport'])->name('pathologyreportmaking.showreport');
 
 
 Route::get('pathologyreportmaking/deliever/{id}', [ makepathologyreport::class,'deliever'])->name('pathologyreportmaking.deliever');
@@ -165,14 +151,7 @@ Route::resource('pathologyreportmaking',  makepathologyreport::class);
 
 Route::post('pathologyreportmaking/update', [ makepathologyreport::class,'update'])->name('pathologyreportmaking.update');
 
-Route::get('pathologyreportmaking/destroy/{id}', [ makepathologyreport::class,'destroy']);
-
-
-
-
-
-
-
+Route::get('pathologyreportmaking/destroy/{id}', [ makepathologyreport::class,'destroy'])->name('pathologyreportmaking.destroy');
 
 
 
@@ -186,10 +165,10 @@ Route::get('reagentransaction/index', [ ReagentTransactionController::class,'ind
 
 
 
-Route::get('reportlist/reagent/list', [ reportcontroller::class,'reagentlist']);
+Route::get('reportlist/reagent/list', [ reportcontroller::class,'reagentlist'])->name('reportlist.reagent.list');
 Route::resource('reportlist',  reportcontroller::class);
 Route::post('reportlist/update', [ reportcontroller::class,'update'])->name('reportlist.update');
-Route::get('reportlist/destroy/{id}', [ reportcontroller::class,'destroy']);
+Route::get('reportlist/destroy/{id}', [ reportcontroller::class,'destroy'])->name('reportlist.destroy');
 
 
 
@@ -201,79 +180,15 @@ Route::resource('pathologytestcomponent',  Pathology_test_Component_Controller::
 Route::post('pathologytestcomponent/update', [ Pathology_test_Component_Controller::class,'update'])->name('pathologytestcomponent.update');
 
 
-Route::get('pathologytestcomponent/destroy/{id}', [ Pathology_test_Component_Controller::class,'destroy']);
+Route::get('pathologytestcomponent/destroy/{id}', [ Pathology_test_Component_Controller::class,'destroy'])->name('pathology.testcomponent.destroy');
 
 
-////////////
-
-
-
-
-
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
  
  ////////////////////////////////////////////// Phermacy Section 
-Route::group([ 'middleware'=>['auth','isPhermachy','PreventBackHistory']], function(){
-        Route::get('Phermachydepdashboard',[phermacyController::class,'index'])->name('phermachy.dashboard');
+
+Route::get('Phermachydepdashboard',[phermacyController::class,'index'])->name('phermachy.dashboard');
        
 	
-
-/////////////////////////////////// 
-
-
-
-///////////////////////////////////////////////////
 
 Route::get('medicinetransition/stock', [medicinetransactionController::class, 'stock'])->name('medicinetransition.stock');
 
@@ -292,8 +207,6 @@ Route::get('medicinetransition/pdf/{id}', [medicinetransactionController::class,
 
 
 
-
-
 Route::resource('medicinetransition',  medicinetransactionController::class);
 
 Route::post('medicinetransition/update', [ medicinetransactionController::class,'update'])->name('medicinetransition.update');
@@ -309,9 +222,6 @@ Route::resource('returnmedicinetransition',  ReturnmedicinetransactionController
 		
 
 
-
-
-
 ///////////////////// Medicne Company medicinecomapny 
 
 Route::get('medicinecomapny', [medicineCompanyController::class, 'index'])->name('medicinecomapny.index');  
@@ -319,8 +229,6 @@ Route::get('medicinecomapny', [medicineCompanyController::class, 'index'])->name
 Route::get('medicinecomapny/edit/{id}', [medicineCompanyController::class, 'edit'])->name('medicinecomapny.edit'); 
 
 Route::post('medicinecomapny/insert', [medicineCompanyController::class, 'store'])->name('medicinecomapny.store'); 
-
-
 
 
 ///////////////////// Medicne Company medicinecomapny transaction fetchtwodate
@@ -349,16 +257,13 @@ Route::resource('medicine',  medicinecontroller::class);
 Route::resource('medicinecategory',  medicine_categorycontroller::class);
 Route::post('medicinecategory/update', [ medicine_categorycontroller::class,'update'])->name('medicinecategory.update');
 
-Route::get('medicinecategory/destroy/{id}', [ medicine_categorycontroller::class,'destroy']);
-
-
-
+Route::get('medicinecategory/destroy/{id}', [ medicine_categorycontroller::class,'destroy'])->name('medicinecategory.destroy');
 
 
 /// medicine outdoor due collection   duepaymenttrans
 Route::get('duecolletionphermachy/pdf/{id}', [duecollectionfromphermachyController::class, 'printpdf'])->name('duecolletionphermachy.pdf');
 
-
+ 
 Route::get('duecolletionphermachy/duetrans', [duecollectionfromphermachyController::class, 'duetransforphermachy'])->name('duecolletionphermachy.duetransforphermachy');
 
 Route::get('duecolletionphermachy/stilldueout', [duecollectionfromphermachyController::class, 'outdorrduelist'])->name('duecolletionphermachy.stilldueout');
@@ -369,10 +274,7 @@ Route::resource('duecolletionphermachy',  duecollectionfromphermachyController::
 
 Route::post('duecolletionphermachy/update', [ duecollectionfromphermachyController::class,'update'])->name('duecolletionphermachy.update');
 
-Route::get('duecolletionphermachy/destroy/{id}', [ duecollectionfromphermachyController::class,'destroy']);
-
-
-
+Route::get('duecolletionphermachy/destroy/{id}', [ duecollectionfromphermachyController::class,'destroy'])->name('due.colletion.phermachy.destroy');
 
 
 
@@ -383,61 +285,15 @@ Route::resource('duecollection_inddor',  indoorpatientduecollectionforphermachy:
 
 Route::post('duecollection_inddor/update', [ indoorpatientduecollectionforphermachy::class,'update'])->name('duecollection_inddor.update');
 
-Route::get('duecollection_inddor/destroy/{id}', [ indoorpatientduecollectionforphermachy::class,'destroy']);
+Route::get('duecollection_inddor/destroy/{id}', [ indoorpatientduecollectionforphermachy::class,'destroy'])->name('due.collection_inddor.destroy');     
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-       
-}); 
-
-
-
-
-
-
-
-
- /////////////////////////////////////////////// Account  Section stilldueout
- 
- Route::group([ 'middleware'=>['auth','isAccount','PreventBackHistory']], function(){
-        Route::get('accountdashboard',[AccountController::class,'index'])->name('account.dashboard');
+Route::get('accountdashboard',[AccountController::class,'index'])->name('account.dashboard');
         
-
-
-
 
 Route::post('doctorcommission/paidfordoctor', [DoctorCommissionController::class, 'paidfordoctor'])->name('doctorcommission.paidfordoctor');
 
 
-
-
-
-
-
-
-
 Route::get('doctorcommission/paidsenddata/{id}', [DoctorCommissionController::class, 'paidsenddata'])->name('doctorcommission.paidsenddata');
-
 
 
 Route::get('doctorcommission/pdf/{id}', [DoctorCommissionController::class, 'printpdf'])->name('doctorcommission.pdf');
@@ -451,15 +307,6 @@ Route::get('doctorcommission/delete/{id}', [DoctorCommissionController::class, '
 Route::post('doctorcommission/insert', [DoctorCommissionController::class, 'store'])->name('doctorcommission.store'); 
 
 
-
-
-
-
-
-
-
-
-
 // pathology test from different pathology 
 Route::get('pathologytestfromother/mlist', [pathologytestfromother::class, 'mlist'])->name('pathologytestfromother.mlist');
 
@@ -467,22 +314,7 @@ Route::resource('pathologytestfromother',  pathologytestfromother::class);
 Route::post('pathologytestfromother/update', [ pathologytestfromother::class,'update'])->name('pathologytestfromother.update');
 
 
-Route::get('pathologytestfromother/destroy/{id}', [ pathologytestfromother::class,'destroy']);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Route::get('pathologytestfromother/destroy/{id}', [ pathologytestfromother::class,'destroy'])->name('pathology.test.from.other.destroy');
 
 
 /// show due payment transition 
@@ -508,25 +340,13 @@ Route::get('duepaymenttrans/pdf/{id}', [duetranController::class, 'printpdf'])->
 
 Route::resource('duepaymenttrans',  duetranController::class);
 
-
-
-
-
-
-
 Route::get('cabinetransfer/dropdown_list', [cabinetransfer::class, 'dropdown_list'])->name('cabinetransfer.dropdown_list');
-
 
 Route::resource('cabinetransfer',  cabinetransfer::class);
 
-
 Route::post('cabinetransfer/update', [ cabinetransfer::class,'update'])->name('cabinetransfer.update');
 
-Route::get('cabinetransfer/destroy/{id}', [ cabinetransfer::class,'destroy']);
-
-
-
-
+Route::get('cabinetransfer/destroy/{id}', [ cabinetransfer::class,'destroy'])->name('cabine.transfer.destroy');
 
 Route::get('advancedeposit/pdf/{id}', [advancedeposit::class, 'pdfprint'])->name('advancedeposit.pdfprint');
 
@@ -538,23 +358,7 @@ Route::resource('advancedeposit',  advancedeposit::class);
 
 Route::post('advancedeposit/update', [ advancedeposit::class,'update'])->name('advancedeposit.update');
 
-Route::get('advancedeposit/destroy/{id}', [ advancedeposit::class,'destroy']);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Route::get('advancedeposit/destroy/{id}', [ advancedeposit::class,'destroy'])->name('advancedeposit.destroy');
 
 
 ///////// Final Report bookingpatient
@@ -592,38 +396,12 @@ Route::resource('finalreport',  finalreporttransitionController::class);
 
 Route::post('finalreport/update', [ finalreporttransitionController::class,'update'])->name('finalreport.update');
 
-Route::get('finalreport/destroy/{id}', [ finalreporttransitionController::class,'destroy']);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Route::get('finalreport/destroy/{id}', [ finalreporttransitionController::class,'destroy'])->name('finalreport.destroy');
 
 // print prescription finalreport
 
 
 Route::get('printprescription', [prescriptionController::class, 'printprescription'])->name('prescription.printprescription');
-
-
-
-
-
-
-
-
-
 
 Route::get('cabinefees/pdf/{id}', [cabinefesscontroller::class, 'printpdf'])->name('cabinefees.pdf');
 
@@ -641,26 +419,13 @@ Route::post('cabinefees/pay', [cabinefesscontroller::class, 'pay'])->name('cabin
 Route::resource('cabinefees',  cabinefesscontroller::class);
 Route::post('cabinefees/update', [ cabinefesscontroller::class,'update'])->name('cabinefees.update');
 
-Route::get('cabinefees/destroy/{id}', [ cabinefesscontroller::class,'destroy']);
-
-
-
-
+Route::get('cabinefees/destroy/{id}', [ cabinefesscontroller::class,'destroy'])->name('final.report.destroy');
 
 
 Route::resource('reportlist',  reportcontroller::class);
 Route::post('reportlist/update', [ reportcontroller::class,'update'])->name('reportlist.update');
 
-
-Route::get('reportlist/destroy/{id}', [ reportcontroller::class,'destroy']);
-
-
-
-
-
-
-
-
+Route::get('reportlist/destroy/{id}', [ reportcontroller::class,'destroy'])->name('reportlist.destroy');
 		
 	//khorochtransition
 	
@@ -738,15 +503,9 @@ Route::get('dentalservice/pdf/{id}', [dentalservicecontroller::class, 'printpdff
 Route::resource('dentalservice',  dentalservicecontroller::class);
 
 
-
-
-
-
-
 Route::get('doctortransition/doctorincome', [doctorappointmenttransactionController::class, 'doctorincome'])->name('doctortransition.doctorincome');
 
 Route::post('doctortransition/doctorfetch', [doctorappointmenttransactionController::class, 'doctorfetch'])->name('doctortransition.doctorfetch');
-
 
 
 Route::get('doctortransition/selectuser', [doctorappointmenttransactionController::class, 'selecttestuser'])->name('doctortransition.select');
@@ -775,23 +534,6 @@ Route::get('doctortransition/pdf/{id}', [doctorappointmenttransactionController:
 
 Route::resource('doctortransition',  doctorappointmenttransactionController::class);
 
-///////////////
-// report transaction 
-/*
-
-Route::post('reporttransaction/refund', [reporttransactionController::class, 'refund'])->name('reporttransaction.refund');
-
-
-Route::get('reporttransaction/mlist', [reporttransactionController::class, 'mlist'])->name('reporttransaction.mlist');
-
-Route::get('reporttransaction/fetch', [reporttransactionController::class, 'fetch'])->name('reporttransaction.fetch');
-
-
-Route::resource('reporttransaction',  reporttransactionController::class);
-*/
-
-
-
 
 /// patient 
 Route::post('patientlist/fetcthrecord', [patientcontroller::class, 'fetcthrecord'])->name('patientlist.fetcthrecord');
@@ -803,29 +545,9 @@ Route::get('patientlist/pdf/{id}', [patientcontroller::class, 'printpdfforintrod
 Route::resource('patientlist', patientcontroller::class);
 
 
-
-
-
-
-
-
-
-
-
-
-
-	
-		
-/// report transaction 
-
-//Route::get('reporttransaction/pdf/{id}', [reporttransactionController::class, 'printpdfforreportslip'])->name('reporttransaction.pdf');
-
-
 Route::get('/pathologytranspicktwodate', function () {
     return view('reporttransaction.picktwodate');
 });
-
-
 
 
 Route::get('reporttransaction/selectuser', [reporttransactionController::class, 'selecttestuser'])->name('reporttransaction.select');
@@ -853,7 +575,6 @@ Route::post('reporttransaction/dailyreport', [reporttransactionController::class
 Route::get('reporttransaction/pdf/{id}', [reporttransactionController::class, 'printpdfforreportslip'])->name('reporttransaction.pdf');
 
 
-
 Route::get('reporttransaction/mlist', [reporttransactionController::class, 'mlist'])->name('reporttransaction.mlist');
 Route::get('reporttransaction/fetch', [reporttransactionController::class, 'fetch'])->name('reporttransaction.fetch');
 
@@ -862,41 +583,17 @@ Route::post('reporttransaction/refund', [reporttransactionController::class, 're
 Route::resource('reporttransaction',  reporttransactionController::class);
 
 
-
-
-
 Route::get('reporttransaction/edit/{id}', [reporttransactionController::class, 'edittrans'])->name('reporttransaction.edittrans');
 
 
 Route::post('reporttransaction/update', [ reporttransactionController::class,'update'])->name('reporttransaction.update');
 
-Route::get('reporttransaction/destroy/{id}', [ reporttransactionController::class,'destroy']);
-
-	// doctor appointment transiction	
-
-
-
+Route::get('reporttransaction/destroy/{id}', [ reporttransactionController::class,'destroy'])->name('report.transaction.destroy');
 
 
 Route::post('doctortransition/update', [ doctorappointmenttransactionController::class,'update'])->name('doctortransition.update');
 
-Route::get('doctortransition/destroy/{id}', [ doctorappointmenttransactionController::class,'destroy']);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Route::get('doctortransition/destroy/{id}', [ doctorappointmenttransactionController::class,'destroy'])->name('doctor.transition.destroy');
 
 
 ///////pathologytranspicktwodate
@@ -910,20 +607,13 @@ Route::get('doctortransition/destroy/{id}', [ doctorappointmenttransactionContro
  Route::post('month_year_pick_fetch', [employeetransactioncontroller::class, 'month_year_pick_fetch'])->name('employeetransactioncon.month_year_pick_fetch');
 
 
-
-
-
-
  Route::get('datepic', [employeetransactioncontroller::class, 'datepick'])->name('employeetransactioncon.datepick');
 
  Route::post('employeesalarymonth', [employeetransactioncontroller::class, 'employeesalarymonth'])->name('employeetransactioncon.employeesalarymonth');
 
-
-
  Route::get('employeeshow', [employeetransactioncontroller::class, 'employeeshow'])->name('employeetransactioncon.employeeshow');
 
  Route::post('employeesalaryfetch', [employeetransactioncontroller::class, 'employeesalaryfetch'])->name('employeetransactioncon.employeesalaryfetch');
-
 
 
 Route::get('employeetransactioncon/dropdown_list', [employeetransactioncontroller::class, 'dropdown_list'])->name('employeetransactioncon.dropdown_list');
@@ -947,8 +637,6 @@ Route::post('agentfetch', [AgenttransactionControllerController::class, 'agentfe
 Route::get('agenttransaction/pdf/{id}', [AgenttransactionControllerController::class, 'printpdf'])->name('agenttransaction.pdf');
 
 
-// Route::post('agenttransaction/paid/{id}', [AgenttransactionControllerController::class, 'paid'])->name('agenttransaction.paid');
-
 Route::post('agenttransaction/paid', [AgenttransactionControllerController::class, 'paid'])->name('agenttransaction.paid');
 
 Route::get('agenttransaction/paidsenddata/{id}', [AgenttransactionControllerController::class, 'paidsenddata'])->name('agenttransaction.paidsenddata');
@@ -966,74 +654,7 @@ Route::resource('externalcost',  externalcostcontroller::class);
 Route::post('externalcost/update', [ externalcostcontroller::class,'update'])->name('externalcost.update');
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		
-		
-
-
-       
-});
- 
- 
- ///////////////////////////////////////////////////
- 
-
-
-
-Route::group([ 'middleware'=>['auth','PreventBackHistory','isUser']], function(){
-    Route::get('dashboard',[UserController::class,'index'])->name('user.dashboard');
-  
-
-
-
-
-
-
-
-//Route::get('categorylist', [PhotoController::class, 'popular']);
-//Route::get('category_list', [categorylist::class,'category_list'])->name('medicine.category_list');
-
-
-
-
-
-
-
-
-});  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Route::group([ 'middleware'=>['auth','isDoctor','PreventBackHistory']], function(){
-   //////////////////// prescription 
-
-
+Route::get('dashboard',[UserController::class,'index'])->name('user.dashboard');
 
 Route::get('prescription/pdf/{id}', [prescriptionController::class, 'printpdf'])->name('prescription.pdf');
 
@@ -1042,64 +663,39 @@ Route::get('prescription/dropdownlist', [prescriptionController::class, 'dropdow
 Route::resource('prescription',  prescriptionController::class);
 Route::post('prescription/update', [ prescriptionController::class,'update'])->name('prescription.update');
 
-Route::get('prescription/destroy/{id}', [ prescriptionController::class,'destroy']);
-
-
-
+Route::get('prescription/destroy/{id}', [ prescriptionController::class,'destroy'])->name('prescription.destroy');
 
 
 Route::resource('prescriptionusages',  prescriptionusageController::class);
 Route::post('prescriptionusages/update', [ prescriptionusageController::class,'update'])->name('prescriptionusages.update');
 
-Route::get('prescriptionusages/destroy/{id}', [ prescriptionusageController::class,'destroy']);
-
-
+Route::get('prescriptionusages/destroy/{id}', [ prescriptionusageController::class,'destroy'])->name('prescriptionusages.destroy');
 
 
 Route::resource('prescriptionusagestwo',  prescreptionusagekhawarageoporeController::class);
 Route::post('prescriptionusagestwo/update', [ prescreptionusagekhawarageoporeController::class,'update'])->name('prescriptionusagestwo.update');
 
-Route::get('prescriptionusagestwo/destroy/{id}', [ prescreptionusagekhawarageoporeController::class,'destroy']);
-
-
-
-
+Route::get('prescriptionusagestwo/destroy/{id}', [ prescreptionusagekhawarageoporeController::class,'destroy'])->name('prescriptionusagestwo.destroy');
 
 ///  release patiient    
 
-	Route::get('relesepatient',[relesepatient::class,'index'])->name('relesepatient');
-	Route::get('relesepatientdeatilsindividual/{id}',[relesepatient::class,'relesepatientdeatilsindividual'])->name('relesepatientdeatilsindividual');
+Route::get('relesepatient',[relesepatient::class,'index'])->name('relesepatient');
+Route::get('relesepatientdeatilsindividual/{id}',[relesepatient::class,'relesepatientdeatilsindividual'])->name('relesepatientdeatilsindividual');
 
 
 
 Route::resource('cabinelist',  cabinelistController::class);
 Route::post('cabinelist/update', [ cabinelistController::class,'update'])->name('cabinelist.update');
 
-Route::get('cabinelist/destroy/{id}', [cabinelistController::class,'destroy']);
-
-
-
+Route::get('cabinelist/destroy/{id}', [cabinelistController::class,'destroy'])->name('cabinelist.destroy');
 
 Route::resource('surgerylist',  surgeryaddlistcontroller::class);
 
-
-
 Route::get('surgerytansition/dropdown_list', [surgerytransitionController::class, 'dropdown_list'])->name('surgerytansition.dropdown_list');
-
 
 Route::get('surgerytansition/pdf/{id}', [surgerytransitionController::class, 'printpdffordoctorappointment'])->name('surgerytansition.pdf');
 
-
 Route::resource('surgerytansition',  surgerytransitionController::class);
-
-
-
-
-
-
-
-
-
 
 //hospital service 
 
@@ -1107,43 +703,11 @@ Route::get('servicelist/dropdown_list', [ servicelisthospitalController::class,'
 
 Route::resource('servicelist',  servicelisthospitalController::class);
 
-
-
-
-
-
-
-
-
-
-
-
-
 Route::post('servicelist/update', [ servicelisthospitalController::class,'update'])->name('servicelist.update');
 
-
-Route::get('servicelist/destroy/{id}', [ servicelisthospitalController::class,'destroy']);
+Route::get('servicelist/destroy/{id}', [ servicelisthospitalController::class,'destroy'])->name('servicelist.destroy');
 
 // service transtion controller servicetranstionController
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 Route::get('servicetranstion/selectuser', [servicetranstionController::class, 'selecttestuser'])->name('servicetranstion.select');
@@ -1182,15 +746,12 @@ Route::resource('servicetranstion',  servicetranstionController::class);
 
 Route::post('servicetranstion/update', [ servicetranstionController::class,'update'])->name('servicetranstion.update');
 
-Route::get('servicetranstion/destroy/{id}', [ servicetranstionController::class,'destroy']);
-
-
+Route::get('servicetranstion/destroy/{id}', [ servicetranstionController::class,'destroy'])->name('service.transtion.destroy');
 
 
 //booking patient list  finalreport
 
 Route::resource('bookingpatient',  show_booking_patient_and_release::class);
-
 
 // cabine transaction  
 Route::get('cabinetransaction/details_of_individual_booking_patient/{id}', [ cabinetransactioncontroller::class,'details_of_individual_booking_patient'])
@@ -1214,16 +775,7 @@ Route::get('cabinetransaction/admitbill/{id}', [ cabinetransactioncontroller::cl
 Route::get('cabinetransaction/dropdown_list', [cabinetransactioncontroller::class, 'dropdown_list'])->name('cabinetransaction.dropdown_list');
 Route::resource('cabinetransaction',  cabinetransactioncontroller::class);
 
-
-
-
-
-
-
-
 //////////   dhar shod korun othoba advance bujhe pan 
-
-
 
 Route::get('supplier_due_advance_pay_or_get/dropdown_list', [ dhar_shod_advance_get_Controller::class,'dropdown_list'])->name('supplier_due_advance_pay_or_get.dropdown_list');
 
@@ -1236,12 +788,6 @@ Route::POST('supplier_due_advance_pay_or_get/update', [ dhar_shod_advance_get_Co
 Route::get('supplier_due_advance_pay_or_get/delete/{id}', [ dhar_shod_advance_get_Controller::class,'destroy'])->name('supplier_due_advance_pay_or_get.delete');
 
 
-
-
-
-
-
-
 //////////////// medicine companyer dena o pawna shod 
 Route::get('medcinercompanydenapawanshod/dropdown_list', [ medicineComapnyrDenaPawnaShodController::class,'dropdown_list'])->name('medcinercompanydenapawanshod.dropdown_list');
 
@@ -1249,12 +795,6 @@ Route::get('medcinercompanydenapawanshod/dropdown_list', [ medicineComapnyrDenaP
 Route::POST('medcinercompanydenapawanshod/transition', [ medicineComapnyrDenaPawnaShodController::class,'medcinercompanydenapawanshod'])->name('medcinercompanydenapawanshod.transition');
 
 Route::resource('medcinercompanydenapawanshod',  medicineComapnyrDenaPawnaShodController::class);
-
-
-
-
-
-
 
 
 
@@ -1273,104 +813,40 @@ Route::resource('medcinercompanydenapawanshod',  medicineComapnyrDenaPawnaShodCo
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-       
-}); 
-
-
-
-
-
-
-
-
-
 /*------------------------------------Admin  printprescription          ---------------------------------------------------*/
-
-
-
-
-
-
-Route::group([ 'middleware'=>['auth','isAdmin','PreventBackHistory']], function(){
-        Route::get('admindashboard',[Admincontroller::class,'index'])->name('admin.dashboard');
-   
-
-
-         
+        
+Route::get('admindashboard',[Admincontroller::class,'index'])->name('admin.dashboard');       
 Route::get('setting/edit/{id}', [BasicSettingController::class, 'edit'])->name('setting.edt');
 Route::get('setting', [BasicSettingController::class, 'index'])->name('setting');
 Route::post('setting/update', [BasicSettingController::class, 'update'])->name('setting.update');
 Route::get('medicinetransition/edit/{id}', [medicinetransactionController::class, 'edittrans'])->name('medicinetransition.editr');
 Route::post('medicinetransition/update', [ medicinetransactionController::class,'update'])->name('medicinetransition.update');
-Route::get('medicinetransition/destroy/{id}', [ medicinetransactionController::class,'destroy']);
-
-
-
-
-
-
+Route::get('medicinetransition/destroy/{id}', [ medicinetransactionController::class,'destroy'])->name('medicine.transition.destroy');
 
 
 /*----------------------------------------------------------------------------------*/			
 Route::resource('showuserlist', employeerolecangecontroller::class);
 Route::post('showuserlist/update', [employeerolecangecontroller::class,'update'])->name('showuserlist.update');
 
-Route::get('showuserlist/destroy/{id}', [employeerolecangecontroller::class,'destroy']);
-	
-		
-		
-		
-		
-		
-
+Route::get('showuserlist/destroy/{id}', [employeerolecangecontroller::class,'destroy'])->name('showuserlist.destroy');
 
 Route::post('patientlist/update', [patientcontroller::class,'update'])->name('patientlist.update');
 
-Route::get('patient/destroy/{id}', [patientcontroller::class,'destroy']);
-
-
-
-
-
-
-
+Route::get('patient/destroy/{id}', [patientcontroller::class,'destroy'])->name('patient.destroy');
 
 // add medicine  
 
 
 Route::post('medicine/update', [ medicinecontroller::class,'update'])->name('medicine.update');
 
-
-Route::get('medicine/destroy/{id}', [ medicinecontroller::class,'destroy']);
+Route::get('medicine/destroy/{id}', [ medicinecontroller::class,'destroy'])->name('medicine.destroy');
 
 // add surgery list 
 
 
-
-
 Route::post('surgerylist/update', [ surgeryaddlistcontroller::class,'update'])->name('surgerylist.update');
 
-
-Route::get('surgerylist/destroy/{id}', [ surgeryaddlistcontroller::class,'destroy']);
-
-
-
-
-
-
+Route::get('surgerylist/destroy/{id}', [ surgeryaddlistcontroller::class,'destroy'])->name('surgerylist.destroy');
 
 Route::post('reporttransaction/refund', [reporttransactionController::class, 'refund'])->name('reporttransaction.refund');
 
@@ -1380,7 +856,7 @@ Route::get('reporttransaction/edit/{id}', [reporttransactionController::class, '
 
 Route::post('reporttransaction/update', [ reporttransactionController::class,'update'])->name('reporttransaction.update');
 
-Route::get('reporttransaction/destroy/{id}', [ reporttransactionController::class,'destroy']);
+Route::get('reporttransaction/destroy/{id}', [ reporttransactionController::class,'destroy'])->name('report.transaction.destroy');
 
 	// doctor appointment transiction	
 
@@ -1390,54 +866,18 @@ Route::get('reporttransaction/destroy/{id}', [ reporttransactionController::clas
 
 Route::post('doctortransition/update', [ doctorappointmenttransactionController::class,'update'])->name('doctortransition.update');
 
-Route::get('doctortransition/destroy/{id}', [ doctorappointmenttransactionController::class,'destroy']);
+Route::get('doctortransition/destroy/{id}', [ doctorappointmenttransactionController::class,'destroy'])->name('doctor.transition.destroy');
 
+Route::post('dentalservice/update', [ dentalservicecontroller::class,'update'])->name('dental.service.update');
 
-
-
-Route::post('dentalservice/update', [ dentalservicecontroller::class,'update'])->name('dentalservice.update');
-
-Route::get('dentalservice/destroy/{id}', [ dentalservicecontroller::class,'destroy']);
-
-
-
-
-
-
-
+Route::get('dentalservice/destroy/{id}', [ dentalservicecontroller::class,'destroy'])->name('dental.service.destroy');
 
 /// surgery transition 
 
 
-
 Route::post('surgerytansition/update', [ surgerytransitionController::class,'update'])->name('surgerytansition.update');
 
-Route::get('surgerytansition/destroy/{id}', [ surgerytransitionController::class,'destroy']);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Route::get('surgerytansition/destroy/{id}', [ surgerytransitionController::class,'destroy'])->name('surgery.tansition.destroy');
 
 
 // employee list 
@@ -1447,7 +887,7 @@ Route::get('surgerytansition/destroy/{id}', [ surgerytransitionController::class
 Route::post('employeelist/update', [ employeedetailscontroller::class,'update'])->name('employeelist.update');
 
 
-Route::get('employeelist/destroy/{id}', [ employeedetailscontroller::class,'destroy']);
+Route::get('employeelist/destroy/{id}', [ employeedetailscontroller::class,'destroy'])->name('employee.list.destroy');
 
 
 // doctor list 
@@ -1456,7 +896,7 @@ Route::get('employeelist/destroy/{id}', [ employeedetailscontroller::class,'dest
 Route::post('doctorlist/update', [ doctorcontroller::class,'update'])->name('doctorlist.update');
 
 
-Route::get('doctorlist/destroy/{id}', [ doctorcontroller::class,'destroy']); 
+Route::get('doctorlist/destroy/{id}', [ doctorcontroller::class,'destroy'])->name('doctor.list.destroy'); 
 
 
 
@@ -1467,7 +907,7 @@ Route::get('doctorlist/destroy/{id}', [ doctorcontroller::class,'destroy']);
 Route::post('agentlist/update', [ agentdetailcontroller::class,'update'])->name('agentlist.update');
 
 
-Route::get('agentlist/destroy/{id}', [ agentdetailcontroller::class,'destroy']);
+Route::get('agentlist/destroy/{id}', [ agentdetailcontroller::class,'destroy'])->name('agent.list.destroy');
 
 
 
@@ -1476,64 +916,37 @@ Route::get('agentlist/destroy/{id}', [ agentdetailcontroller::class,'destroy']);
 Route::post('cabinetransaction/update', [ cabinetransactioncontroller::class,'update'])->name('cabinetransaction.update');
 
 
-Route::get('cabinetransaction/destroy/{id}', [ cabinetransactioncontroller::class,'destroy']);
+Route::get('cabinetransaction/destroy/{id}', [ cabinetransactioncontroller::class,'destroy'])->name('cabine.transaction.destroy');
 
 
 
 // Report transaction delete 
-Route::get('reporttransaction/destroy/{id}', [ reporttransactionController::class,'destroy']);
+Route::get('reporttransaction/destroy/{id}', [ reporttransactionController::class,'destroy'])->name('report.transaction.destroy');
 
  
 // employee transaction delete 
 
-Route::get('employeetransactioncon/destroy/{id}', [ employeetransactioncontroller::class,'destroy']);
+Route::get('employeetransactioncon/destroy/{id}', [ employeetransactioncontroller::class,'destroy'])->name('employee.transactioncon.destroy');
 ///////////////  agenttransaction delete 
 
-Route::get('agenttransaction/destroy/{id}', [ AgenttransactionControllerController::class,'destroy']);
+Route::get('agenttransaction/destroy/{id}', [ AgenttransactionControllerController::class,'destroy'])->name('agent.transaction.destroy');
 ///////////////  external cost transaction delete 
-Route::get('externalcost/destroy/{id}', [ externalcostcontroller::class,'destroy']);
+Route::get('externalcost/destroy/{id}', [ externalcostcontroller::class,'destroy'])->name('external.cost.destroy');
 
 
-
-
- 
-////////////////////////////////////////prothisthaner khoroch///////////////////////////////
-
-
-// report transaction 
-//Route::get('reporttransaction/mlist', [reporttransactionController::class, 'mlist'])->name('reporttransaction.mlist');
-//Route::get('reporttransaction/fetch', [reporttransactionController::class, 'fetch'])->name('reporttransaction.fetch');
 
 ////khorocer khad 
 Route::post('khorocer_khad/update', [ Create_khorocer_khad_Controller::class,'update'])->name('khorocer_khad.update');
 
-Route::get('khorocer_khad/destroy/{id}', [ Create_khorocer_khad_Controller::class,'destroy']);
+Route::get('khorocer_khad/destroy/{id}', [ Create_khorocer_khad_Controller::class,'destroy'])->name('khorocer_khad.destroy');
 
-
-
-
-
-
-
-
-
-
-
-
-
-//Route::post('khorocer_khad/update', [ Create_khorocer_khad_Controller::class,'update'])->name('khorocer_khad.update');
-
-Route::get('medcinercompanydenapawanshod/destroy/{id}', [ medicineComapnyrDenaPawnaShodController::class,'destroy']);
-
-
-
-
+Route::get('medcinercompanydenapawanshod/destroy/{id}', [ medicineComapnyrDenaPawnaShodController::class,'destroy'])->name('medciner.company.denapawanshod.destroy');
 
 /////////Supplier 
 
 Route::post('supplier/update', [ CreaterSupplierController::class,'update'])->name('supplier.update');
 
-Route::get('supplier/destroy/{id}', [ CreaterSupplierController::class,'destroy']);
+Route::get('supplier/destroy/{id}', [ CreaterSupplierController::class,'destroy'])->name('supplier.destroy/');
 
 
 
@@ -1542,7 +955,7 @@ Route::get('supplier/destroy/{id}', [ CreaterSupplierController::class,'destroy'
 
 Route::post('khorochtransition/update', [ KhorochTransitionConTrollerController::class,'update'])->name('khorochtransition.update');
 
-Route::get('khorochtransition/destroy/{id}', [ KhorochTransitionConTrollerController::class,'destroy']);
+Route::get('khorochtransition/destroy/{id}', [ KhorochTransitionConTrollerController::class,'destroy'])->name('khoroch.transition.destroy');
 
 
 ///////////// Taka uttolon o joma  transaction   
@@ -1550,9 +963,9 @@ Route::get('khorochtransition/destroy/{id}', [ KhorochTransitionConTrollerContro
 Route::get('takauttolon/dropdown_list', [TakaUttolonTransitionController::class, 'dropdown_list'])->name('takauttolon.dropdown_list');
 
 Route::resource('takauttolon',  TakaUttolonTransitionController::class);
-//Route::post('khorochtransition/update', [ KhorochTransitionConTrollerController::class,'update'])->name('khorochtransition.update');
 
-Route::get('takauttolon/destroy/{id}', [ TakaUttolonTransitionController::class,'destroy']);
+
+Route::get('takauttolon/destroy/{id}', [ TakaUttolonTransitionController::class,'destroy'])->name('takauttolon.destroy');
 
 // medicinecomapny
 Route::post('medicinecomapny/update', [medicineCompanyController::class, 'update'])->name('medicinecomapny.update'); 
@@ -1566,22 +979,13 @@ Route::get('medicinecomapnytransition/delete/{id}', [medicine_comapny_transition
 
 
 
-
-
-
-
-
-
-
-
-
 ///////////// business Partner   
 
 
 Route::resource('businesspartner',  CreatePartnerController::class);
 Route::post('businesspartner/update', [ CreatePartnerController::class,'update'])->name('businesspartner.update');
 
-Route::get('businesspartner/destroy/{id}', [ CreatePartnerController::class,'destroy']);
+Route::get('businesspartner/destroy/{id}', [ CreatePartnerController::class,'destroy'])->name('business.partner.destroy');
 
 
 ///////////////////////// Taka uttolon o joma report ////////////////////////////////
@@ -1600,14 +1004,6 @@ Route::get('businesspartner/destroy/{id}', [ CreatePartnerController::class,'des
 
  Route::get('joma_uttolon_statement_lastmonth', [joma_uttolon_report_statement_Controller::class, 'lastmonth'])->name('joma_uttolon_statement_lastmonth');
 
-// Route::post('incomestatbtwtwodate', [incomestatemnetController::class, 'recordbetweentwodate'])->name('incomestatbtwtwodate');
-
-//Route::get('/picktwodate', function () {  doctorcommission
-//    return view('incomestatement.picktwodate');
-//});
-
-
-
 
 
  Route::get('doctorstatementoday', [outdoordoctortranstion::class, 'todaystatment'])->name('outdoordoctortranstion.doctorstatementoday');
@@ -1624,33 +1020,13 @@ Route::get('businesspartner/destroy/{id}', [ CreatePartnerController::class,'des
 
  Route::post('outdoordoctorbtwtwodate', [outdoordoctortranstion::class, 'outdoordoctorbtwtwodate'])->name('outdoordoctorbtwtwodate');
 
-
-
-
 Route::get('/picktwodatefordoctortransition', function () {
     return view('incomefromdoctoroutdoor.picktwodate');
 });
 
-
-
-
-
-
 Route::post('duepaymenttrans/update', [ duetranController::class,'update'])->name('duepaymenttrans.update');
 
-
-Route::get('duepaymenttrans/destroy/{id}', [ duetranController::class,'destroy']);
-
-
-
-
-
-
-
-
-
-
-
+Route::get('duepaymenttrans/destroy/{id}', [ duetranController::class,'destroy'])->name('due.paymenttrans.destroy');
 
 
 ////////////////////////////// Income Statement 
@@ -1675,56 +1051,12 @@ Route::get('/picktwodate', function () {
 
 
 
-
-
-
 ////////////////////////////// Doctor Commission /////////////
-
-
-
-/*
-
-Route::post('doctorcommission/paidfordoctor', [DoctorCommissionController::class, 'paidfordoctor'])->name('doctorcommission.paidfordoctor');
-
-
-
-
-
-
-
-
-
-Route::get('doctorcommission/paidsenddata/{id}', [DoctorCommissionController::class, 'paidsenddata'])->name('doctorcommission.paidsenddata');
-
-
-
-Route::get('doctorcommission/pdf/{id}', [DoctorCommissionController::class, 'printpdf'])->name('doctorcommission.pdf');
-
-
-
-Route::get('doctorcommission', [DoctorCommissionController::class, 'index'])->name('doctorcommission.index');  
-
-Route::get('doctorcommission/delete/{id}', [DoctorCommissionController::class, 'destroy'])->name('doctorcommission.destroy');  
-
-Route::post('doctorcommission/insert', [DoctorCommissionController::class, 'store'])->name('doctorcommission.store'); 
-
-*/
-
-
-
-
 
 
 
 //////// check balance 
  Route::get('balance', [BalanceController::class, 'index'])->name('balance');
-
-
-
-
-
-
-
 
 //product transition
 
@@ -1733,7 +1065,7 @@ Route::get('productcompanytrans/dropdownlist', [productcompanytransitionControll
 Route::resource('productcompanytrans',  productcompanytransitionController::class);
 Route::post('productcompanytrans/update', [ productcompanytransitionController::class,'update'])->name('productcompanytrans.update');
 
-Route::get('productcompanytrans/destroy/{id}', [ productcompanytransitionController::class,'destroy']);
+Route::get('productcompanytrans/destroy/{id}', [ productcompanytransitionController::class,'destroy'])->name('product.companytrans.destroy');
 
 
 
@@ -1742,40 +1074,51 @@ Route::get('balancesheetforcompany/pdf/{id}', [compnanybalncecontroller::class, 
 Route::resource('balancesheetforcompany',  compnanybalncecontroller::class);
 Route::post('balancesheetforcompany/update', [ compnanybalncecontroller::class,'update'])->name('balancesheetforcompany.update');
 
-Route::get('balancesheetforcompany/destroy/{id}', [ compnanybalncecontroller::class,'destroy']);
+Route::get('balancesheetforcompany/destroy/{id}', [ compnanybalncecontroller::class,'destroy'])->name('balance.sheetfor.company.destroy');
 
 
 
 
 
-});
 
 
+Route::get('virtual-table/{print?}', [virtualTableController::class, 'show'])->name('virtualtable.index'); 
+Route::get('showmedicne', [virtualTableController::class, 'index'])->name('showmedicne');
+Route::post('showmedicnepdf/{print?}', [virtualTableController::class, 'showmedicnepdf'])->name('show.medicne.pdf.print');
 
-Route::get('virtual-table/{print?}', [virtualTableController::class, 'show']); 
-Route::get('showmedicne', [virtualTableController::class, 'index']);
-Route::post('showmedicnepdf/{print?}', [virtualTableController::class, 'showmedicnepdf']);
 ///--------
 Route::get('addcoshmainstructions',[addcoshmaInstructions::class,'index'])->name('coshmainstructions.index');
 Route::post('storecoshmainstructions',[addcoshmaInstructions::class,'store'])->name('coshmainstructions.store');
-Route::get('/coshma/{id}/edit', [ addcoshmaInstructions::class,'edit']);
+Route::get('/coshma/{id}/edit', [ addcoshmaInstructions::class,'edit'])->name('coshma.instructions.edit');
 Route::post('coshma/update', [ addcoshmaInstructions::class,'update'])->name('coshma.update');
-Route::get('coshma/destroy/{id}', [ addcoshmaInstructions::class,'destroy']);
+Route::get('coshma/destroy/{id}', [ addcoshmaInstructions::class,'destroy'])->name('coshma.instructions.destroy');
 ///-----
-
 
 Route::get('coshmaprescription',[coshmaController::class,'index'])->name('coshma.index');
 Route::get('coshma/prescription/delate/{id}',[coshmaController::class,'destroy'])->name('coshma.delate');
-Route::get('/coshma/{id}/edit',[coshmaController::class,'edit']);
+Route::get('/coshma/{id}/edit',[coshmaController::class,'edit'])->name('coshma.edit');
 Route::get('printcoshmaPreection/{id}',[coshmaController::class,'printcoshmaPreection'])->name('print.coshma.Preection');
 Route::post('coshma/update', [coshmaController::class,'update'])->name('coshma.update');
 
    
-Route::get('test',function(){
-    $data = new \App\Models\coshmaPrescription();
-    $data->name = 'sdds';
-    $data->save();
-});  
+ // User Management
+ Route::resource('/user',  UserControllerRole::class);
+ Route::get('/user/{id}/password', [UserControllerRole::class, 'changePassword'])->name('user.password');
+ Route::put('/user/password/{id}', [UserControllerRole::class, 'passwordUpdate'])->name('user.password-update');
+
+ // Role Management
+ Route::resource('/role', RoleController::class);
+
+ // Permission Management
+ Route::get('/permission/{id}', [RoleController::class, 'rolePermissionEdit'])->name('rolePermission.edit');
+ Route::put('/permission/permissions-update/{id}', [RoleController::class, 'rolePermissionUpdate'])->name('rolePermission.update');
+ 
+ // Root Menu
+ Route::resource('rootmenu', AdminRootMenuController::class); 
+
+ // Menu link and route
+ Route::resource('adminmenu', MenuLinkController::class); 
+// });
 
 
 

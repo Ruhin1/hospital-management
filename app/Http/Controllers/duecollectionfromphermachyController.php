@@ -32,7 +32,9 @@ use App\Models\finalreport;
 use DataTables;
 use Validator;   
 use PDF;
-use App\Models\balance_of_business; 
+use App\Models\balance_of_business;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class duecollectionfromphermachyController extends Controller
 {
@@ -809,7 +811,32 @@ $totalamount =  $total_due_paymet_and_concession;
 		}
 		
 		
-		
+		if($request->transitiontype == 1){
+			Log::channel('medicneTrinction')->info('আউটডোরের কাস্টমার এর দেনা পাওনা এর ট্রানজেকশন',
+			[
+				'type'=> 'কাস্টমার এর থেকে পাওনা টাকা নিচ্ছেন',
+				'employee_details'=> Auth::user(),
+				'Info'=> $request->all(),
+			]);
+
+		}elseif($request->transitiontype == 2){
+			Log::channel('medicneTrinction')->info('আউটডোরের কাস্টমার এর দেনা পাওনা এর ট্রানজেকশন',
+			[
+				'type'=> 'কাস্টমার এর থেকে পাওনা ফেরত দিচ্ছেন',
+				'employee_details'=> Auth::user(),
+				'Info'=> $request->all(),
+			]);
+
+		}elseif($request->transitiontype == 3){
+
+			Log::channel('medicneTrinction')->info('আউটডোরের কাস্টমার এর দেনা পাওনা এর ট্রানজেকশন',
+			[
+				'type'=> 'আউটডোরের কাস্টমার এর দেনা পাওনা এডজাস্ট করেছেন ( প্রকৃত পক্ষে কোন লেনদেন হয় না )',
+				'employee_details'=> Auth::user(),
+				'Info'=> $request->all(),
+			]);
+
+		}
 		
 		
 		
@@ -820,7 +847,32 @@ $totalamount =  $total_due_paymet_and_concession;
   return \Redirect::route('finalreport.index');
 	   }   
 	   
-	   
+	   if($request->transitiontype == 1){
+		Log::channel('medicneTrinction')->info('আউটডোরের কাস্টমার এর দেনা পাওনা এর ট্রানজেকশন',
+		[
+			'type'=> 'কাস্টমার এর থেকে পাওনা টাকা নিচ্ছেন',
+			'employee_details'=> Auth::user(),
+			'Info'=> $request->all(),
+		]);
+
+	}elseif($request->transitiontype == 2){
+		Log::channel('medicneTrinction')->info('আউটডোরের কাস্টমার এর দেনা পাওনা এর ট্রানজেকশন',
+		[
+			'type'=> 'কাস্টমার এর থেকে পাওনা ফেরত দিচ্ছেন',
+			'employee_details'=> Auth::user(),
+			'Info'=> $request->all(),
+		]);
+
+	}elseif($request->transitiontype == 3){
+
+		Log::channel('medicneTrinction')->info('আউটডোরের কাস্টমার এর দেনা পাওনা এর ট্রানজেকশন',
+		[
+			'type'=> 'আউটডোরের কাস্টমার এর দেনা পাওনা এডজাস্ট করেছেন ( প্রকৃত পক্ষে কোন লেনদেন হয় না )',
+			'employee_details'=> Auth::user(),
+			'Info'=> $request->all(),
+		]);
+
+	}
 	   
 	   return \Redirect::route('duepaymenttrans.index');
       //  return response()->json(['success' => 'Data is successfully updated']);

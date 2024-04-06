@@ -80,7 +80,7 @@ return [
             'with' => [
                 'stream' => 'php://stderr',
             ],
-        ],
+        ], 
 
         'syslog' => [
             'driver' => 'syslog',
@@ -99,6 +99,38 @@ return [
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
+        ],
+
+        'medicneTrinction' => [
+            'driver' => 'single',
+            'channels' => ['medicneTrinction'],
+            'path' => storage_path('logs/medicine _corner.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            
+        ],
+        
+        'doctorpoint' => [
+            'driver' => 'single',
+            'channels' => ['doctorpoint'],
+            'path' => storage_path('logs/Doctor_Point.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            
+        ],
+
+        'others' => [
+            'driver' => 'single',
+            'channels' => ['others'],
+            'path' => storage_path('logs/others.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            
+        ],
+
+        'pathologi' => [
+            'driver' => 'single',
+            'channels' => ['pathologi'],
+            'path' => storage_path('logs/Pathologi.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            
         ],
     ],
 

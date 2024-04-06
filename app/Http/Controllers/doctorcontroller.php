@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\doctor;
 use DataTables;
+use Illuminate\Support\Facades\Log;
 use Validator;
 
 class doctorcontroller extends Controller
@@ -109,9 +110,7 @@ class doctorcontroller extends Controller
  
 
         $form_data = array(
-             'name'        =>  $request->name,
-			
-			
+            'name'        =>  $request->name,		
 			'Degree' =>   $request->Degrees,
 			'Department' =>  $request->Department,
 			'mobile' =>  $request->mobile,
@@ -136,6 +135,18 @@ class doctorcontroller extends Controller
         );
 
         doctor::create($form_data);
+
+        Log::channel('doctorpoint')->info("New Doctor Added. Name: {$request->name}",[
+            
+            'Degree' =>   $request->Degrees,
+            'mobile' =>  $request->mobile,
+			'address' =>  $request->address,
+            'first_visit_fees' =>  $request->first_visit_fees,
+			'next_visit_fees' =>  $request->first_visit_fees,
+            'visiting_hours' =>  $request->visiting_hours,
+			'offday' =>  $request->offday,
+            'contact_address_for_serial' =>  $request->contact_address_for_serial,
+        ]);
 
         return response()->json(['success' => 'Data Added successfully.']);
     }
@@ -182,7 +193,8 @@ class doctorcontroller extends Controller
      */
      public function update(Request $request)
     {
-                       $rules = array(
+                       
+        $rules = array(
            'name'    =>  'required',
 			'Degrees' =>  'required',
 			'Department' => 'required',
@@ -334,22 +346,10 @@ elseif ( ( $headerimage == null ) and ( $footerimage != null ) )
 			'offday' =>  $request->offday,
 			'prescriptionheading' =>  $request->Prescription_heading,
 			'contact_address_for_serial' =>  $request->contact_address_for_serial,
-	
-		 
-	 
-	   
-	
-		  			  	'headerimage' => $headerimage,
-	
-
+		  	'headerimage' => $headerimage,
         );	
 			
-
-
-
-			
-	   }
-	elseif ( ( $headerimage == null ) and ( $footerimage == null ) )   
+	   }elseif ( ( $headerimage == null ) and ( $footerimage == null ) )   
 		   {
 		  	
 			
@@ -370,40 +370,21 @@ elseif ( ( $headerimage == null ) and ( $footerimage != null ) )
 			'offday' =>  $request->offday,
 			'prescriptionheading' =>  $request->Prescription_heading,
 			'contact_address_for_serial' =>  $request->contact_address_for_serial,
-	
-		 
-	 
+
+        );							
+	   } 	   
 	   
-	
-		  		
-	
-
-        );	
-			
+  
 
 
-
-			
-	   }	   
-	   
-	   
-	   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-       doctor::whereId($request->hidden_id)->update($form_data);
+     doctor::whereId($request->hidden_id)->update($form_data);
+    
+    
+     Log::channel('doctorpoint')->info("Data is successfully updated. Name: {$request->name}",[
+            
+        
+        
+    ]);
 
         return response()->json(['success' => 'Data is successfully updated']);
 
@@ -420,5 +401,6 @@ elseif ( ( $headerimage == null ) and ( $footerimage != null ) )
     {
                 doctor::whereId($id)
   ->update(['softdelete' => '1']);  //softdelete 
+  Log::channel('doctorpoint')->info("Doctor Delated. id: {$id}");
     }
 }

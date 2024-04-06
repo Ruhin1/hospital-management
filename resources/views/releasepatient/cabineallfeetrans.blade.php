@@ -77,7 +77,7 @@ tr:nth-child(even) {background-color: #f2f2f2;}
      Cabine NO:  <input type="text" readonly name="cabine" id="cabine" value="" autocomplete="off" class="form-control" />
     </div>
     <div class="col-4">
-   Unpaid Since the Date(M/D/Y) :   <input type="date" readonly name="unpaiddate" id="unpaiddate" value="" autocomplete="off" class="form-control" />
+   Unpaid Since the Date(M/D/Y) :   <input type="datetime-local" readonly name="unpaiddate" id="unpaiddate" value="" autocomplete="off" class="form-control" />
     </div>
   </div>
   
@@ -97,7 +97,7 @@ tr:nth-child(even) {background-color: #f2f2f2;}
     <div class="row">
 
     <div class="col-3">
-     Pay Till Date(M/D/Y) : <input type="date" name="paytilldate" id="paytilldate"  autocomplete="off" class="form-control" />
+     Pay Till Date(M/D/Y) : <input type="datetime-local" name="paytilldate" id="paytilldate"  autocomplete="off" class="form-control" />
     </div>
     <div class="col-3">
     Pay for Total days :   <input type="text" readonly name="payfordays" id="payfordays" value=""  autocomplete="off" class="form-control" />
@@ -105,7 +105,7 @@ tr:nth-child(even) {background-color: #f2f2f2;}
 
 
     <div class="col-3">
-  Data Entry Date : <input type="date" name="dataentrydate" id="dataentrydate" required  autocomplete="off" class="form-control" />
+  Data Entry Date : <input type="datetime-local" name="dataentrydate" id="dataentrydate" required  autocomplete="off" class="form-control" />
     </div>
 
 	

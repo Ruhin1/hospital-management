@@ -102,7 +102,7 @@
 	
             <label class="control-label col-md-4"> যে তারিখে বেতন দেয়া হচ্ছে : </label>
             <div class="col-md-8">
-             <input type="date" id="Startdate" name="Startdate" class="form-control" />
+             <input type="datetime-local" id="Startdate" name="Startdate" class="form-control" />
             </div>
            </div>
   
