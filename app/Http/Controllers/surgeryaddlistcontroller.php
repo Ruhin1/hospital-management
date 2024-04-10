@@ -7,6 +7,8 @@ use App\Models\surgerylist;
 
 
 use DataTables;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Validator;
 
 class surgeryaddlistcontroller extends Controller
@@ -107,6 +109,13 @@ class surgeryaddlistcontroller extends Controller
 
         surgerylist::create($form_data);
 
+        Log::channel('sarjaribibag')->info('New patients added for surgery',
+[
+    'massage'=> 'New patients added for surgery',
+    'employee_details'=> Auth::user(),
+	'Info'=> $request->all(),
+]);
+
         return response()->json(['success' => 'Data Added successfully.']);
     }
 
@@ -188,6 +197,13 @@ class surgeryaddlistcontroller extends Controller
         );
         surgerylist::whereId($request->hidden_id)->update($form_data);
 
+        Log::channel('sarjaribibag')->info('Updated information on patients undergoing surgery.',
+        [
+            'massage'=> 'Updated information on patients undergoing surgery.',
+            'employee_details'=> Auth::user(),
+            'Info'=> $request->all(),
+        ]);
+
         return response()->json(['success' => 'Data is successfully updated']);
     }
 
@@ -199,6 +215,13 @@ class surgeryaddlistcontroller extends Controller
      */
     public function destroy($id)
     {
+        $data = surgerylist::find($id);
+        Log::channel('sarjaribibag')->info('সার্জারী করা রোগীর তথ্য ডিলিট করা হয়েছে।',
+        [
+            'massage'=> 'সার্জারী করা রোগীর তথ্য ডিলিট করা হয়েছে।',
+            'employee_details'=> Auth::user(),
+            'Info'=>  $data,
+        ]);
 			surgerylist::whereId($id)
   ->update(['softdelete' => '1']);  //softdelete 
 

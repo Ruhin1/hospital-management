@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Models\employeedetails;
 use DataTables;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Validator;
 
 class employeedetailscontroller extends Controller
@@ -92,6 +94,13 @@ class employeedetailscontroller extends Controller
 
         employeedetails::create($form_data);
 
+        Log::channel('employee')->info('new employee Added.',
+[
+    'massage'=> 'new employee Added.',
+    'employee_details'=> Auth::user(),
+	'Info'=> $request->all(),
+]);
+
         return response()->json(['success' => 'Data Added successfully.']);
     }
 
@@ -163,6 +172,13 @@ class employeedetailscontroller extends Controller
 
        employeedetails::whereId($request->hidden_id)->update($form_data);
 
+       Log::channel('employee')->info('employee Updated.',
+       [
+           'massage'=> 'employee Updated',
+           'employee_details'=> Auth::user(),
+           'Info'=> $request->all(),
+       ]);
+
         return response()->json(['success' => 'Data is successfully updated']);
 
 
@@ -177,7 +193,16 @@ class employeedetailscontroller extends Controller
     public function destroy($id)
     {
 		
-		
+        
+		$data = employeedetails::find($id);
+        
+        Log::channel('employee')->info('employee Delated.',
+        [
+            'massage'=> 'employee Delated',
+            'employee_details'=> Auth::user(),
+            'Info'=> $data,
+        ]);
+
           employeedetails::whereId($id)
   ->update(['softdelete' => '1']);  //softdelete 
   

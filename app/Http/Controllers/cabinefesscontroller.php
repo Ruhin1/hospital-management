@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\DB;
 Use \Carbon\Carbon;
 use DateTime;
 use DataTables;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use PDF;
 
 use Redirect;
@@ -455,7 +457,12 @@ $cashtransition->save();
 
 
 
-
+    Log::channel('cabinservice')->info('Cabin fee charged',
+    [
+        'massage'=> 'Cabin fee charged',
+        'employee_details'=> Auth::user(),
+      'Info'=> $request->all(),
+    ]);
 
     return response()->json(['success' => 'Data Added Successfully']);
 
@@ -621,7 +628,12 @@ $presentbalance= $presentbalance  - $sum;
   
   
   
-  
+  Log::channel('cabinservice')->info('Cabin fee trenaction Delated',
+    [
+        'massage'=> 'Cabin fee trenaction Delated',
+        'employee_details'=> Auth::user(),
+      'Info'=> $c,
+    ]);
   
   
   $c->delete();

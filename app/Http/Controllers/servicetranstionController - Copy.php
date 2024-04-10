@@ -15,7 +15,6 @@ use  App\Models\doctorCommissionTransition;
 use  App\Models\agentdetail;
 use  App\Models\cabinelist;
 
-
 use DateTime;
 use Carbon\Carbon;
 use App\Models\cabinetransaction;

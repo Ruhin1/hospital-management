@@ -16,6 +16,9 @@ use DataTables;
 use Validator;
 use App\Models\balance_of_business;
 use DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 class dhar_shod_advance_get_Controller extends Controller
 {
         public function index(Request $request)
@@ -278,7 +281,12 @@ $cashtransition->save();
 		
 		
 		
-		
+Log::channel('borokorosh')->info('সাপ্লায়ার কে টাকা দেওয়া হয়েছে।',
+[
+    'massage'=> 'সাপ্লায়ার কে টাকা দেওয়া হয়েছে।',
+    'employee_details'=> Auth::user(),
+	'Info'=> $request->all(),
+]);
 		
 		
        DB::commit();
@@ -302,7 +310,12 @@ public function destroy($id)
   
   
   $cashtransition = cashtransition::where('dhar_shod_othoba_advance_er_mal_buje_pawa_id', $id)->delete();
-  
+  Log::channel('borokorosh')->info('সাপ্লায়ার দের ট্রানজেকশন ডিলিট করা হয়েছে।',
+[
+    'massage'=> 'সাপ্লায়ার দের ট্রানজেকশন ডিলিট করা হয়েছে।',
+    'employee_details'=> Auth::user(),
+	'Info'=> $data,
+]);
   
   $data->delete();
   

@@ -37,6 +37,8 @@ use App\Models\reportorder;
 
 use App\Models\finalreport; 
 use DataTables;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Validator;   
 use PDF;
 
@@ -1174,7 +1176,12 @@ $updatedbalance = $balance->balance + $duetransition->amount - $request->receive
 		}
 
 
-
+    Log::channel('patientadvancecollection')->info('Due Payment Transition Updated',
+    [
+        'massage'=> 'Due Payment Transition Updated',
+        'employee_details'=> Auth::user(),
+      'Info'=> $request->all(),
+    ]);
 
 return response()->json(['success' => 'Data Updated successfully.']);
 
@@ -1324,14 +1331,26 @@ $current_due = $patient->due +    $duetransition->totalamount   ;
  
  if ($cashtransition)
  {
-	 
+
+  Log::channel('patientadvancecollection')->info('Due Payment Transition  Updated',
+  [
+      'massage'=> 'Due Payment Transition  Updated',
+      'employee_details'=> Auth::user(),
+    'Info'=> $duetransition,
+  ]);
+  
 $cashtransition->delete();	 
  }
  
  
  
  
- 
+ Log::channel('patientadvancecollection')->info('Due Payment Transition  Updated',
+ [
+     'massage'=> 'Due Payment Transition  Updated',
+     'employee_details'=> Auth::user(),
+   'Info'=> $duetransition,
+ ]);
    $duetransition->delete();
    
   

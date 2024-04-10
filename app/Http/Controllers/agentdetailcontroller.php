@@ -8,6 +8,8 @@ use App\Models\agentdetail;
 use DataTables;
 use Validator;
 use DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class agentdetailcontroller extends Controller
 {
@@ -117,6 +119,13 @@ class agentdetailcontroller extends Controller
 
         agentdetail::create($form_data);
 
+        Log::channel('agent')->info('New Agent Added',
+[
+    'massage'=> 'New Agent Added',
+    'employee_details'=> Auth::user(),
+	'Info'=> $request->all(),
+]);
+
         return response()->json(['success' => 'Data Added successfully.']);
     }
 
@@ -186,6 +195,13 @@ class agentdetailcontroller extends Controller
 
        agentdetail::whereId($request->hidden_id)->update($form_data);
 
+       Log::channel('agent')->info(' Agent Informeation Updated',
+       [
+           'massage'=> 'Agent Informeation Updated',
+           'employee_details'=> Auth::user(),
+           'Info'=> $request->all(),
+       ]);
+
         return response()->json(['success' => 'Data is successfully updated']);
 
 
@@ -198,6 +214,13 @@ class agentdetailcontroller extends Controller
      */
     public function destroy($id)
     {
+        $data = agentdetail::find($id);
+        Log::channel('agent')->info(' Agent Informeation Delated',
+       [
+           'massage'=> 'Agent Informeation Delated',
+           'employee_details'=> Auth::user(),
+           'Info'=> $data,
+       ]);
                   agentdetail::whereId($id)
   ->update(['softdelete' => '1']);  //softdelete 
     }

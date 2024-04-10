@@ -13,31 +13,7 @@ use DataTables;
 use Validator;
 
 class medicinecontroller extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-	 
-	 /*
-	 
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-	 
-	 
-	 
-	
-
-
-/////////////////////////////////////////////////	
-
-
-	 
+{	 
 	  public function index(Request $request)
     {
      // $medicine=  medicine::latest()->get();
@@ -139,11 +115,11 @@ class medicinecontroller extends Controller
         );
 
         $medicineId = medicine::create($form_data);
-
+        
             $id = auth()->user()->id;
             $order = new medicinecompanyorder(); 
             $order->user_id = $id;
-            $order->medicinecomapnyname_id = 0;
+            $order->medicinecomapnyname_id = 3;
             $order->totalbeforediscount = 0;
             $order->due = 0;
             $order->pay_in_cash = 0;
@@ -151,18 +127,20 @@ class medicinecontroller extends Controller
             $order->discount = 0;
             $order->transitiontype = 3;
             $order->created_at = $request->datetime;
-            $order->save();
+            $order->save(); 
          
-
+            $dt = $request->stock - $request->stock;
             $medicinetransition = new medicineCompanyTransition(); 
             $medicinetransition->medicine_id = $medicineId->id; 
             $medicinetransition->medicinecompanyorder_id = $order->id;
-            $medicinetransition->Quantity = 0;
+            $medicinetransition->Quantity = $dt;
             $medicinetransition->unit_price = $request->unitprice;
             $medicinetransition->transitiontype = 3;
+            $medicinetransition->remaining = $request->stock;
             $medicinetransition->created_at = $request->datetime; 
             $medicinetransition->save();  
 
+        
         return response()->json(['success' => 'Data Added successfully.']);
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChildmenusTable extends Migration
+class CreateMenuactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,14 @@ class CreateChildmenusTable extends Migration
      */
     public function up()
     {
-        Schema::create('childmenus', function (Blueprint $table) {
+        Schema::create('menuactions', function (Blueprint $table) {
             $table->id();
+            $table->integer('Childmenu_id');
+            //$table->foreign('Childmenu_id')->references('id')->on('clildmenus')->onDelete('cascade');
             $table->string('name');
             $table->string('route')->unique();
-            $table->integer('status')->default(1);
-            $table->integer('rootmenu_id');
-            //$table->foreign('rootmenu_id')->references('id')->on('rootmenus')->onDelete('cascade');
+            $table->integer('status')->default('1');
             $table->timestamps();
-
-            
         });
     }
 
@@ -33,6 +31,7 @@ class CreateChildmenusTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('childmenus');
+        Schema::dropIfExists('menuactions');
     }
-}
+} 
+

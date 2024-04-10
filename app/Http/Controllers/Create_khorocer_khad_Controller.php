@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\khorocer_khad;
 use DataTables;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Validator;
 
 class Create_khorocer_khad_Controller extends Controller
@@ -81,6 +83,13 @@ class Create_khorocer_khad_Controller extends Controller
 
         khorocer_khad::create($form_data);
 
+        Log::channel('borokorosh')->info('বড় খরছ এর খ্যাত যুক্ত করা হয়েছে।',
+        [
+            'massage'=> 'বড় খরছ এর খ্যাত যুক্ত করা হয়েছে।',
+            'employee_details'=> Auth::user(),
+            'Info'=> $request->all(),
+        ]);
+
         return response()->json(['success' => 'Data Added successfully.']);
     }
     /**
@@ -139,6 +148,13 @@ class Create_khorocer_khad_Controller extends Controller
         );
        khorocer_khad::whereId($request->hidden_id)->update($form_data);
 
+       Log::channel('borokorosh')->info('খরছের খ্যাত আপডেট করা হয়েছে।',
+        [
+            'massage'=> 'খরছের খ্যাত আপডেট করা হয়েছে।',
+            'employee_details'=> Auth::user(),
+            'Info'=> $request->all(),
+        ]);
+
         return response()->json(['success' => 'Data is successfully updated']);
     }
 
@@ -150,7 +166,14 @@ class Create_khorocer_khad_Controller extends Controller
      */
     public function destroy($id)
     {
+        $data = 	khorocer_khad::find();
+        Log::channel('borokorosh')->info('খরছের খ্যাত ডিলিট করা হয়েছে।',
+        [
+            'massage'=> 'খরছের খ্যাত ডিলিট করা হয়েছে।',
+            'employee_details'=> Auth::user(),
+            'Info'=> $data,
+        ]);
         	   	khorocer_khad::whereId($id)
   ->update(['softdelete' => '1']);
-    }
+    } 
 }

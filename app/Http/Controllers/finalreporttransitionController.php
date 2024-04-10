@@ -41,7 +41,10 @@ use App\Models\setting;
 use DataTables;
 use Validator;   
 use PDF;
-use App\Models\balance_of_business; 
+use App\Models\balance_of_business;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 class finalreporttransitionController extends Controller
 {
     /**
@@ -559,13 +562,25 @@ $current_due = $patient->due +    $duetransition->totalamount   ;
  
  if ($cashtransition)
  {
-	 
+	Log::channel('patientadvancecollection')->info('Due Payment Transition  Delated',
+	[
+		'massage'=> 'Due Payment Transition  Delated',
+		'employee_details'=> Auth::user(),
+	  'Info'=> $duetransition,
+	]); 
 $cashtransition->delete();	 
+
+
  }
  
  
  
- 
+ Log::channel('patientadvancecollection')->info('Due Payment Transition  Delated',
+	[
+		'massage'=> 'Due Payment Transition  Delated',
+		'employee_details'=> Auth::user(),
+	  'Info'=> $duetransition,
+	]); 
  
    $duetransition->delete();
    
@@ -5798,7 +5813,12 @@ $cashtransition->save();
 		
 		
 		
-		
+		Log::channel('patientadvancecollection')->info('Due Payment & Refund',
+[
+    'massage'=> 'Due Payment & Refund',
+    'employee_details'=> Auth::user(),
+	'Info'=> $request->all(),
+]);
 		
 	 return response()->json(['success' => 'Data Added successfully.']);	
 		

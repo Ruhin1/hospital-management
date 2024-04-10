@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class serviceorder extends Model
 {
@@ -21,16 +22,6 @@ class serviceorder extends Model
 		'refundamount','refundbyuser_id','refunddate','refundbyuser',
 		'status','refund','total','discount','receiveableamount',
 		'paid','due_adjust_from_advance','due','commission',
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 
     ];
 	

@@ -299,6 +299,7 @@
                             html = '<div class="alert alert-success">' + data.success + '</div>';
                             $('#sample_form')[0].reset();
                             $('#patient_table').DataTable().ajax.reload();
+                            console.log(data.success);
                         }
                         $('#form_result').html(html);
                         $('#form_result').fadeIn();

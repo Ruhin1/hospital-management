@@ -17,6 +17,8 @@ use App\Models\cashtransition;
 
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use PDF;
 
@@ -560,6 +562,13 @@ $cashtransition->save();
 		
     DB::commit();
 
+    Log::channel('employee')->info('কর্মচারী বেতন দেওয়া হয়েছে।',
+[
+    'massage'=> 'কর্মচারী বেতন দেওয়া হয়েছে।',
+    'employee_details'=> Auth::user(),
+	'Info'=> $request->all(),
+]);
+
         return response()->json(['success' => 'Data Added successfully.']);
     }
 
@@ -698,6 +707,13 @@ $cashtransition->save();
 	 
 	 
 	DB::commit();
+
+    Log::channel('employee')->info('কর্মচারী কে দেওয়া বেতনের তথ্য আপডেট করা হয়েছে।',
+    [
+        'massage'=> 'কর্মচারী কে দেওয়া বেতনের তথ্য আপডেট করা হয়েছে।',
+        'employee_details'=> Auth::user(),
+        'Info'=> $request->all(),
+    ]);
 	 
 	  return response()->json(['success' => 'Data is successfully updated']);
     }
@@ -727,6 +743,14 @@ DB::beginTransaction();
 $cashtransition = cashtransition::where('employeesalarytransaction_id', $id )->delete();
 	
 		////delete 
+
+        Log::channel('employee')->info('কর্মচারী কে দেওয়া বেতনের তথ্য ডিলিট করা হয়েছে।',
+    [
+        'massage'=> 'কর্মচারী কে দেওয়া বেতনের তথ্য ডিলিট করা হয়েছে।',
+        'employee_details'=> Auth::user(),
+        'Info'=> $data,
+    ]);
+
         $data->delete();
     
 	DB::commit();

@@ -14,7 +14,7 @@ use  App\Models\agenttransaction;
 use  App\Models\doctorCommissionTransition;  
 use  App\Models\agentdetail;
 use  App\Models\cabinelist;
-
+use App\Models\User;
 use  App\Models\servicelistinhospital;
 use DateTime;
 use Carbon\Carbon;
@@ -25,7 +25,9 @@ use App\Models\cashtransition;
 use App\Models\cabinefeetransition;
 use  App\Models\doctor;
 use  App\Models\patient;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 
@@ -1349,7 +1351,12 @@ $cashtransition->save();
 
 
 
-
+Log::channel('cabinservice')->info('Passant new services have been added.',
+[
+    'massage'=> 'Passant new services have been added.',
+    'employee_details'=> Auth::user(),
+	'Info'=> $request->all(),
+]);
 
 return response()->json(['success' => 'Data Added successfully.']);
  
@@ -1673,6 +1680,12 @@ patient::where('id',  $data->patient_id )
 		$casthtransition->delete();
 		}
 		
+		Log::channel('cabinservice')->info('Passant new services tranctaion Delated.',
+[
+    'massage'=> 'Passant new services tranctaion Delated.',
+    'employee_details'=> Auth::user(),
+	'Info'=> $data,
+]);
 		
 		$data->delete();
     }

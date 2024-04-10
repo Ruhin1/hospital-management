@@ -13,6 +13,9 @@ use DataTables;
 use Validator;
 use DB;
 use App\Models\balance_of_business;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 class TakaUttolonTransitionController extends Controller
 {
     /**
@@ -287,6 +290,25 @@ $cashtransition->save();
    
 
   DB::commit();
+      if( $request->transitiontype == 1 ){
+
+        Log::channel('patner')->info('পাটনার কে তার টাকা উত্তোলন করে দেওয়া হয়েছে।',
+        [
+            'massage'=> 'পাটনার কে তার টাকা উত্তোলন করে দেওয়া হয়েছে।',
+            'employee_details'=> Auth::user(),
+          'Info'=> $request->all(),
+        ]);
+
+      }else{
+
+        Log::channel('patner')->info('পাটনার তার টাকা জমা দিয়েছে।',
+        [
+            'massage'=> 'পাটনার তার টাকা জমা দিয়েছে।',
+            'employee_details'=> Auth::user(),
+          'Info'=> $request->all(),
+        ]);
+
+      }
         return response()->json(['success' => 'Data Added successfully.']);
     }
 

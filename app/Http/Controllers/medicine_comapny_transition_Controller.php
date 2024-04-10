@@ -64,6 +64,10 @@ class medicine_comapny_transition_Controller extends Controller
 					{
 					return "Purchase";	
 					}
+                    if( $order->transitiontype == 3 )
+					{
+					return "Frist Time Stock";	
+					}
 				if( $order->transitiontype == 2 )
 					{
 					return "Return Medicine to Company"	;
@@ -630,28 +634,5 @@ if($data->transitiontype == 1){
 }
         $data->delete();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

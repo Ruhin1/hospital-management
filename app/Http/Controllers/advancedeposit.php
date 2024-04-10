@@ -43,16 +43,9 @@ use App\Models\finalreport;
 use DataTables;
 use Validator;   
 use PDF;
-use App\Models\balance_of_business; 
-
-
-
-
-
-
-
-
-
+use App\Models\balance_of_business;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class advancedeposit extends Controller
 {
@@ -293,7 +286,12 @@ $cashtransition->save();
 		
 		
 		
-		
+	Log::channel('patientadvancecollection')->info('Advance acceptance from the patient',
+[
+    'massage'=> 'Advance acceptance from the patient',
+    'employee_details'=> Auth::user(),
+	'Info'=> $request->all(),
+]);	
 	return response()->json(['success' => 'Data Added successfully.']);	
 	
     }
@@ -413,7 +411,12 @@ patient::where('id',  $data->patient_id )
 		   'dena'=> $patient_dena,
         ]);
 
-
+        Log::channel('patientadvancecollection')->info('Advance intake information from the patient has been deleted.',
+        [
+            'massage'=> 'Advance intake information from the patient has been deleted.',
+            'employee_details'=> Auth::user(),
+            'Info'=> $data,
+        ]);	
 		$data->delete();
     }
 }

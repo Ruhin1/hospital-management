@@ -79,7 +79,11 @@ use App\Http\Controllers\AdminRootMenuController;
 use App\Http\Controllers\MenuLinkController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserControllerRole;
-
+use App\Models\medicineCompanyTransition;
+use App\Models\medicinetransition;
+use App\Models\returnmedicinetransaction;
+use App\Models\medicinecompanyorder as mco;
+use App\Models\order;
 
 /* medicinecontroller dueshow pathologyreportmaking releasedindoor   employeesalarymonth
 |--------------------------------------------------------------------------   order
@@ -93,14 +97,14 @@ use App\Http\Controllers\UserControllerRole;
 */ 
 
 Route::middleware(['middleware'=>'PreventBackHistory'])->group(function () {
- 
-
-    Auth::routes(['register' => false]);
+    
+    Auth::routes(['register' => false]); 
 });
 
 Route::get('/', [indexController::class, 'index'])->name('welcome');
 
-// Route::group(['middleware' => ['admin_permission']],function(){
+//admin_permission
+Route::group(['middleware' => ['web','auth','admin_permission']],function(){
 
 
 
@@ -239,7 +243,7 @@ Route::get('medicinecomapnytransition/pdf/{id}', [medicine_comapny_transition_Co
 
 Route::get('medicinecomapnytransition/dropdown_list', [medicine_comapny_transition_Controller::class, 'dropdown_list'])->name('medicinecomapnytransition.dropdown_list');  
 
-
+ 
 Route::get('medicinecomapnytransition', [medicine_comapny_transition_Controller::class, 'index'])->name('medicinecomapnytransition.index');  
 
 
@@ -1079,7 +1083,7 @@ Route::get('balancesheetforcompany/destroy/{id}', [ compnanybalncecontroller::cl
 
 
 
-
+///----------------
 
 
 Route::get('virtual-table/{print?}', [virtualTableController::class, 'show'])->name('virtualtable.index'); 
@@ -1118,8 +1122,16 @@ Route::post('coshma/update', [coshmaController::class,'update'])->name('coshma.u
 
  // Menu link and route
  Route::resource('adminmenu', MenuLinkController::class); 
-// });
+ 
+});
 
 
-
+Route::get('/del',function (){
+        medicinetransition::truncate();
+        medicineCompanyTransition::truncate();
+        returnmedicinetransaction::truncate();
+        mco::truncate();
+        //order::truncate();
+        return 1;
+});
 

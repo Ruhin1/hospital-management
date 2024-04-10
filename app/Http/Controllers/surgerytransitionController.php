@@ -21,8 +21,11 @@ use App\Models\balance_of_business;
 Use \Carbon\Carbon;
 use DateTime;
 use PDF; 
-use App\Models\cabinelist; 
-use Illuminate\Support\Facades\DB; 
+use App\Models\cabinelist;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 class surgerytransitionController extends Controller
 {
     /**
@@ -600,6 +603,13 @@ $cashtransition->save();
 
 });	
        //return Redirect::back();
+	   Log::channel('sarjaribibag')->info('New Surgery Transaction Added',
+[
+    'massage'=> 'New Surgery Transaction Added',
+    'employee_details'=> Auth::user(),
+	'Info'=> $request->all(),
+]);
+
 return response()->json(['success' => 'Data Added successfully.']);
     }
    
@@ -779,6 +789,8 @@ patient::where('id',  $data->patient_id )
 				 $duetrans = duetransition::where('surgerytransaction_id', $data->id )->first();
 	if($duetrans != null )
 	{
+		
+		
 		$duetrans->delete();
 	}
 	
@@ -788,7 +800,13 @@ patient::where('id',  $data->patient_id )
 	{
 		$cashtransition->delete();
 	}
-	
+	Log::channel('sarjaribibag')->info(' Surgery Transaction Delated',
+	[
+		'massage'=> 'Surgery Transaction Delated',
+		'employee_details'=> Auth::user(),
+		'Info'=> $data,
+	]);
+
 		$data->delete();
     }
 }

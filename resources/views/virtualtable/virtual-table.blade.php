@@ -151,6 +151,8 @@ foreach ($virtualTable as $row) {
                         Buy Medicine From Company
                         @elseif ($row->transitiontype == 2)
                         Return Medicine To Company
+                        @elseif ($row->transitiontype == 3)
+                        Frist Time Stock own Medicine
                         @endif
                     </td>
                     

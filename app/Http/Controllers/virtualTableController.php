@@ -8,6 +8,7 @@ use App\Models\medicinetransition;
 use App\Models\medicineCompanyTransition;
 use App\Models\returnmedicinetransaction;
 use App\Models\medicine;
+use App\Models\medicinecompanyorder;
 use Carbon\Carbon;
 use PDF;
 use DB;
@@ -111,7 +112,11 @@ class virtualTableController extends Controller
         $medicineTransitions = medicineTransition::orderBy('medicine_id','ASC')->orderBy('created_at', 'DESC')->get(); 
         $medicineCompanyTransition = medicineCompanyTransition::orderBy('medicine_id','ASC')->orderBy('created_at', 'DESC')->get(); 
         $returnMedicineTransactions = returnmedicinetransaction::orderBy('medicine_id','ASC')->orderBy('created_at', 'DESC')->get(); 
-        
+        // medicineTransition::truncate();
+        // medicineCompanyTransition::truncate();
+        // returnmedicinetransaction::truncate();
+        // medicinecompanyorder::truncate();
+        // return 1;
         $virtualTable = [];
 
         foreach ($medicineTransitions as $transition) { 

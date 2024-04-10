@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\AdminMenu;
+use App\Models\Childmenu;
 use App\Models\Rootmenu;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
@@ -121,8 +122,8 @@ class RoleController extends Controller
         $role = Role::findById($id);
 
         // Retrieve all routes
-        $routes = Rootmenu::select('id','name')->with('childmenu')->get();
-        //return  $routes;
+        $routes = Childmenu::select('id','name')->with('menuaction','rootmenu')->get();
+        return  $routes;
         // Retrieve permissions associated with the role
         $permissions = $role->permissions->pluck('name')->toArray();
     

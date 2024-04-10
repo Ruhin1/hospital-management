@@ -9,6 +9,8 @@ use App\Models\externalcost;
 
 use App\Models\balance_of_business;
 use DataTables;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Validator;
 
 class externalcostcontroller extends Controller
@@ -131,7 +133,12 @@ $externalcost->created_at = 	$request->Date_of_Transition;
 	 
 	 
 	 
-	 
+  Log::channel('kucrakoros')->info('নতুন খুচরা খরছ যুক্ত করা হয়েছে।',
+  [
+      'massage'=> 'নতুন খুচরা খরছ যুক্ত করা হয়েছে।',
+      'employee_details'=> Auth::user(),
+      'Info'=> $request->all(),
+  ]);
 
         return response()->json(['success' => 'Data Added successfully.']);
     }
@@ -256,7 +263,12 @@ $newbalance =   $balance->balance - (   $request->amount - $presentamount);
 		 
 		 
 		 
-		 
+        Log::channel('kucrakoros')->info('খুচরা খরছের তথ্য আপডেট করা হয়েছে।',
+        [
+            'massage'=> 'খুচরা খরছের তথ্য আপডেট করা হয়েছে।',
+            'employee_details'=> Auth::user(),
+            'Info'=> $request->all(),
+        ]);
 
         return response()->json(['success' => 'Data is successfully updated']);
 		
@@ -283,8 +295,13 @@ $newbalance =   $balance->balance - (   $request->amount - $presentamount);
   ->update(['balance' =>( $balance->balance    + $data->cost  )  ]);
 				
 				
-					
+  Log::channel('kucrakoros')->info('খুচরা খরছের তথ্য ডিলিট করা হয়েছে।',
+  [
+      'massage'=> 'খুচরা খরছের তথ্য ডিলিট করা হয়েছে।',
+      'employee_details'=> Auth::user(),
+      'Info'=> $data,
+  ]);
 				
-        $data->delete();
+        $data->delete(); 
     }
 }

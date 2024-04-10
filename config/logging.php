@@ -132,6 +132,70 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
             
         ],
+
+        'cabinservice' => [
+            'driver' => 'single',
+            'channels' => ['cabinservice'],
+            'path' => storage_path('logs/cabin_service.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            
+        ],
+
+        'patientadvancecollection' => [
+            'driver' => 'single',
+            'channels' => ['patientadvancecollection'],
+            'path' => storage_path('logs/Acceptance_of_patient_advance_and_collection_of_dues.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            
+        ],
+
+        'sarjaribibag' => [
+            'driver' => 'single',
+            'channels' => ['sarjaribibag'],
+            'path' => storage_path('logs/sarjari_bibag.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            
+        ],
+
+        'agent' => [
+            'driver' => 'single',
+            'channels' => ['agent'],
+            'path' => storage_path('logs/agent_data.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            
+        ],
+
+        'employee' => [
+            'driver' => 'single',
+            'channels' => ['employee'],
+            'path' => storage_path('logs/employee_data.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            
+        ],
+
+        'patner' => [
+            'driver' => 'single',
+            'channels' => ['patner'],
+            'path' => storage_path('logs/our_partner_details.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            
+        ],
+
+        'kucrakoros' => [
+            'driver' => 'single',
+            'channels' => ['kucrakoros'],
+            'path' => storage_path('logs/Kucra_kors.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            
+        ],
+
+        'borokorosh' => [
+            'driver' => 'single',
+            'channels' => ['borokorosh'],
+            'path' => storage_path('logs/Boro_koroch_er_Kat.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            
+        ],
     ],
 
 ];

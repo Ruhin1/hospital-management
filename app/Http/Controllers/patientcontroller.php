@@ -16,6 +16,8 @@ use App\Models\cabinelist;
 use DataTables;
 use Validator;
 use BPDF; // barrydom pdf 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use PDF; // mpdf
 class patientcontroller extends Controller
 {
@@ -214,6 +216,13 @@ public function printpdfforintroductoryslip($id)
 
         patient::create($form_data);
 
+//         Log::channel('patientadvancecollection')->info('Pathology Bill  Updated',
+// [
+//     'massage'=> 'Pathology Bill  Updated',
+//     'employee_details'=> Auth::user(),
+// 	'Info'=> $request->all(),
+// ]);
+
         return response()->json(['success' => 'Data Added successfully.']);
     }
 
@@ -282,6 +291,13 @@ public function printpdfforintroductoryslip($id)
 		
 	cabinelist::where('patient_id', $request->hidden_id)->update(['patientname' => $request->name]);
 
+            Log::channel('patientadvancecollection')->info('Patient information has been updated',
+[
+    'massage'=> 'Patient information has been updated',
+    'employee_details'=> Auth::user(),
+	'Info'=> $request->all(),
+]);
+
         return response()->json(['success' => 'Data is successfully updated']);
     }
 
@@ -298,6 +314,12 @@ public function printpdfforintroductoryslip($id)
 	   
 	                 patient::whereId($id)
   ->update(['softdelete' => '1']);  //softdelete 
-	   
+  
+  Log::channel('patientadvancecollection')->info('Patient information has been deleted.',
+  [
+      'massage'=> 'Patient information has been deleted.',
+      'employee_details'=> Auth::user(),
+      
+  ]);
     }
 }

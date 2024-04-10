@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\sharepartner; 
 use DataTables;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Validator;
 class CreatePartnerController extends Controller
 {
@@ -82,6 +84,13 @@ class CreatePartnerController extends Controller
 
         sharepartner::create($form_data);
 
+        Log::channel('patner')->info('New Patner Added',
+[
+    'massage'=> 'New Patner Added',
+    'employee_details'=> Auth::user(),
+	'Info'=> $request->all(),
+]);
+
         return response()->json(['success' => 'Data Added successfully.']);
     }
 
@@ -153,6 +162,13 @@ class CreatePartnerController extends Controller
         );
         sharepartner::whereId($request->hidden_id)->update($form_data);
 
+        Log::channel('patner')->info('Patner Informeation Updated',
+        [
+            'massage'=> 'Patner Informeation Updated',
+            'employee_details'=> Auth::user(),
+            'Info'=> $request->all(),
+        ]);
+
         return response()->json(['success' => 'Data is successfully updated']);
     }
 
@@ -164,8 +180,15 @@ class CreatePartnerController extends Controller
      */
    public function destroy($id)
     {
-       // $data = patient::findOrFail($id);
+        $data =  sharepartner::findOrFail($id);
        // $data->delete();
+
+       Log::channel('patner')->info('Patner Informeation Delated',
+        [
+            'massage'=> 'Patner Informeation Delated',
+            'employee_details'=> Auth::user(),
+            'Info'=> $data,
+        ]);
 	   
 	                 sharepartner::whereId($id)
   ->update(['softdelete' => '1']);  //softdelete 

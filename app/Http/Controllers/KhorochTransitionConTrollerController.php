@@ -18,6 +18,9 @@ use DataTables;
 use Validator;
 use App\Models\balance_of_business; 
 use DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 class KhorochTransitionConTrollerController extends Controller
 {
     /**
@@ -663,9 +666,26 @@ $cashtransition->save();
    
       DB::commit(); 
 
-   
-   
-       
+      if ($request->advance == 0){
+
+        Log::channel('borokorosh')->info('সম্পদ ক্ষয় করা হয়েছে।',
+      [
+          'massage'=> 'সম্পদ ক্ষয় করা হয়েছে।',
+          'employee_details'=> Auth::user(),
+        'Info'=> $request->all(),
+      ]);
+
+      }else{
+        Log::channel('borokorosh')->info('সম্পদ কনসামিং করা হয়েছে।',
+        [
+            'massage'=> 'সম্পদ কনসামিং করা হয়েছে।',
+            'employee_details'=> Auth::user(),
+          'Info'=> $request->all(),
+        ]);
+        
+
+      }
+      
 
         return response()->json(['success' => 'Data Added successfully.']);
     } 
@@ -851,7 +871,25 @@ khoroch_transition::where('id', $request->hidden_id )->update($form_data);
 
 
 
- 
+  if ($request->advance == 0){
+
+    Log::channel('borokorosh')->info('সম্পদ ক্ষয় আপডেট করা হয়েছে।',
+  [
+      'massage'=> 'সম্পদ ক্ষয় আপডেট করা হয়েছে।',
+      'employee_details'=> Auth::user(),
+    'Info'=> $request->all(),
+  ]);
+
+  }else{
+    Log::channel('borokorosh')->info('সম্পদ ক্ষয় কনসামিং আপডেট করা হয়েছে।',
+    [
+        'massage'=> 'সম্পদ ক্ষয় কনসামিং আপডেট করা হয়েছে।',
+        'employee_details'=> Auth::user(),
+      'Info'=> $request->all(),
+    ]);
+    
+
+  }
    
    
    
@@ -930,7 +968,13 @@ khoroch_transition::where('id', $request->hidden_id )->update($form_data);
 
 cashtransition::where('khoroch_transition_id', $id  )->delete();
 
-	
+Log::channel('borokorosh')->info('সম্পদ ক্ষয় এর ট্রানজেকশন ডিলিট করা হয়েছে।',
+[
+    'massage'=> 'সম্পদ ক্ষয় এর ট্রানজেকশন ডিলিট করা হয়েছে।',
+    'employee_details'=> Auth::user(),
+  'Info'=> $data, 
+]);
+
         $data->delete();
     
 	 DB::commit();	

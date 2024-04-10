@@ -22,6 +22,8 @@ use DataTables;
 use Validator;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use PDF;
 class AgenttransactionControllerController extends Controller
 {
@@ -792,6 +794,13 @@ $cashtransition->save();
  
 	  DB::commit();
 
+	  Log::channel('agent')->info('এজেন্টকে কমিশন দেওয়া হয়েছে।',
+[
+    'massage'=> 'এজেন্টকে কমিশন দেওয়া হয়েছে।',
+    'employee_details'=> Auth::user(),
+	'Info'=> $request->all(),
+]);
+
         return response()->json(['success' => 'Data Added successfully.']);
     }
     /**
@@ -979,6 +988,14 @@ public function paidsenddata($id)
   $agentdetailbalance =  $agentdetail  - $data->paidamount;
      agentdetail::findOrFail($data->agentdetail_id)
   ->update(['hospitaler_kache_pawna' =>$agentdetailbalance  ]);
+
+  Log::channel('agent')->info('Agent Commission Transitions Delated',
+[
+    'massage'=> 'Agent Commission Transitions Delated',
+    'employee_details'=> Auth::user(),
+	'Info'=> $data,
+]);
+
 
  $data->delete();
 

@@ -57,6 +57,15 @@ tr:nth-child(even) {background-color: #f2f2f2;}
             
 			<div class="row">
 
+                <div class="col-4">First In, First Out (FIFO) :  
+                    <input type="radio" name="methodtype" value="1" checked="checked">
+                </div>
+                <div class="col-4">Last In, First Out (LIFO) :  
+                    <input type="radio" name="methodtype" value="2">
+                </div>
+                <div class="col-4">Average :  
+                    <input type="radio" name="methodtype" value="3">
+                </div>
            
 		   <div class="col-4">Cabine NO :  
 	        <select id="customer_id"  class="form-control "  name="customer_id"     >  
@@ -1232,6 +1241,7 @@ tr:nth-child(even) {background-color: #f2f2f2;}
                             $('#sample_form')[0].reset();
                             $('#patient_table').DataTable().ajax.reload();
                             $('#action_button').attr("disabled", false);
+                            console.log(data.success);
                         }
 
                         if (data.error) {
