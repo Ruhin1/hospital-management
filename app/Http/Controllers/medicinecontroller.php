@@ -111,6 +111,7 @@ class medicinecontroller extends Controller
             'name'        =>  $request->name,
             'stock'         =>  $request->stock,
            'medicine_category_id' =>$request->category,
+           
 		   'unitprice' =>$request->unitprice,
         );
 
@@ -122,21 +123,21 @@ class medicinecontroller extends Controller
             $order->medicinecomapnyname_id = 3;
             $order->totalbeforediscount = 0;
             $order->due = 0;
-            $order->pay_in_cash = 0;
+            $order->pay_in_cash = 0; 
             $order->total = 0;
             $order->discount = 0;
             $order->transitiontype = 3;
             $order->created_at = $request->datetime;
             $order->save(); 
-         
-            $dt = $request->stock - $request->stock;
+            
+            
             $medicinetransition = new medicineCompanyTransition(); 
             $medicinetransition->medicine_id = $medicineId->id; 
             $medicinetransition->medicinecompanyorder_id = $order->id;
-            $medicinetransition->Quantity = $dt;
+            $medicinetransition->Quantity = $request->stock;
             $medicinetransition->unit_price = $request->unitprice;
             $medicinetransition->transitiontype = 3;
-            $medicinetransition->remaining = $request->stock;
+            //$medicinetransition->remaining = $request->stock;
             $medicinetransition->created_at = $request->datetime; 
             $medicinetransition->save();  
 

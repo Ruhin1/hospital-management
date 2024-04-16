@@ -17,7 +17,7 @@ class MenuLinkController extends Controller
        
         if($request->ajax())
         {
-            $data = Childmenu::latest('id')->with('rootmenu')->orderBy('name')->get();
+            $data = Childmenu::latest('id')->with('rootmenu')->get();
 
             return DataTables::of($data)
 
@@ -29,7 +29,7 @@ class MenuLinkController extends Controller
 
                     ->addColumn('status', function($data){
                         
-                        if($data->status = 1){
+                        if($data->status == 1){
                             return '<span class="text-success">active</span>';
                         }else{
                             return '<span class="text-muted">not Active</span>';

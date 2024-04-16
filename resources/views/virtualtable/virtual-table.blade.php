@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -64,7 +65,7 @@ th, td {
 </head>
 <body>
     @php
-
+$s = 0;
 $groupedRows = [];
 
 foreach ($virtualTable as $row) {
@@ -93,6 +94,7 @@ foreach ($virtualTable as $row) {
                 <th>Date</th>
             </tr>
         </thead>
+       
         <tbody>
             @foreach($groupedRows as $medicineId => $rows)
 
@@ -134,8 +136,18 @@ foreach ($virtualTable as $row) {
             </tr>
            
             
-                <?php  $b = $medicine->stock;?>
+            
+                
+           
+            
+           
+            <?php 
+             $sb = \App\Models\medicineCompanyTransition::where('medicine_id','=',$medicineId)->first()->Quantity;
+             $sb = intval($sb); 
+             ?>
+            
                 @foreach($rows as $row)
+               
                 <tr>
                    
                     <td>{{ $row->id }}</td>
@@ -155,48 +167,40 @@ foreach ($virtualTable as $row) {
                         Frist Time Stock own Medicine
                         @endif
                     </td>
-                    
-					@if (@$loop->first)
-                    <td>{{ $medicine->stock }}</td>
-                    @else
-                    <td>{{ $row->Quantity  }}</td>
-                    @endif
+
+                    <td>{{ $row->Quantity  }}</td> 
                     <td>
                        
-                        <?php 
-					   
-                        if($row->order_id != null) 
-                        {
-                            if ($b != 0) {
-                             $b =$b -  $row->Quantity;
+                        <?php
+                    
+                        if ($row->order_id != null) {
+                           
+                                $sb = $sb - $row->Quantity;
+                           
+                        }
+                        
+                        if ($row->return_order_id != null) {
+                                $sb = $sb + $row->Quantity;
+                        }
+                        
+                        if ($row->medicinecompanyorder_id != null) {
+                            
+                             if ($row->transitiontype == 1) {
+                                $sb = $sb + $row->Quantity;
                             }
+                            
+                            if ($row->transitiontype == 2) {
+                                if ($sb != 0) {
+                                    $sb = $sb - $row->Quantity;
+                                }
+                            }
+      
+                            
                         }
-                        if($row->return_order_id  != null)
-                        {
-                           $b = $b + $row->Quantity; 
-                        }
-                        if($row->medicinecompanyorder_id != null )
-                        {
-                          if ($row->transitiontype == 1)
-                          {
-                           $b = $b + $row->Quantity;
- 
-                          }	
-                          if($row->transitiontype == 2){
-                             if ($b != 0) {
-                                  $b =$b- $row->Quantity;
-                             }
-                               
-                             }
-                          if($row->transitiontype == 3){
-     
-                               $b = $b + $row->Quantity;
-                             }							
-                        }
-                        ?>
-					   
-					   
-					   {{$b}} 
+      ?>
+
+					   {{$sb}} 
+            
                     </td>
                     <td>{{ $row->type }}</td>
                     <td>{{ \Carbon\Carbon::parse($row->created_at)->format('d-m-Y h:i A') }}</td>
@@ -207,3 +211,4 @@ foreach ($virtualTable as $row) {
     </table>  
 </body>
 </html>
+

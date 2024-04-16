@@ -19,7 +19,6 @@ class CreateChildmenusTable extends Migration
             $table->string('route')->unique();
             $table->integer('status')->default(1);
             $table->integer('rootmenu_id');
-            //$table->foreign('rootmenu_id')->references('id')->on('rootmenus')->onDelete('cascade');
             $table->timestamps();
 
             

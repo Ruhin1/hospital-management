@@ -16,7 +16,7 @@ class Menuaction extends Model
                 'route',
                 'status',
                 'childmenu_id',
-            ];
+            ]; 
 
             public function childmenu() : BelongsTo
     {

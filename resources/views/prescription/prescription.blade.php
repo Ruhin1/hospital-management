@@ -15,6 +15,9 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        
+   
+
     </style>
 
     </head>
@@ -29,8 +32,18 @@
         @endif
 
         <div class="container" style="background-color:#EEE8AA; ">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="alert alert-primary" role="alert">
+                        Prescriptions for glasses and medicine can be made here.  You can create both prescriptions or create either prescription as well.  But remember you are required to select Paitinet id before making any prescription.
+                      </div>
+                     
+                    
+                </div>
+            </div>
             <div style="display: flex; justify-content:space-between">
                 <h2>Write Prescription</h2>
+                
             <button class="btn btn-primary coshma-prection">Add Coshma prection</button>
             </div>
             <span id="form_result"></span>
@@ -39,9 +52,17 @@
                 enctype="multipart/form-data">
                 @csrf
 
+                <div class="row">
+                    <div class="col-lg-8"> </div>
+                    <div class="col-lg-4">
+                        <input type="checkbox" id="medicneprescription" name="medicneprescription" value="1">
+                        <label for="vehicle1">Add Medicne Prescription</label>
+                    </div>
+                </div>
+                
 
                 <div id="cusid" class="form-group">
-                    <label class="control-label col-md-4">Patinet Id : </label>
+                    <label class="control-label col-md-4">Patinet Id <span style="color: red">(*)</span>: </label>
                     <div class="col-md-8">
                         <select id="customer_id" class="form-control " name="customer_id" required style='width: 270px;'>
 
@@ -54,11 +75,11 @@
                 <table class="table" id="products_table">
                     <thead>
                         <tr>
-                            <th style="width:100px;"> ক্যাটাগরি </th>
-                            <th>মেডিসিন</th>
-                            <th>ব্যবহার</th>
+                            <th style="width:100px;"> ক্যাটাগরি <span style="color: red">*</span></th>
+                            <th>মেডিসিন<span style="color: red">*</span></th>
+                            <th>ব্যবহার<span style="color: red">*</span></th>
 
-                            <th>খাবার </th>
+                            <th>খাবার <span style="color: red">*</span></th>
                             <th style="width:150px;">দিন </th>
 
                             <th>কমেন্ট </th>
@@ -166,12 +187,19 @@
                 <div id="coshma-from">
                     <h3 style="text-align: center; margin:20px;">Write coshma Prescription</h3>
                     <div class="row">
+                        <div class="col-lg-8"> </div>
+                        <div class="col-lg-4">
+                            <input type="checkbox" id="coshmaprescription" name="coshmaprescription" value="2">
+                            <label for="vehicle1">Add coshma Prescription</label>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-3">
-                            <label for="Date">Date:</label>
+                            <label for="Date">Date<span style="color: red">*</span>:</label>
                             <input type="datetime-local" class="form-control" name="brith" id="brith">
                          </div>
                         <div class="col-lg-3">
-                            <label for="Date">Ipd:</label>
+                            <label for="Date">Ipd<span style="color: red">*</span>:</label>
                             <input type="number" class="form-control" name="ipd" id="ipd"  placeholder="write ipd....">
                          </div>
                     </div>
@@ -183,11 +211,11 @@
                                 
                             </div>
                             <div class="col-lg-6">
-                               <label for="resph">Sph</label>
+                               <label for="resph">Sph<span style="color: red">*</span></label>
                                <input type="text" class="form-control" id="resph" name="resph"  placeholder="write sps....">
                             </div>
                             <div class="col-lg-6">
-                                <label for="recyl">Cyl</label>
+                                <label for="recyl">Cyl<span style="color: red">*</span></label>
                                <input type="number" class="form-control" id="recyl" name="recyl" placeholder="write cyl....">
                             </div>
                             <div class="col-lg-6">
@@ -206,11 +234,11 @@
                                     <h3>Left Eye (OS)</h3> 
                                 </div>
                                 <div class="col-lg-6">
-                                    <label for="lesph">Sph</label>
+                                    <label for="lesph">Sph<span style="color: red">*</span></label>
                                     <input type="text" class="form-control" id="lesph" name="lesph"  placeholder="write sps....">
                                  </div>
                                  <div class="col-lg-6">
-                                     <label for="lecyl">Cyl</label>
+                                     <label for="lecyl">Cyl<span style="color: red">*</span></label>
                                     <input type="number" class="form-control" id="lecyl" name="lecyl"  placeholder="write cyl....">
                                  </div>
                                  <div class="col-lg-6">
@@ -232,44 +260,59 @@
                             <input type="text" class="form-control" name="diopter" id="diopter" placeholder="write diopter....">
                         </div>
                         <div class="row">
-                           <div class="col-lg-6">
-                            <label for="instructions">Instructions</label><br/>
-                            <select name="instructions[]" multiple>
-                             @php
-                                 $inst = \App\Models\coshma::all();
-                             @endphp
-                             @foreach ($inst as $row)
-                             <option value="{{$row->id}}" style="margin: 10px; padding:10px;"> {{$row->value}}</option>
-                             @endforeach
-                            </select>
-                           </div>
+                            
+                            <div class="col-lg-6"><br/> <br/> 
+                            
+                                <p>Instructions</p> <br/> 
+ 
+                            
+                              @php
+                                  $inst = \App\Models\coshma::where('type','=',1)->get();
+                              @endphp
+                              
+                              @foreach ($inst as $row)
+     <input type="checkbox" name="instructions[]"  value="{{$row->id}}">
+     <label for="instruction{{$row->id}}">{{$row->value}}</label><br>
+     @endforeach  
+                             
+                            </div>
                                 <div class="col-lg-6">
                                     <div class="col-lg-12">
-                                        <label for="type">Type:</label><br/>
-                                        <select name="type[]" multiple> 
-                                            <option selected value="1">Unifosal</option>
-                                            <option value="2">mit
-                                                Bifocal</option>
-                                            <option value="3">Progressive focal (Varilus)</option>
-                                        </select>
+                                        <br/>
+                                        <p>Type:</p>
+                                        @php
+                                        $inst = \App\Models\coshma::where('type','=',2)->get();
+                                    @endphp
+                                    
+                                    @foreach ($inst as $row)
+           <input type="checkbox" name="type[]"  value="{{$row->id}}">
+           <label for="type{{$row->id}}">{{$row->value}}</label><br>
+           @endforeach  
+                                        
                                     </div>
-                                    <div class="col-lg-12">
-                                        <label for="color">Color:</label><br/>
-                                        <select name="color[]" multiple>
-                                            <option selected value="1">White</option>
-                                            <option value="2">Photochromatic</option>
-                                            <option value="3">MC Fiber (UV Protect) (Blue Cut)</option>
-                                        </select>
+                                    <div class="col-lg-12"><br/>
+                                        <p>Color:</p>
+                                        
+                                        @php
+                                        $inst = \App\Models\coshma::where('type','=',3)->get();
+                                    @endphp
+                                    
+                                     @foreach ($inst as $row)
+           <input type="checkbox" name="color[]"  value="{{$row->id}}">
+           <label for="color{{$row->id}}">{{$row->value}}</label><br>
+           @endforeach  
                                     </div>
-                                    <div class="col-lg-12">
-                                        <label for="Remarks">Remarks :</label><br/>
-                                        <select name="remarks[]" multiple>
-                                            <option selected value="1">Distant</option>
-                                            <option value="2">Reading</option>
-                                            <option value="3">Constant</option>
-                                            <option value="4">Fiber</option>
-                                            <option value="5">Glass</option>
-                                        </select>
+                                    <div class="col-lg-12"><br/>
+                                        <p>Remarks :</p>
+                                        
+                                        @php
+                                        $remarks = \App\Models\coshma::where('type','=',4)->get();
+                                    @endphp
+                                    
+                                    @foreach ($remarks as $row)
+           <input type="checkbox" name="remarks[]"  value="{{$row->id}}">
+           <label for="remarks{{$row->id}}">{{$row->value}}</label><br> 
+           @endforeach  
                                     </div>
                                 </div>
                         </div>
@@ -485,7 +528,7 @@
 
 
 
-
+ 
 
 
 
@@ -555,7 +598,7 @@
 
                         ////////////////////fetch data for dropdown menu 
                         success: function(response) {
-
+                            
                             ////////////////////fetch data for Customer dropdown menu ////////////////////////////
                             $("#customer_id").html("");
 
@@ -564,7 +607,7 @@
 
                             var len = 0;
                             if (response.patientdata != null) {
-                                len = response.patientdata.length;
+                                len = response.patientdata.length; 
                             }
 
                             if (len > 0) {
@@ -574,7 +617,7 @@
                                     var mobile = response.patientdata[i].mobile;
 
                                     var option = "<option value='" + id + "'>" + name + "</option>";
-                                    var optionforid = "<option value='" + id + "'>" + id + "</option>";
+                                    var optionforid = "<option value='" + id + "'>" + id + ' '+ name + ' '+ mobile +"</option>";
                                     var optionformobile = "<option value='" + id + "'>" + mobile +
                                         "</option>";
 
@@ -799,7 +842,6 @@
                                         processData: false,
                                         dataType: "json",
                                         success: function(data) {
-                                            console.log(data);
                                             var html = '';
                                             if (data.errors) {
                                                 html = '<div class="alert alert-danger">';
@@ -807,12 +849,15 @@
                                                     html += '<p>' + data.errors[count] + '</p>';
                                                 }
                                                 html += '</div>';
+                                                console.log('data.errors');
+                                                console.log(data.errors);
                                             }
                                             if (data.success) {
                                                 html = '<div class="alert alert-success">' + data.success +
                                                     '</div>';
                                                 $('#sample_form')[0].reset();
                                                 $('#patient_table').DataTable().ajax.reload();
+                                                console.log('data.success');
                                                 console.log(data.success);
                                             }
 
@@ -821,6 +866,8 @@
                                                     '</div>';
                                                 $('#sample_form')[0].reset();
                                                 $('#patient_table').DataTable().ajax.reload();
+                                                console.log('data.error');
+                                                console.log(data.error);
                                             }
 
                                             $('#form_result').html(html);
@@ -848,7 +895,7 @@
                                             }
                                  })
                             } catch (error) {
-                                console.log(error);
+                                //console.log(error);
                             }
                         }
 

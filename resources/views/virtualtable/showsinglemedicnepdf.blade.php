@@ -1,87 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>Virtual Table</title>
-<style>
-*{margin: 0;padding: 0;box-sizing: border-box}
-.virtual-table{
-background: #D1E7DD;
-color: black;
-font-weight: bold;
-text-align: center;
-text-transform: uppercase;
-padding: 8px;
-}
+    <title>Show Single Medicne</title>
+    <style>
+            *{margin: 0;padding: 0;box-sizing: border-box}
+            .virtual-table{
+            background: #D1E7DD;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            padding: 8px;
+            }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
 
-table thead tr th,
-table tbody tr th{
-    background: #D1E7DD;
-    border-bottom: 2px solid black; 
-}
+            table thead tr th,
+            table tbody tr th{
+                background: #D1E7DD;
+                border-bottom: 2px solid black; 
+            }
 
-/* table tbody tr td{
-   
-    
-} */
+            /* table tbody tr td{
+            
+                
+            } */
 
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-    /* background: #D1E7DD; */
-}
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+                /* background: #D1E7DD; */
+            }
 
-.header{
-    display: flex;
-    justify-content: space-between;
-    padding: 15px 50px;
+            .header{
+                display: flex;
+                justify-content: space-between;
+                padding: 15px 50px;
 
-}
+            }
 
-.header .logo{
-width: 20%;
-}
+            .header .logo{
+            width: 20%;
+            }
 
-.header .logo img{
-    width: 100%;
-}
+            .header .logo img{
+                width: 100%;
+            }
 
-.header .description{
-width: 80%;
-padding-left: 100px; 
-}
+            .header .description{
+            width: 80%;
+            padding-left: 100px; 
+            }
 
-.header .description span{
-    
-}
+            .header .description span{
+                
+            }
 
-.pdf-div{
-    display: flex;
-    justify-content:end;
-    margin:20px 0; 
-}
+            .pdf-div{
+                display: flex;
+                justify-content:end;
+                margin:20px 0; 
+            }
 
-.pdf-div .print-pdfruhin{
-   
-    padding: 5px 10px;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-align: center;
-    background: #0069D9;
-    border-radius: 3px; 
-    color: #fff;
-} 
-
-</style>
-</head>
+            .pdf-div .print-pdfruhin{
+            
+                padding: 5px 10px;
+                font-weight: bold;
+                text-transform: uppercase;
+                text-align: center;
+                background: #0069D9;
+                border-radius: 3px; 
+                color: #fff;
+            } 
+    </style>
+  </head>
 <body style="font-family: Times New Roman;">
    
     <div class="header">
@@ -132,8 +131,11 @@ padding-left: 100px;
                 </th>
                 <th colspan="4">Preveus Stock:
                     <?php
-                    $b = $medicine->stock;
-                    $sb = $medicine->stock;
+                    $med = $data['medicneName'];
+                    $value = \App\Models\medicineCompanyTransition::where('medicine_id','=',$med)->first()->Quantity;
+                    $value = intval($value); 
+                    $b = $value;
+                    $sb = $value;
                     foreach ($virtualTable as $row){
                     $rdate = strtotime(\Carbon\Carbon::parse($row->created_at)->format('d-m-Y') . ' 12:00');
                     if($rdate  < $sdate){
@@ -160,9 +162,7 @@ if ($row->medicinecompanyorder_id != null) {
         }
     }
 
-    if ($row->transitiontype == 3) {
-        $sb = $sb + $row->Quantity;
-    }
+    
 }
 
 
@@ -204,17 +204,17 @@ break;
                                 <td>{{ $row->unit_price }}</td>
                                 <td>
                                     @if ($row->transitiontype == 1)
-                                        Buy Medicine From Company
+                                    Buy Medicine From Company
                                     @elseif ($row->transitiontype == 2)
-                                        Return Medicine To Company
+                                    Return Medicine To Company
+                                    @elseif ($row->transitiontype == 3)
+                                    Frist Time Stock own Medicine
                                     @endif
                                 </td>
 
-                                @if (@$loop->first)
-                                    <td>{{ $medicine->stock }}</td>
-                                @else
+                                
                                     <td>{{ $row->Quantity  }}</td>
-                                @endif
+                                
                                 
                                 <td>
    
@@ -237,9 +237,7 @@ break;
                                                 $b = $b - $row->Quantity;
                                             }
                                         }
-                                        if ($row->transitiontype == 3) {
-                                            $b = $b + $row->Quantity;
-                                        }
+                                       
                                     }
                                     ?>
                                     {{ $b }}
@@ -270,9 +268,7 @@ break;
                                 $b = $b - $row->Quantity;
                             }
                         }
-                        if ($row->transitiontype == 3) {
-                            $b = $b + $row->Quantity;
-                        }
+                        
                     }
                     ?>
                 @endif

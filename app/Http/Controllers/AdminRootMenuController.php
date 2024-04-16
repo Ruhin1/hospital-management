@@ -11,30 +11,30 @@ class AdminRootMenuController extends Controller
     public function index(Request $request)
     {
         
-        $rootMenus  = Rootmenu::select('id','name','status')->get();
+        $rootMenus  = Rootmenu::latest('id')->select('id','name','status')->get();
        
         if($request->ajax())
         {
-            $data = Rootmenu::latest('id')->select('id','name')->orderBy('name')->get();
+            $data = Rootmenu::latest('id')->select('id','name','status')->orderBy('name')->get();
 
             return DataTables::of($data) 
 
-                    // ->addColumn('status', function($data){
-                                
-                    //     if($data->status = 1){
-                    //         return '<span class="text-success">active</span>';
-                    //     }else{
-                    //         return '<span class="text-muted">not Active</span>';
-                    //     }
-                        
-                    // }) 
+                    ->addColumn('status', function($data){
+                       
+                        if($data->status == 1){
+                            return '<span class="text-success">active</span>';
+                        }else{
+                            return '<span class="text-muted">not Active</span>';
+                        }    
+                                     
+                    })  
 
                     ->addColumn('actions', function($data){
                         $button = '<button type="button"   id="roote'.$data->id.'" class="root_edit btn btn-success btn-sm" data-url="'.$data->id.'">Edit</button>';
                         $button .= '&nbsp;&nbsp;&nbsp;<button type="button" name="edit" id="rootd'.$data->id.'" data-url="'.$data->id.'" class="root-link-delete btn btn-danger btn-sm">Delete</button>';
                         return $button;
                     })
-                    ->rawColumns(['actions'])
+                    ->rawColumns(['actions','status'])
                     ->make(true);
         }
         return view('adminmenue.index',['rootMenus'=>$rootMenus]);

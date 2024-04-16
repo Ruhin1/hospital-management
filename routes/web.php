@@ -79,11 +79,13 @@ use App\Http\Controllers\AdminRootMenuController;
 use App\Http\Controllers\MenuLinkController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserControllerRole;
+use App\Models\coshmaPrescription;
 use App\Models\medicineCompanyTransition;
 use App\Models\medicinetransition;
 use App\Models\returnmedicinetransaction;
 use App\Models\medicinecompanyorder as mco;
 use App\Models\order;
+use App\Models\prescription;
 
 /* medicinecontroller dueshow pathologyreportmaking releasedindoor   employeesalarymonth
 |--------------------------------------------------------------------------   order
@@ -1085,7 +1087,7 @@ Route::get('balancesheetforcompany/destroy/{id}', [ compnanybalncecontroller::cl
 
 ///----------------
 
-
+ 
 Route::get('virtual-table/{print?}', [virtualTableController::class, 'show'])->name('virtualtable.index'); 
 Route::get('showmedicne', [virtualTableController::class, 'index'])->name('showmedicne');
 Route::post('showmedicnepdf/{print?}', [virtualTableController::class, 'showmedicnepdf'])->name('show.medicne.pdf.print');
@@ -1127,11 +1129,16 @@ Route::post('coshma/update', [coshmaController::class,'update'])->name('coshma.u
 
 
 Route::get('/del',function (){
-        medicinetransition::truncate();
-        medicineCompanyTransition::truncate();
-        returnmedicinetransaction::truncate();
-        mco::truncate();
-        //order::truncate();
-        return 1;
+        // medicinetransition::truncate();
+        // medicineCompanyTransition::truncate();
+        // returnmedicinetransaction::truncate();
+        // mco::truncate();
+        // //order::truncate();
+        prescription::truncate();
+        coshmaPrescription::truncate();
+         return 1;
+
+        
+        
 });
 

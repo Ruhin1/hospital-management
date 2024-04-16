@@ -122,8 +122,8 @@ class RoleController extends Controller
         $role = Role::findById($id);
 
         // Retrieve all routes
-        $routes = Childmenu::select('id','name')->with('menuaction','rootmenu')->get();
-        return  $routes;
+        $routes = Rootmenu::with('childmenu.menuaction')->where('status','=',1)->get();
+       // return  $routes;
         // Retrieve permissions associated with the role
         $permissions = $role->permissions->pluck('name')->toArray();
     
@@ -134,7 +134,7 @@ class RoleController extends Controller
             'permissions' => $permissions,
         ]);   
      }
-        
+         
 
     public function rolePermissionUpdate(Request $request, $id)
     {

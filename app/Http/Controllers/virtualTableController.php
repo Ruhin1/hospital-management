@@ -109,14 +109,10 @@ class virtualTableController extends Controller
 
     public function show(String $print = '')
     {
-        $medicineTransitions = medicineTransition::orderBy('medicine_id','ASC')->orderBy('created_at', 'DESC')->get(); 
-        $medicineCompanyTransition = medicineCompanyTransition::orderBy('medicine_id','ASC')->orderBy('created_at', 'DESC')->get(); 
-        $returnMedicineTransactions = returnmedicinetransaction::orderBy('medicine_id','ASC')->orderBy('created_at', 'DESC')->get(); 
-        // medicineTransition::truncate();
-        // medicineCompanyTransition::truncate();
-        // returnmedicinetransaction::truncate();
-        // medicinecompanyorder::truncate();
-        // return 1;
+        $medicineTransitions = medicineTransition::all(); 
+        $medicineCompanyTransition = medicineCompanyTransition::all(); 
+        $returnMedicineTransactions = returnmedicinetransaction::all(); 
+        
         $virtualTable = [];
 
         foreach ($medicineTransitions as $transition) { 
@@ -137,7 +133,7 @@ class virtualTableController extends Controller
         }
 
         $virtualTable = collect($virtualTable)->sortBy('created_at')->values()->all();
-
+     $virtualTable;
         if($print == 'yes'){
             $pdf = PDF::loadView('virtualtable.virtual-table', compact('virtualTable'),
             [], 

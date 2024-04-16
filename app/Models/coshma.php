@@ -11,6 +11,7 @@ class coshma extends Model
 
     protected $fillable = [
         'value',
+        'type',
         'softdelete',
     ];
 } 

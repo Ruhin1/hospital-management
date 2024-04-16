@@ -12,6 +12,7 @@ class Rootmenu extends Model
 
     protected $fillable = [
         'name',
+        'status',
     ];
 
     public function childmenu(): HasMany

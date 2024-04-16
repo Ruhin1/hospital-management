@@ -355,3 +355,15 @@ public function store(Request $request)
 
 }
 
+============================================================================
+
+  $(document).ready(function() {
+    loadprescription();
+
+    Echo.channel('storeData').listen('DataStored', () => {
+        console.log('Event DataStored received'); 
+
+        // Reload the datatable
+        $('#patient_table').DataTable().ajax.reload();
+    });
+});

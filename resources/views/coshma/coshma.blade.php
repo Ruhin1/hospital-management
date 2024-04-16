@@ -208,33 +208,23 @@
                     <h4>
                         Type
                         <span style="margin-left: 20px; margin-right: 20px"
-                            >:</span
-                        >
-                        <span 
+                            >:</span>
+               
+                        <?php 
+                        $coshmaType = App\Models\coshma::where('type','=',2)->get();
                         
-                        @if (in_array('1', $data['type']))
-                            class="select"  
-                           @endif
-                        style="margin-left: 10px; margin-right: 10px">
-                            Unifosal</span
-                        >/
-                    
-                        <span
-                        @if (in_array('2', $data['type']))
-                           class="select"  
-                           @endif
-                         style="margin-left: 10px; margin-right: 10px">
-                            mit
-                        Bifocal</span
-                        >/
-                        <span
-                           @if (in_array('3', $data['type']))
-                           class="select"  
-                           @endif
-                            style="margin-left: 10px; margin-right: 10px"
-                        >
-                        Progressive focal (Varilus)</span
-                        >
+                        ?>
+                        @foreach ($coshmaType as $row)
+                        <span style="margin-left: 20px; margin-right: 20px"
+                        @if (in_array($row->id, $data['type']))
+                        class="select"  
+                        @endif
+                        >{{$row->value}}</span>
+                        @if (!$loop->last)
+                            /
+                        @endif
+                        @endforeach
+                        
                         
                     </h4>
                     <h4>
@@ -242,72 +232,45 @@
                         <span style="margin-left: 20px; margin-right: 20px"
                             >:</span
                         >
-                        <span 
-                        @if (in_array('1', $data['color']))
+                        <?php 
+                        $coshmaColor = App\Models\coshma::where('type','=',3)->get();
+                       
+                        
+                        ?>
+                        @foreach ($coshmaColor as $row)
+                        <span style="margin-left: 20px; margin-right: 20px"
+                        @if (in_array($row->id, $data['color']))
                         class="select"  
                         @endif
-                        style="margin-left: 10px; margin-right: 10px">
-                            White</span
-                        >/  
-                        <span
-                        @if (in_array('2', $data['color']))
-                        class="select"  
+                        >{{$row->value}}</span>
+                         @if (!$loop->last)
+                            /
                         @endif
-                            style="margin-left: 10px; margin-right: 10px"
-                        >
-                        Photochromatic</span
-                        >/
-                        <span
-                        @if (in_array('3', $data['color']))
-                        class="select"  
-                        @endif
-                        style="margin-left: 10px; margin-right: 10px">
-                            MC Fiber (UV Protect) (Blue Cut)</span
-                        >
+                        @endforeach  
                     </h4>
                     <h4>
                         Remarks
                         <span 
                         style="margin-left: 20px; margin-right: 20px"
-                            >:</span
-                        >
-                        <span 
-                        @if (in_array('1', $data['remarks']))
-                        class="select"  
-                        @endif
-                        style="margin-left: 10px; margin-right: 10px">
-                            Distant</span
-                        >/   
-                        <span 
-                        @if (in_array('2', $data['remarks']))
-                        class="select"  
-                        @endif
-                        style="margin-left: 10px; margin-right: 10px">
-                            Reading</span
-                        >/
-                        <span 
-                        @if (in_array('3', $data['remarks']))
-                        class="select"  
-                        @endif
-                        style="margin-left: 10px; margin-right: 10px">
-                            Constant</span
-                        >/
-                        <span
-                        @if (in_array('4', $data['remarks']))
-                        class="select"  
-                        @endif
-                            style="margin-left: 10px; margin-right: 10px"
-                        >
-                        Fiber </span
-                        >/
-                        <span
-                        @if (in_array('5', $data['remarks']))
-                        class="select"  
-                        @endif
-                            style="margin-left: 10px; margin-right: 10px"
-                        >
-                        Glass </span
-                        >
+                            >:</span>
+
+                            <?php 
+                            $coshmaRemarks = App\Models\coshma::where('type','=',4)->get();
+                           
+                            ?>
+
+                            @foreach ($coshmaRemarks as $row)
+                            <span style="margin-left: 20px; margin-right: 20px"
+                            @if (in_array($row->id, $data['remarks']))
+                            class="select"  
+                            @endif
+                            >{{$row->value}}</span>
+                           
+                            @if (!$loop->last)
+                                /
+                            @endif
+                            @endforeach
+                        
                     </h4>
                 </div>
                 <div class="signacher">

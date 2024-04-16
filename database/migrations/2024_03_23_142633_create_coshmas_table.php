@@ -16,6 +16,7 @@ class CreateCoshmasTable extends Migration
         Schema::create('coshmas', function (Blueprint $table) {
             $table->id();
             $table->string('value');
+            $table->integer('type');
             $table->tinyInteger('softdelete')->default('0');
             $table->timestamps();
         });

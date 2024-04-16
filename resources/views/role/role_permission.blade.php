@@ -25,6 +25,9 @@
     .button-style{
         background: #3E8E41;
     }
+    .style{
+        border: 1px solid black;
+    }
 </style>
     </head>
 
@@ -49,7 +52,7 @@
                                   <div class="row">
                                    
                                     @foreach ($routes as $row)
-                                    @if ($row->childmenu != [])
+                                    
                                     <div class="col-lg-12 my-2">
                                         <div class="row">
                                             <div class="col-lg-12">
@@ -68,20 +71,30 @@
                                             <div class="col-lg-12">
                                                 <div class="collapse multi-collapse" id="{{$row->name}}">
                                                     @foreach ($row->childmenu as $childmenu)
-                                                        <div class="row">
+                                                        @if ($childmenu->status == 1)
+                                                        <div class="row style">
                                                             <div class="col-lg-2">
                                                             <input type="checkbox" name="permissions[]" value="{{$childmenu->name}}" {{ $childmenu->name == $permissions ? 'checked' : '' }}>
                                                             </div>
                                                             <div class="col-lg-10">  Name: {{$childmenu->name}}</div>
+                                                            @foreach ($childmenu->menuaction as $menuaction)
+                                                            @if ($menuaction->status == 1)
+                                                            <div class="col-lg-2">
+                                                                
+                                                                <input type="checkbox" name="permissions[]" value="{{$menuaction->name}}" {{ $menuaction->name == $permissions ? 'checked' : '' }}>
+                                                                {{$menuaction->name}}
+                                                               
+                                                            </div>
+                                                            @endif
+                                                            @endforeach 
                                                         </div>
+                                                        @endif
                                                     @endforeach
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    @else
-                                    @continue
-                                    @endif
+                                    
                                     @endforeach 
                                     
                                     

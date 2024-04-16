@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\prescriptionusages;
+
 use App\Models\coshma;
 use DataTables;
 use Validator;
@@ -28,6 +28,23 @@ class addcoshmaInstructions extends Controller
             $prescriptionusages =  coshma::where('softdelete',0)->latest()->get();
             return Datatables::of($prescriptionusages)
                    ->addIndexColumn()
+                   ->addColumn('type', function(coshma $data){ 
+                    
+                    if($data->type == 1){
+                        return 'Instructions';
+                    }
+                    if($data->type == 2){
+                        return 'Type';
+                    }
+                    if($data->type == 3){
+                        return 'Color';
+                    }
+                    if($data->type == 4){
+                        return 'Remarks';
+                    }
+                    
+                   
+              }) 
                     ->addColumn('action', function(coshma $data){ 
    
                           $button = '<button type="button" name="edit" id="'.$data->id.'" class="edit btn btn-primary btn-sm">Edit</button>';
@@ -38,7 +55,7 @@ class addcoshmaInstructions extends Controller
 
 					
 					
-                    ->rawColumns(['action'])
+                    ->rawColumns(['action','type'])
                     ->make(true);
         }
       
@@ -46,26 +63,12 @@ class addcoshmaInstructions extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
      public function store(Request $request)
     {
         $rules = array(
             'name'    =>  'required',
+            'type'    =>  'required',
            
         );
 
@@ -80,6 +83,7 @@ class addcoshmaInstructions extends Controller
 
         $form_data = array(
             'value'        =>  $request->name,
+            'type'        =>  $request->type, 
            
         );
 
@@ -89,23 +93,7 @@ class addcoshmaInstructions extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+  
     public function edit($id)
     {
         if(request()->ajax())
@@ -115,19 +103,14 @@ class addcoshmaInstructions extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
    public function update(Request $request) 
     {
   
         
             $rules = array(
                 'name'    =>  'required',
+                'type'    =>  'required',
                
             );
 
@@ -141,19 +124,16 @@ class addcoshmaInstructions extends Controller
 
         $form_data = array(
             'value'       =>   $request->name,
+            'type'       =>   $request->type,
             
         );
+
        coshma::whereId($request->hidden_id)->update($form_data); 
 
         return response()->json(['success' => 'Data is successfully updated']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy($id)
     {
 
@@ -164,3 +144,4 @@ class addcoshmaInstructions extends Controller
 	   
     }
 }
+

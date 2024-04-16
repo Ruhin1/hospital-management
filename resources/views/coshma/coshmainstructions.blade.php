@@ -25,6 +25,7 @@
                        <tr>
                           <th>ID</th>
                           <th>No</th>
+                          <th>Type</th>
                           <th>Usage</th>
                           <th width="300px">Action</th>
                        </tr>
@@ -50,6 +51,18 @@
          <span id="form_result"></span>
          <form method="post" id="sample_form" class="form-horizontal" enctype="multipart/form-data">
           @csrf
+          <div class="form-group">
+            <label class="control-label col-md-4" > TYPE : </label>
+            <div class="col-md-8">
+             <select name="type" id="type">
+                <option value="1">Instructions</option>
+                <option value="2">Type</option>
+                <option value="3">Color</option>
+                <option value="4">Remarks</option>
+             </select>
+            </div>
+           </div>
+
           <div class="form-group">
             <label class="control-label col-md-4" > USE : </label>
             <div class="col-md-8">
@@ -129,9 +142,8 @@ $(document).ready(function(){
 		
 		 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'id', name: 'id'},
-            {data: 'value', name: 'value'},
-			
-			    
+            {data: 'type', name: 'type'},
+            {data: 'value', name: 'value'},    
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

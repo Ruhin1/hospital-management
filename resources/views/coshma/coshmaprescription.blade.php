@@ -214,6 +214,43 @@
 
 <script type="text/javascript">
 
+function loadprescription() {
+    var table = $('#patient_table').DataTable({
+        processing: true,
+        serverSide: true,
+		responsive: true,
+            ajax: "{{ route('coshma.index') }}",
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'name', name: 'name' },
+                { data: 'pdf', name: 'pdf' },
+                { data: 'action', name: 'action', orderable: false, searchable: false },
+                
+            ]
+    });
+}
+
+$(document).ready(function() {
+    loadprescription();
+
+    Echo.channel('storeData').listen('DataStored', () => {
+        console.log('Event DataStored received'); 
+
+        // Reload the datatable
+        $('#patient_table').DataTable().ajax.reload();
+    });
+});
+
+$(document).ready(function() {
+    loadprescription();
+
+    Echo.channel('storeData').listen('DataStored', () => {
+        console.log('Event DataStored received'); 
+
+        // Reload the datatable
+        $('#patient_table').DataTable().ajax.reload();
+    });
+});
 
 $(document).ready(function(){
 

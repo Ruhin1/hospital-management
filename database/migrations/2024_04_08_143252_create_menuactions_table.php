@@ -16,7 +16,6 @@ class CreateMenuactionsTable extends Migration
         Schema::create('menuactions', function (Blueprint $table) {
             $table->id();
             $table->integer('Childmenu_id');
-            //$table->foreign('Childmenu_id')->references('id')->on('clildmenus')->onDelete('cascade');
             $table->string('name');
             $table->string('route')->unique();
             $table->integer('status')->default('1');
