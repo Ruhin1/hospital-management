@@ -51,7 +51,7 @@ class virtualTableController extends Controller
 
         foreach ($medicineTransitions2 as $transition) { 
             $transition->type = 'Sale Medicine To Customer';
-            $transition->Quantity = $transition->unit;
+            
             $virtualTable2[] = $transition;
         }
 
@@ -62,7 +62,7 @@ class virtualTableController extends Controller
 
         foreach ($returnMedicineTransactions2 as $transition) {
             $transition->type = 'Return Medicine To Customer';
-            $transition->Quantity = $transition->unit;
+            
             $virtualTable2[] = $transition; 
         } 
 
@@ -84,7 +84,7 @@ class virtualTableController extends Controller
 
         foreach ($medicineTransitions2 as $transition) { 
             $transition->type = 'Sale Medicine To Customer';
-            $transition->Quantity = $transition->unit;
+            
             $virtualTable2[] = $transition;
         }
 
@@ -95,7 +95,7 @@ class virtualTableController extends Controller
 
         foreach ($returnMedicineTransactions2 as $transition) {
             $transition->type = 'Return Medicine To Customer';
-            $transition->Quantity = $transition->unit;
+            
             $virtualTable2[] = $transition; 
         }
 
@@ -117,7 +117,7 @@ class virtualTableController extends Controller
 
         foreach ($medicineTransitions as $transition) { 
             $transition->type = 'Sale Medicine To Customer';
-            $transition->Quantity = $transition->unit;
+             $transition->Quantity = $transition->unit;
             $virtualTable[] = $transition;
         }
 
@@ -128,7 +128,7 @@ class virtualTableController extends Controller
 
         foreach ($returnMedicineTransactions as $transition) {
             $transition->type = 'Return Medicine To Customer';
-            $transition->Quantity = $transition->unit;
+             $transition->Quantity = $transition->unit;
             $virtualTable[] = $transition;
         }
 

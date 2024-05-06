@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Childmenu;
+use App\Models\Menuaction;
 use App\Models\Rootmenu;
 use Illuminate\Http\Request;
 use DataTables;
@@ -45,6 +47,7 @@ class AdminRootMenuController extends Controller
     {
         $rules = array(
             'name'=>'required|unique:rootmenus',
+            'status'=>'required',
         );
         
 
@@ -57,6 +60,7 @@ class AdminRootMenuController extends Controller
 
         $data = new Rootmenu();
         $data->name = $request->name;
+        $data->status = $request->status;
         $data->save();
         return response()->json(['success' => 'Data Added successfully.']);
         
@@ -73,12 +77,12 @@ class AdminRootMenuController extends Controller
     }
 
      //
-     public function update(Request $request)
+     public function update(Request $request,$id)
      {
          
          // $rules = [
          //     'name' => 'required',
-         //     'route'=>'required|unique:childmenus'.$request->hidden_id,
+         //     'route'=>'required|unique:rootmenus'.$request->hidden_id,
          //     'status'=>'required',
          // ];
  
@@ -90,21 +94,47 @@ class AdminRootMenuController extends Controller
          // }
  
  
-         // $data = Childmenu::findOrFail($request->hidden_id);
-         // $data->name = $request->name;
-         // $data->route = $request->route;
-         // $data->status = $request->status;
-         // $data->update();
+        //  $data = Rootmenu::findOrFail($request->hidden_id);
+        //  $data->name = $request->name;
+        //  $data->status = 1;
+        //  $data->update();
  
-         //return response()->json(['success' => 'Data is successfully Delated']);
-         return response()->json(['success' => $request->all()]);
+        // return response()->json(['success' => 'Data is successfully Delated']);
+        return response()->json(['success' => $request->all()]);
      }
 
      //
     public function destroy($id)
     {
-        $data = Rootmenu::findOrFail($id);
-        $data->delete();
+        
+        $rootmenu = Rootmenu::findOrFail($id);
+        $childmenus = $rootmenu->childmenu; 
+        
+        $delatedata = [];
+        foreach($childmenus as $row){
+                array_push($delatedata, $row->id);
+        }
+         
+        
+        
+        foreach($delatedata as $row){
+            $ChildMenu = Childmenu::findOrFail($row);
+            $menuAction = $ChildMenu->menuaction;
+
+            foreach($menuAction as $row){
+                Menuaction::find($row->id)->delete();
+            }
+
+        }
+
+        Childmenu::destroy($delatedata);
+        $rootmenu->delete();
+        
         return response()->json(['success' => 'Data is successfully Delated']);
+    }
+
+    public function rootMenu(){
+       $data = Rootmenu::select('id','name')->get();
+       return response()->json($data);
     }
 }

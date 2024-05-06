@@ -19,6 +19,11 @@ class DatabaseSeeder extends Seeder
             'mobile' => "000000000",
             'image'=> 'logo,jpg',
         ]);
+
+        $this->call([
+            TestSeeder::class,
+        ]);
+        
     }
 
 

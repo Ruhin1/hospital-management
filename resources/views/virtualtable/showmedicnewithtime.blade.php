@@ -137,6 +137,7 @@
                 <th>Transition Type</th>
                 <th>Quantity</th>
                 <th>Balance</th>
+                <th>Remaining</th>
                 <th>Type</th>
                 <th>Date</th>
             </tr>
@@ -303,6 +304,7 @@
 					   ?>
                        {{$b}}
                     </td>
+                     <td>{{$row->remaining}}</td>
                     <td>{{ $row->type }}</td>
                     <td>{{ \Carbon\Carbon::parse($row->created_at)->format('d-m-Y h:i A') }}</td>
                 </tr> 

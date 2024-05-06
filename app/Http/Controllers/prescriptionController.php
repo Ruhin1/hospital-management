@@ -322,7 +322,7 @@ class prescriptionController extends Controller
                 $coshmaprescription->remarks = $request->remarks;
                 $coshmaprescription->save(); 
 
-                event(new DataStored()); 
+                // event(new DataStored()); 
 
                 Log::channel('doctorpoint')->info('New Coshma and Medicne Prescroption Added.',
                 [
@@ -375,7 +375,7 @@ class prescriptionController extends Controller
     
                 }
  
-                event(new DataStored()); 
+                // event(new DataStored()); 
 
                 Log::channel('doctorpoint')->info('New Medicne Prescroption Added.',
                 [
@@ -428,7 +428,7 @@ class prescriptionController extends Controller
                 $coshmaprescription->remarks = $request->remarks;
                 $coshmaprescription->save(); 
 
-                event(new DataStored()); 
+                // event(new DataStored()); 
 
                 Log::channel('doctorpoint')->info('New Coshma  Prescroption Added.',
                 [

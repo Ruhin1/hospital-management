@@ -349,6 +349,7 @@ if($request->transitiontype == 2  )
 		$medicinetransition->Quantity = $request->quantity[$product_id];   
 		   
 		$medicinetransition->unit_price = $request->unit_price[$product_id]; 
+        $medicinetransition->remaining = $request->quantity[$product_id];
         $medicinetransition->transitiontype   = $request->transitiontype; 
         $medicinetransition->created_at  = $request->date;
 		$medicinetransition->save(); 

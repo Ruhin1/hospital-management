@@ -871,7 +871,7 @@ $('.addmoreproduct').delegate('.medicine_name','change',function(){
 	var price= tr.find('.medicine_name option:selected').attr("data-price");
 	
 	
-	tr.find('.unit_price').val(price);
+	//tr.find('.unit_price').val(price);
 	tr.find('.stock').val(stock);
 	
 	

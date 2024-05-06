@@ -79,13 +79,16 @@ use App\Http\Controllers\AdminRootMenuController;
 use App\Http\Controllers\MenuLinkController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserControllerRole;
+use App\Models\Childmenu;
 use App\Models\coshmaPrescription;
 use App\Models\medicineCompanyTransition;
 use App\Models\medicinetransition;
 use App\Models\returnmedicinetransaction;
 use App\Models\medicinecompanyorder as mco;
+use App\Models\Menuaction;
 use App\Models\order;
 use App\Models\prescription;
+use App\Models\Rootmenu;
 
 /* medicinecontroller dueshow pathologyreportmaking releasedindoor   employeesalarymonth
 |--------------------------------------------------------------------------   order
@@ -195,7 +198,6 @@ Route::get('pathologytestcomponent/destroy/{id}', [ Pathology_test_Component_Con
 Route::get('Phermachydepdashboard',[phermacyController::class,'index'])->name('phermachy.dashboard');
        
 	
-
 Route::get('medicinetransition/stock', [medicinetransactionController::class, 'stock'])->name('medicinetransition.stock');
 
 
@@ -1121,6 +1123,7 @@ Route::post('coshma/update', [coshmaController::class,'update'])->name('coshma.u
  
  // Root Menu
  Route::resource('rootmenu', AdminRootMenuController::class); 
+ Route::get('rootmenulist', [AdminRootMenuController::class,'rootMenu']); 
 
  // Menu link and route
  Route::resource('adminmenu', MenuLinkController::class); 
@@ -1129,14 +1132,18 @@ Route::post('coshma/update', [coshmaController::class,'update'])->name('coshma.u
 
 
 Route::get('/del',function (){
-        // medicinetransition::truncate();
-        // medicineCompanyTransition::truncate();
-        // returnmedicinetransaction::truncate();
-        // mco::truncate();
-        // //order::truncate();
-        prescription::truncate();
-        coshmaPrescription::truncate();
-         return 1;
+        medicinetransition::truncate();
+        medicineCompanyTransition::truncate();
+        returnmedicinetransaction::truncate();
+        
+  
+        // // Menuaction::truncate();
+        // // Rootmenu::truncate(); 
+        // // Childmenu::truncate();
+        //  return 1;
+
+       
+      
 
         
         

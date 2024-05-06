@@ -137,7 +137,7 @@ class medicinecontroller extends Controller
             $medicinetransition->Quantity = $request->stock;
             $medicinetransition->unit_price = $request->unitprice;
             $medicinetransition->transitiontype = 3;
-            //$medicinetransition->remaining = $request->stock;
+            $medicinetransition->remaining = $request->stock;
             $medicinetransition->created_at = $request->datetime; 
             $medicinetransition->save();  
 

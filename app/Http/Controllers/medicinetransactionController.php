@@ -8,7 +8,7 @@ use App\Models\medicinetransition;
 
 use DataTables;
 use Validator;
-use App\Models\balance_of_business as BalanceOfBusiness; 
+use App\Models\balance_of_business;
 use App\Models\setting;
 use App\Models\patient;
 use App\Models\medicine;  
@@ -18,10 +18,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\returnmedicinetransaction;
 use App\Models\cashtransition;
+use App\Models\medicineCompanyTransition;
 use App\Models\return_order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use PDF;
 $jsonmessage=0;
 $status=0;
@@ -436,234 +438,359 @@ public function printpdfformedicineslip($id)
 public function store(Request $request)
 {
     
-    $validated = $request->validate([
-        'customer_id',
-        'unit_price',
-        'quantity',
-        'stock',
-        'vat',
-        'vattk',
-        'discount',
-        'totaldiscount',
-        'amount',
-        'adjust',
-        'percentofdicountontaotal',
-        'grossamount',
-        'discountatend',
-        'paid',
-        'due',
-        'totalamount',
-        'statusvalue',
-        'medicine_name',
-        'dataentry',
-        'methodtype'
-    ]);
 
-  
+	
     
-    DB::transaction(function () use ($request) {
+	
+	DB::transaction(function () use ($request) {
+		
+		
+
+	$validated = $request->validate([
+	
+		'customer_id',
+		'unit_price',
+		'quantity',
+		'stock',
+		'vat',
+		'vattk',
+		'discount',
+		'totaldiscount',
+		'amount',
+		'adjust',
+		'percentofdicountontaotal',
+		'grossamount',
+		'discountatend',
+		'paid',
+		'due',
+		'totalamount',
+		'statusvalue',
+		'medicine_name',
+		'dataentry',
+		'methodtype'	
+	]);
+	
+
+
+
+	/// Check korche jodi quantityr poriman stock theke beshi hoy 
+		for ($product_id = 0; $product_id < count($request->medicine_name); $product_id++ ) {
+		
+			$desired_qun=0;
+	$product_id_access_the_medicine_id_in_this_current_itteration = $request->medicine_name[$product_id];
+
+	for ($id = 0; $id < count($request->medicine_name); $id++ ) 
+	{
+		
+		if ($request->medicine_name[$id] == $product_id_access_the_medicine_id_in_this_current_itteration )
+		$desired_qun = $desired_qun + $request->quantity[$id] ;
+		
+	}
+
+	$stcok_amount_of_medicine=  medicine::where('id',$request->medicine_name[$product_id] )->pluck('stock')->first();
+
+
+
+	
+	if ( $stcok_amount_of_medicine < $desired_qun )
+	{ 
+		global	$jsonmessage;
+		$jsonmessage=1;
+			goto flag;
+	}
+	 }
+		if ( ($request->customer_id == '')   and ($request->regcustomer == '')  and ($request->excus == '' )  )
+		{
+		$patient = new patient() ; 
+		$patient->name = $request->name;
+		$patient->mobile = $request->mobile;
+		$patient->age = $request->age;
+		$patient->sex = $request->sex;
+		$patient->address = $request->address;
+		$patient->booking_status = 5;
+		$patient->save();
+		
+		$patientid = $patient->id;
+		}
+		else if ($request->excus == 1 ) 
+		{
+		$patientid = 1;
+			
+		}
+		else if  ($request->customer_id != '')    
+		{
+		$patientid = $request->customer_id;	
+		}
+		else if ($request->regcustomer != '')    
+		{
+		$patientid = $request->regcustomer;	
+		}
+	
+		global $status;
+		if ($request->statusvalue == 0 )
+		{
+			$status = 0;
+		}
+
+		$patient = patient::findOrFail($patientid);	
+	
+		if($request->adjustwithadvancedeposit == 1 )
+		{	
+				$remainging = $patient->dena - $request->due;
+				
+				if ( ($remainging > 0) or ($remainging == 0))
+				{
+					
+					$adjust_advance = $request->due;
+				$request->due =0;
+				
+				patient::where('id', $patientid )
+			->update([
+				'dena' => $remainging
+				
+				]);	
+					
+				}
+				if ($remainging < 0)
+				{
+				
+					$adjust_advance = $patient->dena;
+					$request->due =  -1 * $remainging ;
+						patient::where('id', $patientid )
+			->update([
+				'dena' => 0
+				
+				]);		
+					
+					
+					
+		} } else{
+			$adjust_advance =0;
+				
+			
+		}			
+	
+			$order = new order; 
+			$order->user_id  = auth()->user()->id ; //$request->sellerid;
+			$order->patient_id  = $patientid; 
+			$order->pay_by_adv =	$adjust_advance;	
+			$order->due =	$request->due;
+			$due = $request->due;
+			$id= $patientid ;
+	
+			$patient_due = patient::where('id', $patientid )->pluck('due')->first();
+
+			$patient_due = $patient_due + $due; 
+
+	//// update patient due 
+		patient::where('id', $patientid )
+			->update([
+				'due' => $patient_due
+				]);
+
+	// /////////// update company balance 
+
+		$balance =  balance_of_business::first();
+		
+		balance_of_business::where('id', 1)
+		->update(['balance' =>( $request->paid + $balance->balance)  ]);	
+
+
+		$order->totalbeforediscount  =	$request->grossamount;
+		$order->discount  =	$request->discountatend;
+
+		$order->pay_in_cash  =	$request->paid;
+		$order->total  = $request->totalamount;
+		$order->created_at  = $request->dataentry;
+		$order->save();
+
+		if($request->due > 0)
+		{
+		$duetransition = new duetransition();
+		$duetransition->patient_id = $patientid;
+		$duetransition->user_id = auth()->user()->id ;
+		$duetransition->totalamount = $request->due;
+		$duetransition->amount = $request->due;
+		$duetransition->transitiontype	= 2;
+		$duetransition->transitionproducttype	= 2;	
+		$duetransition->order_id	= $order->id;
+		$duetransition->duepaidfor	= 1;
+		$duetransition->created_at  = $request->dataentry;
+		$duetransition->comment	=  "Medicine sale Due: from Patinet ID: ".$patientid. " Medicine Order ID: "   .$order->id;
+		
+		
+		$duetransition->save();
+		
+		}
+
+		
+		$order_id = $order->id;
+
+		global  $arr;
+		global $b;
+		$b = 0;
+		$arr = [];
+
+		
         
+		for ($product_id = 0; $product_id < count($request->medicine_name); $product_id++ ) 
 
-        // Check if medicines are available in stock
-        for ($product_id = 0; $product_id < count($request->medicine_name); $product_id++) {
-            $desired_qun = 0;
-            $product_id_access_the_medicine_id_in_this_current_iteration = $request->medicine_name[$product_id];
+		{	
+			
+                $medicinetransition = new medicinetransition; 
+                $medicinetransition->order_id = $order_id;
+                
+                $medicinetransition->medicine_id = $request->medicine_name[$product_id]; // asole medicine_name[] er vetore id neya hoyeche. form bananor somoy name lekha hoyechecilo pore ar change kora hoy nai 
+                    $medicinetransition->unit = $request->quantity[$product_id];
+                    medicine::where('id',$request->medicine_name[$product_id] )->decrement('stock',$request->quantity[$product_id] );
+                    
+                    
+                    $medicinetransition->vat = $request->vat[$product_id];
+                    $medicinetransition->unitprice = $request->unit_price[$product_id];    
+                    $medicinetransition->totalvat = $request->vattk[$product_id];
+                    
+                    $qun= $request->quantity[$product_id];
+                    
+                    if ($request->percentofdicountontaotal > 0)
+                    {
+                        
+                        $discount = (($request->unit_price[$product_id] * $qun)* ($request->percentofdicountontaotal/100) ) ; 
+                        
+                    
+                        $amount = ($request->unit_price[$product_id] * $qun) - $discount; 
+                        
+                        $medicinetransition->discount = $request->percentofdicountontaotal;
+                        $medicinetransition->totaldiscount	 = $discount;
+                        
+                        
+                        $medicinetransition->amount = $request->amount[$product_id];
+                        $medicinetransition->adjust = $amount;
+                        
+                    }
+                    else {
+                            
+                        $medicinetransition->discount = $request->discount[$product_id];
+                        $medicinetransition->totaldiscount	 = $request->totaldiscount[$product_id];
+                        $medicinetransition->amount = $request->amount[$product_id];
+                        $medicinetransition->adjust = $request->adjust[$product_id];
+                    }
+                    
+                    $data = medicineCompanyTransition::where('remaining', '<>', 0)->where('medicine_id',$request->medicine_name[$product_id] )->get();
+                    
+                    // foreach($data as $row){
 
-            // Calculate the total desired quantity of the current medicine
-            for ($id = 0; $id < count($request->medicine_name); $id++) {
-                if ($request->medicine_name[$id] == $product_id_access_the_medicine_id_in_this_current_iteration) {
-                    $desired_qun += $request->quantity[$id];
-                }
-            }
+						
+					// 	// chart GPT write logice here
 
-            // Check if the desired quantity exceeds the available stock
-            $stock_amount_of_medicine = Medicine::where('id', $request->medicine_name[$product_id])->pluck('stock')->first();
-            if ($stock_amount_of_medicine < $desired_qun) {
-                global $jsonmessage;
-                $jsonmessage = 1;
-                goto flag;
-            }
-        }
+                        
+                    // }
 
-        if (($request->customer_id == '') and ($request->regcustomer == '') and ($request->excus == '')) {
-            $patient = new Patient();
-            $patient->name = $request->name;
-            $patient->mobile = $request->mobile;
-            $patient->age = $request->age;
-            $patient->sex = $request->sex;
-            $patient->address = $request->address;
-            $patient->booking_status = 5;
-            $patient->save();
+					foreach($data as $row){
 
-            $patientid = $patient->id;
-        } elseif ($request->excus == 1) {
-            $patientid = 1;
-        } elseif ($request->customer_id != '') {
-            $patientid = $request->customer_id;
-        } elseif ($request->regcustomer != '') {
-            $patientid = $request->regcustomer;
-        }
+						if ($qun > 0) {
+							if ($row->remaining >= $qun) {
+								// If remaining quantity in current row is greater than or equal to required quantity
+								$row->decrement('remaining', $qun);
+								$qun = 0; // Set remaining quantity to 0
+							} else {
+								// If remaining quantity in current row is less than required quantity
+								$qun -= $row->remaining; // Deduct remaining quantity in current row
+								$row->remaining = 0; // Set remaining quantity in current row to 0
+								$row->save(); // Save changes to current row
+							}
+						} else {
+							break; // Exit loop if remaining quantity becomes 0
+						}
+					
+						// Break the loop if there's no remaining quantity left
+						if ($qun <= 0) {
+							break;
+						}
+					}
+					
+					
 
-        global $status;
-        if ($request->statusvalue == 0) {
-            $status = 0;
-        }
+					
+					
 
-        $patient = Patient::findOrFail($patientid);
+                    $medicinetransition->created_at  = $request->dataentry;
+                    $medicinetransition->save();   
+                   
 
-        if ($request->adjustwithadvancedeposit == 1) {
-            $remainging = $patient->dena - $request->due;
+		}	
 
-            if (($remainging > 0) or ($remainging == 0)) {
 
-                $adjust_advance = $request->due;
-                $request->due = 0;
+				
+       
+       
+        
+	
 
-                Patient::where('id', $patientid)
-                    ->update([
-                        'dena' => $remainging
-                    ]);
-            }
-            if ($remainging < 0) {
-                $adjust_advance = $patient->dena;
-                $request->due =  -1 * $remainging;
-                Patient::where('id', $patientid)
-                    ->update([
-                        'dena' => 0
-                    ]);
-            }
-        } else {
-            $adjust_advance = 0;
-        }
+			$patient_name = patient::findOrFail($patientid)->name;
 
-        $order = new Order();
-        $order->user_id  = auth()->user()->id;
-        $order->patient_id  = $patientid;
-        $order->pay_by_adv =	$adjust_advance;
-        $order->due =	$request->due;
-        $due = $request->due;
-        $id = $patientid;
+			$cashtransition = new cashtransition();
 
-        $patient_due = Patient::where('id', $patientid )->pluck('due')->first();
-        $patient_due = $patient_due + $due;
+			$cashtransition->patient_id = $patientid;
 
-        Patient::where('id', $patientid)
-            ->update([
-                'due' => $patient_due
-            ]);
+			$cashtransition->order_id = $order_id;
+			$cashtransition->user_id =  auth()->user()->id ;
+			$cashtransition->gorssamount = $request->grossamount;
+			$cashtransition->discount = $request->discountatend;	
+			$cashtransition->amount_after_discount = $request->totalamount;
+			$cashtransition->deposit = $request->paid;
+			$cashtransition->debit = 0;
+			$cashtransition->credit = $request->paid;
+			$cashtransition->description = "Medicine Bill from Patinet Name:" .$patient_name. " Patient ID: " .$patientid. " Medicine Order ID:" .$order_id ;
+			$cashtransition->company_type = 1;
 
-        $balance = BalanceOfBusiness::first();
+			$cashtransition->customer_type = 1;
+			$cashtransition->transitionproducttype = 4; 
+			$cashtransition->created_at  = $request->dataentry;
+			$cashtransition->customer_baki = $request->due + $adjust_advance;
+			$cashtransition->advance_deposit_minus = $adjust_advance;
+			$cashtransition->customer_joma =0;
+			$cashtransition->save();
+					
+			flag:
+			});	
+				// return Redirect::back();
+			global $jsonmessage;
+			global $status; 
+           
+			if($status !=0 )
+			{
+				// Log::channel('medicneTrinction')->info('Medicine Sales',
+				// 	[
+				// 		'massage'=> 'Medicine Sales',
+				// 		'employee_details'=> Auth::user(),
+				// 		'Info'=> $request->all(),
+				// 	]);
+					return response()->json(['success' => 'You can not give commission to an Admitted patient']);
+					
+			}
 
-        BalanceOfBusiness::where('id', 1)
-            ->update(['balance' => ($request->paid + $balance->balance)]);
+			if($jsonmessage ==0 )
+			{
+				Log::channel('medicneTrinction')->info('Medicine Sales',
+					[
+						'massage'=> 'Medicine Sales',
+						'employee_details'=> Auth::user(),
+						'Info'=> $request->all(),
+					]);
+					global $arr;
+					return response()->json(['success' => $arr]);
+					return response()->json(['success' => 'Data Added successfully.']);
+					
+					
+			}
+			else{
+			
+			return response()->json(['error' => 'Products are not avilable in Stock']);	
+			
 
-        $order->totalbeforediscount  =	$request->grossamount;
-        $order->discount  =	$request->discountatend;
-        $order->pay_in_cash  =	$request->paid;
-        $order->total  = $request->totalamount;
-        $order->created_at  = $request->dataentry;
-        $order->save();
+			}
 
-        if ($request->due > 0) {
-            $duetransition = new Duetransition();
-            $duetransition->patient_id = $patientid;
-            $duetransition->user_id = auth()->user()->id;
-            $duetransition->totalamount = $request->due;
-            $duetransition->amount = $request->due;
-            $duetransition->transitiontype	= 2;
-            $duetransition->transitionproducttype	= 2;
-            $duetransition->order_id	= $order->id;
-            $duetransition->duepaidfor	= 1;
-            $duetransition->created_at  = $request->dataentry;
-            $duetransition->comment	=  "Medicine sale Due: from Patinet ID: ".$patientid. " Medicine Order ID: "   .$order->id;
 
-            $duetransition->save();
-        }
-
-        $order_id = $order->id;
-
-        for ($product_id = 0; $product_id < count($request->medicine_name); $product_id++) {
-
-            $medicinetransition = new Medicinetransition;
-            $medicinetransition->order_id = $order_id;
-
-            $medicinetransition->medicine_id = $request->medicine_name[$product_id];
-            $medicinetransition->unit = $request->quantity[$product_id];
-            Medicine::where('id',$request->medicine_name[$product_id])->decrement('stock',$request->quantity[$product_id]);
-
-            $medicinetransition->vat = $request->vat[$product_id];
-            $medicinetransition->unitprice = $request->unit_price[$product_id];
-            $medicinetransition->totalvat = $request->vattk[$product_id];
-
-            $qun= $request->quantity[$product_id];
-
-            if ($request->percentofdicountontaotal > 0) {
-                $discount = (($request->unit_price[$product_id] * $qun)* ($request->percentofdicountontaotal/100) ) ;
-                $amount = ($request->unit_price[$product_id] * $qun) - $discount;
-                $medicinetransition->discount = $request->percentofdicountontaotal;
-                $medicinetransition->totaldiscount	 = $discount;
-                $medicinetransition->amount = $request->amount[$product_id];
-                $medicinetransition->adjust = $amount;
-            } else {
-                $medicinetransition->discount = $request->discount[$product_id];
-                $medicinetransition->totaldiscount	 = $request->totaldiscount[$product_id];
-                $medicinetransition->amount = $request->amount[$product_id];
-                $medicinetransition->adjust = $request->adjust[$product_id];
-            }
-
-            $medicinetransition->created_at  = $request->dataentry;
-            $medicinetransition->save();
-        }
-
-        $patient_name = Patient::findOrFail($patientid)->name;
-
-        $cashtransition = new Cashtransition();
-        $cashtransition->patient_id = $patientid;
-        $cashtransition->order_id = $order_id;
-        $cashtransition->user_id =  auth()->user()->id ;
-        $cashtransition->gorssamount = $request->grossamount;
-        $cashtransition->discount = $request->discountatend;
-        $cashtransition->amount_after_discount = $request->totalamount;
-        $cashtransition->deposit = $request->paid;
-        $cashtransition->debit = 0;
-        $cashtransition->credit = $request->paid;
-        $cashtransition->description = "Medicine Bill from Patinet Name:" .$patient_name. " Patient ID: " .$patientid. " Medicine Order ID:" .$order_id ;
-        $cashtransition->company_type = 1;
-        $cashtransition->customer_type = 1;
-        $cashtransition->transitionproducttype = 4;
-        $cashtransition->created_at  = $request->dataentry;
-        $cashtransition->customer_baki = $request->due + $adjust_advance;
-        $cashtransition->advance_deposit_minus = $adjust_advance;
-        $cashtransition->customer_joma =0;
-        $cashtransition->save();
-
-        flag:
-    });
-
-    global $jsonmessage;
-    global $status;
-
-    if($status !=0 ) {
-        Log::channel('medicneTrinction')->info('Medicine Sales',
-            [
-                'massage'=> 'Medicine Sales',
-                'employee_details'=> Auth::user(),
-                'Info'=> $request->all(),
-            ]);
-        return response()->json(['success' => 'You can not give commission to an Admitted patient']);
-    }
-
-    if($jsonmessage ==0 ) {
-        Log::channel('medicneTrinction')->info('Medicine Sales',
-            [
-                'massage'=> 'Medicine Sales',
-                'employee_details'=> Auth::user(),
-                'Info'=> $request->all(),
-            ]);
-        return response()->json(['success' => 'Data Added successfully.']);
-    } else {
-        return response()->json(['error' => 'Products are not available in Stock']);
-    }
 }
 
 

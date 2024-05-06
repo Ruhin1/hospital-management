@@ -886,7 +886,7 @@ tr:nth-child(even) {background-color: #f2f2f2;}
             tr.find('.unit_price').val(price);
             tr.find('.stock').val(stock);
 
-
+ 
             var price = parseFloat(tr.find('.unit_price').val()); // 2y bar price neya hoyeche karon jodi pore user pirce poriboron kore
             var qun = parseFloat(tr.find(".quantity").val());
 

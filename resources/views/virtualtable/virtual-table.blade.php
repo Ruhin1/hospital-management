@@ -90,6 +90,7 @@ foreach ($virtualTable as $row) {
                 <th>Transition Type</th>
                 <th>Quantity</th>
                 <th>Balance</th>
+                <th>Remaining</th>
                 <th>Type</th>
                 <th>Date</th>
             </tr>
@@ -99,7 +100,7 @@ foreach ($virtualTable as $row) {
             @foreach($groupedRows as $medicineId => $rows)
 
             <tr class="medicine-name">
-                <th colspan="13">
+                <th colspan="14">
                     Matched Medicine Name: 
                     {{-- Check if medicine exists --}}
                     @php
@@ -131,6 +132,7 @@ foreach ($virtualTable as $row) {
                     <th>Transition Type</th>
                     <th>Quantity</th>
                     <th>Balance</th>
+                    <th>Remaining</th>
                     <th>Type</th>
                     <th>Date</th>
             </tr>
@@ -144,6 +146,7 @@ foreach ($virtualTable as $row) {
             <?php 
              $sb = \App\Models\medicineCompanyTransition::where('medicine_id','=',$medicineId)->first()->Quantity;
              $sb = intval($sb); 
+             
              ?>
             
                 @foreach($rows as $row)
@@ -202,6 +205,8 @@ foreach ($virtualTable as $row) {
 					   {{$sb}} 
             
                     </td>
+                   
+                    <td>{{$row->remaining}}</td>
                     <td>{{ $row->type }}</td>
                     <td>{{ \Carbon\Carbon::parse($row->created_at)->format('d-m-Y h:i A') }}</td>
                 </tr>

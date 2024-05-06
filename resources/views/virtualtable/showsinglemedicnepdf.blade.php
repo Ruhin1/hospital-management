@@ -120,6 +120,7 @@
                 <th>Transition Type</th>
                 <th>Quantity</th>
                 <th>Balance</th>
+                <th>Remaining</th>
                 <th>Type</th>
                 <th>Date</th>
             </tr>
