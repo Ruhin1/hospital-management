@@ -1774,6 +1774,7 @@ $('#formModal').modal('hide');
  var user_id;
 
  $(document).on('click', '.delete', function(){
+  
   user_id = $(this).attr('id');
   $('#confirmModal').modal('show');
  });

@@ -1057,7 +1057,9 @@ $("#thirteen").hide();
  <div id="nine"> 
  <div class="bg-white py-2 collapse-inner rounded">
 
-<a target="_blank" class="collapse-item" href="{{ url('showuserlist') }}"> সফটও্যারে স্টাফদের <br> এক্সেস দেন  </a>
+<a target="_blank" class="collapse-item" href="{{ url('role') }}"> রোল এন্ড প্যারমিশন </a>
+<a target="_blank" class="collapse-item" href="{{ url('user') }}"> নতুন ইউজার যুক্ত করে <br/> রোল এসাইন করোন </a>
+<a target="_blank" class="collapse-item" href="{{ url('adminmenu') }}"> রোল এবং প্যারমিশন এর <br/> রাউট যুক্ত করোন </a>
 
 <p><br>
 

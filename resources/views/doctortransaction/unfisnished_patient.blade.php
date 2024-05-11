@@ -1370,7 +1370,7 @@ $('#sample_formk').on('submit', function(event){
 
 
    $(document).on('click', '.edit', function(){
-	   
+	  
   var id = $(this).attr('id');
   $('#form_result').html('');
  

@@ -60,12 +60,12 @@ class doctorappointmenttransactionController extends Controller
 
                     ->addColumn('action', function( doctorappointmenttransaction $data){ 
    
-                          $button = '<button type="button" name="deletekortehobe" id="'.$data->id.'"     class="delete btn btn-danger btn-sm">Delete</button> <br> ';
+                          $button = '<button type="button" name="deletekortehobe" id="'.$data->id.'"     class="delete btn btn-danger btn-sm">Delete1</button> <br> ';
                         
 						$button .= '&nbsp;&nbsp;';
 						
 						
-                            $button .= ' <p> <button type="button" name="edit" id="'.$data->id.'"     class="edit btn btn-info btn-sm">Edit</button>';
+                            $button .= ' <p> <button type="button" name="edit" id="'.$data->id.'"     class="edit btn btn-info btn-sm">Edit1</button>';
                         
 						
 						

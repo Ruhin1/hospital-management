@@ -211,6 +211,7 @@ class DoctorCommissionController extends Controller
 
 	public function paidsenddata($id)
 {
+	
 	  $data = doctorCommissionTransition::with('doctor','patient')->findOrFail($id);
 	  if($data->patient_id != null)
 	  {

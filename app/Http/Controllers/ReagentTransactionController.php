@@ -92,6 +92,7 @@ return response()->json(['reagent' => $reagent, 'supplier' => $supplier]);
 	 }
 
      public function store (Request $request){
+        
 DB::transaction(function () use ($request) {
 $request->validate([
     'medicinecomapnyname_id',

@@ -48,6 +48,7 @@ class coshmaController extends Controller
 
          public function edit($id)
          {
+            
              if(request()->ajax())
              {
                 $data = coshmaPrescription::findOrFail($id);
@@ -61,7 +62,7 @@ class coshmaController extends Controller
          public function destroy($id)
          {
      
-          
+            
             coshmaPrescription::find($id)->delete(); 
             Log::channel('doctorpoint')->info('Eyeglass prescription Delated.', [
                 'id'=>$id,

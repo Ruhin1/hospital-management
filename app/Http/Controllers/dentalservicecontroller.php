@@ -41,13 +41,16 @@ class dentalservicecontroller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
    public function index(Request $request)
     {
+        
       $dentalservice =  dentalservice::where('softdelete',0)->orderBy('name')->get();
 	  
 	
 	  
 	        if ($request->ajax()) {
+                
      $dentalservice =  dentalservice::where('softdelete',0)->orderBy('name')->get();
             return Datatables::of($dentalservice)
                    ->addIndexColumn()

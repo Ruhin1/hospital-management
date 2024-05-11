@@ -526,8 +526,6 @@ Route::get('doctortransition/selectagent', [doctorappointmenttransactionControll
 Route::post('doctortransition/selectfetagent', [doctorappointmenttransactionController::class, 'selectfagent'])->name('doctortransition.selectfetchagent');
 
 
-Route::get('doctortransition/finddoctorpatient', [doctorappointmenttransactionController::class, 'finddoctorpatient'])->name('doctortransition.finddoctorpatient');
-
 
 Route::get('doctortransition/finddoctorpatient', [doctorappointmenttransactionController::class, 'finddoctorpatient'])->name('doctortransition.finddoctorpatient');
 
@@ -555,7 +553,7 @@ Route::resource('patientlist', patientcontroller::class);
 
 Route::get('/pathologytranspicktwodate', function () {
     return view('reporttransaction.picktwodate');
-});
+})->name('pathologytranspicktwodate.index');
 
 
 Route::get('reporttransaction/selectuser', [reporttransactionController::class, 'selecttestuser'])->name('reporttransaction.select');
@@ -571,7 +569,7 @@ Route::get('reporttransaction/selectagent', [reporttransactionController::class,
 Route::post('reporttransaction/selectfetagent', [reporttransactionController::class, 'selectfagent'])->name('reporttransaction.selectfetchagent');
 
 
-Route::get('reporttransaction/select', [reporttransactionController::class, 'selecttest'])->name('reporttransaction.select');
+Route::get('reporttransaction/select', [reporttransactionController::class, 'selecttest'])->name('reporttransaction.select'); 
 
 Route::post('reporttransaction/selectfetch', [reporttransactionController::class, 'selectfetch'])->name('reporttransaction.selectfetch');
 
@@ -1028,9 +1026,9 @@ Route::get('businesspartner/destroy/{id}', [ CreatePartnerController::class,'des
 
  Route::post('outdoordoctorbtwtwodate', [outdoordoctortranstion::class, 'outdoordoctorbtwtwodate'])->name('outdoordoctorbtwtwodate');
 
-Route::get('/picktwodatefordoctortransition', function () {
+Route::get('picktwodatefordoctortransition', function () {
     return view('incomefromdoctoroutdoor.picktwodate');
-});
+})->name('picktwodatefordoctortransition');
 
 Route::post('duepaymenttrans/update', [ duetranController::class,'update'])->name('duepaymenttrans.update');
 
@@ -1132,15 +1130,15 @@ Route::post('coshma/update', [coshmaController::class,'update'])->name('coshma.u
 
 
 Route::get('/del',function (){
-        medicinetransition::truncate();
-        medicineCompanyTransition::truncate();
-        returnmedicinetransaction::truncate();
+        // medicinetransition::truncate();
+        // medicineCompanyTransition::truncate();
+        // returnmedicinetransaction::truncate();
         
   
-        // // Menuaction::truncate();
-        // // Rootmenu::truncate(); 
-        // // Childmenu::truncate();
-        //  return 1;
+        Menuaction::truncate();
+        Rootmenu::truncate(); 
+        Childmenu::truncate();
+         return 1;
 
        
       

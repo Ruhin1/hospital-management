@@ -775,6 +775,7 @@ $(this).parent().parent().remove();
  var user_id;
 
  $(document).on('click', '.delete', function(){
+    
   user_id = $(this).attr('id');
   console.log('A');
   $('#confirmModal').modal('show');
