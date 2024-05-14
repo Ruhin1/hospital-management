@@ -1053,7 +1053,7 @@ Route::get('duepaymenttrans/destroy/{id}', [ duetranController::class,'destroy']
 
 Route::get('/picktwodate', function () {
     return view('incomestatement.picktwodate');
-});
+})->name('picktwodate');
 
 
 
